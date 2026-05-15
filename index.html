@@ -987,27 +987,7 @@ function ClientModal({client,managers,pipeline,templates,currentUser,onSave,onDe
         </>}
 
         {/* ACCOMPANIMENT */}
-        {tab==='accomp'&&<>
-          <div className="field-row">
-            <Fl label="Ответственный менеджер"><select className="input" value={f.responsibleManager} onChange={e=>set('responsibleManager',e.target.value)} disabled={!canEdit}>
-              <option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
-            </select></Fl>
-            <Fl label="Ипотечный специалист"><input className="input" value={f.mortgageSpecialist} onChange={e=>set('mortgageSpecialist',e.target.value)} placeholder="ФИО специалиста"/></Fl>
-          </div>
-          <div className="section-hdr">Этапы сопровождения</div>
-          <div className="accomp-stages">
-            {ACCOMP_STAGES.map((s,i)=><div key={s} className="accomp-step" onClick={()=>canEdit&&set('accompStageIndex',i)}>
-              <div className={`accomp-dot${i<f.accompStageIndex?' done':i===f.accompStageIndex?' active':''}`}>
-                {i<f.accompStageIndex?<i className="ti ti-check" style={{fontSize:9}}/>:i+1}
-              </div>
-              <div className="accomp-label">{s}</div>
-            </div>)}
-          </div>
-          <div style={{marginTop:12,padding:'12px',background:'var(--accent-bg)',borderRadius:9,border:'1px solid #bfdbfe'}}>
-            <div style={{fontWeight:700,fontSize:13,color:'var(--accent)'}}>Текущий: {ACCOMP_STAGES[f.accompStageIndex]}</div>
-            <div style={{fontSize:11,color:'var(--muted)',marginTop:2}}>{f.accompStageIndex} из {ACCOMP_STAGES.length} этапов завершено</div>
-          </div>
-        </>}
+        {tab==='accomp'&&<AccompTab f={f} set={set} managers={managers} canEdit={canEdit} templates={templates} pipeline={pipeline}/>}
 
         {/* CHECKLIST */}
         {tab==='checklist'&&<>
@@ -1485,6 +1465,199 @@ function TemplateModal({item,pipeline,onSave,onClose}){
       <MA onClose={onClose} onSave={()=>onSave(f)}/>
     </div>
   </div>;
+}
+
+// ══════════════════════════ ACCOMP TAB ════════════════════════════
+const STAGE_CHECKLISTS = {
+  'Сбор документов':     [{id:'sd1',text:'Удостоверение личности',type:'doc'},{id:'sd2',text:'Справка о доходах',type:'doc'},{id:'sd3',text:'ЭЦП заёмщика',type:'ecp'},{id:'sd4',text:'ЭЦП созаёмщика',type:'ecp'},{id:'sd5',text:'Выписка из ЕНПФ',type:'doc'}],
+  'Проверка БКИ':        [{id:'bk1',text:'Запрос в БКИ сделан',type:'check'},{id:'bk2',text:'Отчёт БКИ получен',type:'doc'},{id:'bk3',text:'Просрочки выявлены/нет',type:'check'},{id:'bk4',text:'Текущая нагрузка рассчитана',type:'check'}],
+  'Подготовка доходов':  [{id:'pd1',text:'Официальный доход подтверждён',type:'check'},{id:'pd2',text:'Доп. доход оформлен',type:'check'},{id:'pd3',text:'Пенсионные отчисления проверены',type:'check'},{id:'pd4',text:'2-НДФЛ / справка получена',type:'doc'}],
+  'Выбор программы':     [{id:'vp1',text:'Банки сравнены',type:'check'},{id:'vp2',text:'Программа выбрана',type:'check'},{id:'vp3',text:'Ставка согласована',type:'check'},{id:'vp4',text:'КП отправлено клиенту',type:'check'}],
+  'Подача заявки':       [{id:'pz1',text:'Заявка в банк подана',type:'check'},{id:'pz2',text:'Пакет документов передан',type:'doc'},{id:'pz3',text:'Номер заявки получен',type:'check'},{id:'pz4',text:'Клиент уведомлён',type:'check'}],
+  'Одобрение':           [{id:'od1',text:'Решение банка получено',type:'check'},{id:'od2',text:'Сумма одобрения подтверждена',type:'check'},{id:'od3',text:'Условия согласованы с клиентом',type:'check'},{id:'od4',text:'ЭЦП заёмщика на решение',type:'ecp'}],
+  'Поиск квартиры':      [{id:'pk1',text:'Требования к квартире зафиксированы',type:'check'},{id:'pk2',text:'Варианты предложены',type:'check'},{id:'pk3',text:'Квартира выбрана',type:'check'},{id:'pk4',text:'Договор задатка',type:'doc'}],
+  'Оценка':              [{id:'oc1',text:'Оценщик выбран',type:'check'},{id:'oc2',text:'Оценка проведена',type:'check'},{id:'oc3',text:'Отчёт об оценке получен',type:'doc'},{id:'oc4',text:'Отчёт передан в банк',type:'check'}],
+  'Сделка':              [{id:'sk1',text:'Дата сделки назначена',type:'check'},{id:'sk2',text:'Договор купли-продажи подписан',type:'doc'},{id:'sk3',text:'ЭЦП заёмщика на договор',type:'ecp'},{id:'sk4',text:'ЭЦП созаёмщика на договор',type:'ecp'},{id:'sk5',text:'Ипотечный договор подписан',type:'doc'}],
+  'Выдача ипотеки':      [{id:'vi1',text:'Деньги перечислены',type:'check'},{id:'vi2',text:'Акт приёма-передачи',type:'doc'},{id:'vi3',text:'Ключи получены',type:'check'},{id:'vi4',text:'Страховка оформлена',type:'doc'}],
+  'Закрытие':            [{id:'zk1',text:'Клиент доволен, получен отзыв',type:'check'},{id:'zk2',text:'Рекомендации запрошены',type:'check'},{id:'zk3',text:'Дело закрыто в CRM',type:'check'},{id:'zk4',text:'Архив документов сформирован',type:'doc'}],
+};
+
+function AccompTab({f,set,managers,canEdit,templates,pipeline}){
+  const [activeStage,setActiveStage]=useState(f.accompStageIndex||0);
+  const [newComments,setNewComments]=useState({});
+
+  const stageData=f.accompStages||{};
+
+  function getStageData(i){return stageData[i]||{done:[],comments:[]};}
+  function setStageData(i,data){set('accompStages',{...stageData,[i]:data});}
+
+  function toggleCheck(stageIdx,itemId){
+    const sd=getStageData(stageIdx);
+    const done=sd.done||[];
+    setStageData(stageIdx,{...sd,done:done.includes(itemId)?done.filter(x=>x!==itemId):[...done,itemId]});
+  }
+  function addComment(stageIdx){
+    const txt=(newComments[stageIdx]||'').trim();
+    if(!txt)return;
+    const sd=getStageData(stageIdx);
+    const comments=[...(sd.comments||[]),{id:uid(),text:txt,date:nowStr()}];
+    setStageData(stageIdx,{...sd,comments});
+    setNewComments(x=>({...x,[stageIdx]:''}));
+  }
+  function delComment(stageIdx,cid){
+    const sd=getStageData(stageIdx);
+    setStageData(stageIdx,{...sd,comments:(sd.comments||[]).filter(c=>c.id!==cid)});
+  }
+
+  const ICON_MAP={check:'ti-checkbox',ecp:'ti-writing-sign',doc:'ti-file-text'};
+  const ICON_COLOR={check:'var(--muted)',ecp:'#8b5cf6',doc:'#0ea5e9'};
+  const TYPE_LABEL={check:'Пункт',ecp:'ЭЦП',doc:'Документ'};
+
+  const totalDone=ACCOMP_STAGES.reduce((sum,s,i)=>{
+    const items=STAGE_CHECKLISTS[s]||[];
+    const done=(getStageData(i).done||[]).length;
+    return sum+done;
+  },0);
+  const totalItems=ACCOMP_STAGES.reduce((sum,s)=>sum+(STAGE_CHECKLISTS[s]||[]).length,0);
+
+  return <>
+    {/* Header */}
+    <div className="field-row" style={{marginBottom:14}}>
+      <Fl label="Ответственный менеджер">
+        <select className="input" value={f.responsibleManager} onChange={e=>set('responsibleManager',e.target.value)} disabled={!canEdit}>
+          <option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
+        </select>
+      </Fl>
+      <Fl label="Ипотечный специалист">
+        <input className="input" value={f.mortgageSpecialist} onChange={e=>set('mortgageSpecialist',e.target.value)} placeholder="ФИО специалиста"/>
+      </Fl>
+    </div>
+
+    {/* Overall progress */}
+    <div style={{background:'linear-gradient(135deg,#eff6ff,#f5f3ff)',border:'1px solid #c7d2fe',borderRadius:10,padding:'12px 14px',marginBottom:14,display:'flex',alignItems:'center',gap:14}}>
+      <div style={{flex:1}}>
+        <div style={{fontWeight:700,fontSize:13,color:'var(--accent)',marginBottom:6}}>Общий прогресс сопровождения</div>
+        <div className="prog-wrap"><div className="prog-bar" style={{width:`${Math.round(totalDone/Math.max(totalItems,1)*100)}%`,background:'var(--accent)'}}/></div>
+      </div>
+      <div style={{textAlign:'center',flexShrink:0}}>
+        <div style={{fontWeight:800,fontSize:22,color:'var(--accent)',letterSpacing:'-1px'}}>{Math.round(totalDone/Math.max(totalItems,1)*100)}%</div>
+        <div style={{fontSize:10,color:'var(--muted)'}}>{totalDone}/{totalItems}</div>
+      </div>
+    </div>
+
+    {/* Stage dots nav */}
+    <div style={{display:'flex',gap:0,marginBottom:14,overflowX:'auto',padding:'4px 0'}}>
+      {ACCOMP_STAGES.map((s,i)=>{
+        const items=STAGE_CHECKLISTS[s]||[];
+        const sd=getStageData(i);
+        const done=(sd.done||[]).length;
+        const allDone=done===items.length&&items.length>0;
+        const hasComments=(sd.comments||[]).length>0;
+        const isActive=activeStage===i;
+        return <div key={s} style={{flex:1,minWidth:68,textAlign:'center',position:'relative',cursor:'pointer'}} onClick={()=>setActiveStage(i)}>
+          {i<ACCOMP_STAGES.length-1&&<div style={{position:'absolute',top:10,left:'50%',right:'-50%',height:2,background:allDone?'var(--success)':i<activeStage?'var(--accent)':'var(--border)',zIndex:0}}/>}
+          <div style={{width:22,height:22,borderRadius:'50%',border:`2px solid ${allDone?'var(--success)':isActive?'var(--accent)':'var(--border2)'}`,background:allDone?'var(--success)':isActive?'var(--accent)':'var(--card)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 4px',fontSize:9,fontWeight:700,position:'relative',zIndex:1,color:allDone||isActive?'#fff':'var(--muted)',boxShadow:isActive?'0 0 0 4px rgba(59,130,246,.2)':'none',transition:'all .2s'}}>
+            {allDone?<i className="ti ti-check" style={{fontSize:10}}/>:i+1}
+          </div>
+          <div style={{fontSize:9,color:isActive?'var(--accent)':allDone?'var(--success)':'var(--muted)',fontWeight:isActive||allDone?700:500,lineHeight:1.2,padding:'0 2px'}}>
+            {s}
+            {hasComments&&<span style={{display:'block',fontSize:8,color:'var(--accent)'}}>💬{(sd.comments||[]).length}</span>}
+          </div>
+        </div>;
+      })}
+    </div>
+
+    {/* Active stage detail */}
+    {ACCOMP_STAGES.map((stageName,stageIdx)=>{
+      if(stageIdx!==activeStage)return null;
+      const items=STAGE_CHECKLISTS[stageName]||[];
+      const sd=getStageData(stageIdx);
+      const done=sd.done||[];
+      const comments=sd.comments||[];
+      const pct=items.length>0?Math.round(done.length/items.length*100):100;
+      const incomplete=items.filter(item=>!done.includes(item.id));
+      const isComplete=pct===100||items.length===0;
+
+      return <div key={stageName}>
+        {/* Stage header */}
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12,padding:'10px 14px',background:isComplete?'#f0fdf4':'#fffbeb',borderRadius:10,border:`1px solid ${isComplete?'#bbf7d0':'#fde68a'}`}}>
+          <div style={{width:32,height:32,borderRadius:'50%',background:isComplete?'var(--success)':'var(--warn)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            {isComplete?<i className="ti ti-check" style={{color:'#fff',fontSize:15}}/>:<i className="ti ti-clock" style={{color:'#fff',fontSize:15}}/>}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:700,fontSize:14,color:isComplete?'var(--success)':'var(--warn)'}}>{stageName}</div>
+            <div style={{fontSize:11,color:'var(--muted)'}}>{isComplete?'Все пункты выполнены ✓':`Выполнено ${done.length} из ${items.length} пунктов`}</div>
+          </div>
+          <div style={{fontWeight:800,fontSize:20,color:isComplete?'var(--success)':'var(--warn)'}}>{pct}%</div>
+          {/* Mark stage as current */}
+          <button className="btn btn-sm" style={{background:'var(--accent)',color:'#fff',border:'none'}} onClick={()=>canEdit&&set('accompStageIndex',stageIdx)}>Текущий</button>
+        </div>
+
+        {/* Warning if incomplete */}
+        {!isComplete&&<div style={{background:'#fef3c7',border:'1px solid #fcd34d',borderRadius:8,padding:'9px 12px',marginBottom:12,display:'flex',alignItems:'flex-start',gap:8}}>
+          <i className="ti ti-alert-triangle" style={{color:'#d97706',fontSize:16,flexShrink:0,marginTop:1}}/>
+          <div>
+            <div style={{fontWeight:700,fontSize:12,color:'#92400e',marginBottom:3}}>Не все пункты выполнены:</div>
+            <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+              {incomplete.map(item=><span key={item.id} style={{background:'#fffbeb',border:'1px solid #fde68a',borderRadius:4,padding:'1px 6px',fontSize:11,color:'#92400e',display:'flex',alignItems:'center',gap:3}}>
+                <i className={`ti ${ICON_MAP[item.type||'check']}`} style={{fontSize:10}}/>{item.text}
+              </span>)}
+            </div>
+          </div>
+        </div>}
+
+        {/* Progress bar */}
+        {items.length>0&&<div style={{marginBottom:12}}>
+          <div className="prog-wrap"><div className="prog-bar" style={{width:`${pct}%`,background:isComplete?'var(--success)':'var(--warn)'}}/></div>
+        </div>}
+
+        {/* Checklist items */}
+        {items.length>0&&<div style={{background:'#f8fafc',borderRadius:10,padding:'12px',border:'1px solid var(--border)',marginBottom:14}}>
+          <div style={{fontWeight:700,fontSize:12,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.04em',marginBottom:8}}>Чек-лист этапа</div>
+          {items.map(item=>{
+            const isDone=done.includes(item.id);
+            return <div key={item.id} className="cl-item" onClick={()=>canEdit&&toggleCheck(stageIdx,item.id)}>
+              <div className="cl-box" style={{background:isDone?'var(--success)':undefined,borderColor:isDone?'var(--success)':undefined}}>
+                {isDone&&<i className="ti ti-check" style={{fontSize:10,color:'#fff'}}/>}
+              </div>
+              <i className={`ti ${ICON_MAP[item.type||'check']}`} style={{fontSize:13,color:ICON_COLOR[item.type||'check'],flexShrink:0}}/>
+              <span style={{flex:1,fontSize:13,textDecoration:isDone?'line-through':'none',color:isDone?'var(--muted)':'var(--text)'}}>{item.text}</span>
+              <span style={{fontSize:9,background:'#e2e8f0',borderRadius:4,padding:'1px 5px',color:'var(--muted)'}}>{TYPE_LABEL[item.type||'check']}</span>
+            </div>;
+          })}
+        </div>}
+
+        {/* Comments for this stage */}
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'12px',border:'1px solid var(--border)'}}>
+          <div style={{fontWeight:700,fontSize:12,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.04em',marginBottom:8,display:'flex',alignItems:'center',gap:6}}>
+            <i className="ti ti-message" style={{fontSize:13}}/>Комментарии к этапу ({comments.length})
+          </div>
+          {comments.length===0&&<div style={{fontSize:12,color:'var(--light)',fontStyle:'italic',marginBottom:8}}>Нет комментариев к этому этапу</div>}
+          {comments.map(c=><div key={c.id} style={{padding:'8px 10px',background:'#fff',borderRadius:7,border:'1px solid var(--border)',marginBottom:6,position:'relative'}}>
+            <div style={{fontSize:10,color:'var(--muted)',marginBottom:3,display:'flex',alignItems:'center',gap:6}}>
+              <i className="ti ti-clock" style={{fontSize:11}}/>{c.date}
+              {canEdit&&<button className="btn btn-ghost" style={{padding:'0 4px',fontSize:10,color:'var(--danger)',marginLeft:'auto'}} onClick={()=>delComment(stageIdx,c.id)}><i className="ti ti-trash" style={{fontSize:11}}/></button>}
+            </div>
+            <div style={{fontSize:13,lineHeight:1.5}}>{c.text}</div>
+          </div>)}
+          {canEdit&&<div style={{display:'flex',gap:7,marginTop:8}}>
+            <input className="input" value={newComments[stageIdx]||''} onChange={e=>setNewComments(x=>({...x,[stageIdx]:e.target.value}))} placeholder={`Заметка к этапу "${stageName}"...`} onKeyDown={e=>e.key==='Enter'&&addComment(stageIdx)} style={{flex:1}}/>
+            <button className="btn btn-primary btn-sm" onClick={()=>addComment(stageIdx)}><i className="ti ti-send"/></button>
+          </div>}
+        </div>
+
+        {/* Navigation between stages */}
+        <div style={{display:'flex',justifyContent:'space-between',marginTop:12}}>
+          <button className="btn btn-sm" onClick={()=>setActiveStage(Math.max(0,stageIdx-1))} disabled={stageIdx===0} style={{opacity:stageIdx===0?.3:1}}>
+            <i className="ti ti-arrow-left"/>Предыдущий
+          </button>
+          <button className="btn btn-sm btn-primary" onClick={()=>setActiveStage(Math.min(ACCOMP_STAGES.length-1,stageIdx+1))} disabled={stageIdx===ACCOMP_STAGES.length-1} style={{opacity:stageIdx===ACCOMP_STAGES.length-1?.3:1}}>
+            Следующий<i className="ti ti-arrow-right"/>
+          </button>
+        </div>
+      </div>;
+    })}
+  </>;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);

@@ -8,191 +8,199 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-:root {
-  --navy: #0f172a; --navy2: #1e293b; --navy3: #334155;
-  --accent: #3b82f6; --accent2: #1d4ed8; --accent-bg: #eff6ff;
-  --success: #10b981; --warn: #f59e0b; --danger: #ef4444;
-  --purple: #8b5cf6; --teal: #14b8a6; --pink: #ec4899; --orange: #f97316;
-  --bg: #f1f5f9; --card: #ffffff;
-  --border: #e2e8f0; --border2: #cbd5e1;
-  --text: #0f172a; --muted: #64748b; --light: #94a3b8;
-  --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
+:root{
+  --navy:#0f172a;--navy2:#1e293b;--navy3:#334155;
+  --accent:#3b82f6;--accent2:#1d4ed8;--accent-bg:#eff6ff;
+  --success:#10b981;--warn:#f59e0b;--danger:#ef4444;
+  --purple:#8b5cf6;--teal:#14b8a6;--pink:#ec4899;--orange:#f97316;
+  --bg:#f1f5f9;--card:#fff;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--muted:#64748b;--light:#94a3b8;
+  --radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 16px rgba(0,0,0,.1);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 13.5px; }
-.app { display: flex; min-height: 100vh; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13.5px}
+.app{display:flex;min-height:100vh}
 
 /* SIDEBAR */
-.sb { width: 220px; background: var(--navy); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-.sb-logo { padding: 20px 18px 16px; border-bottom: 1px solid #1e293b; }
-.sb-logo-title { font-size: 16px; font-weight: 700; letter-spacing: -.3px; color: #fff; display: flex; align-items: center; gap: 8px; }
-.sb-logo-sub { font-size: 11px; color: #64748b; margin-top: 3px; }
-.sb-nav { padding: 12px 10px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
-.sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 500; transition: all .12s; user-select: none; }
-.sb-item:hover { background: #1e293b; color: #fff; }
-.sb-item.active { background: var(--accent); color: #fff; }
-.sb-item i { font-size: 17px; width: 20px; flex-shrink: 0; }
-.sb-section { padding: 8px 18px 4px; font-size: 10px; font-weight: 700; letter-spacing: .08em; color: #475569; text-transform: uppercase; margin-top: 8px; }
-.sb-footer { padding: 14px 16px; border-top: 1px solid #1e293b; font-size: 11px; color: #475569; }
-.sb-user { display: flex; align-items: center; gap: 8px; }
-.sb-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.sb{width:220px;background:var(--navy);color:#fff;display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid #1e293b}
+.sb-logo-title{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.sb-logo-sub{font-size:10px;color:#475569;margin-top:2px}
+.sb-nav{padding:10px 8px;flex:1;display:flex;flex-direction:column;gap:2px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;color:#94a3b8;font-size:12.5px;font-weight:500;transition:all .12s;user-select:none}
+.sb-item:hover{background:#1e293b;color:#fff}
+.sb-item.active{background:var(--accent);color:#fff}
+.sb-item i{font-size:16px;width:18px;flex-shrink:0}
+.sb-section{padding:8px 16px 3px;font-size:10px;font-weight:700;letter-spacing:.08em;color:#475569;text-transform:uppercase;margin-top:6px}
+.sb-footer{padding:12px 14px;border-top:1px solid #1e293b}
+.sb-user{display:flex;align-items:center;gap:8px}
+.sb-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-badge{font-size:9px;padding:1px 6px;border-radius:20px;font-weight:700}
 
 /* MAIN */
-.main { flex: 1; overflow: auto; }
-.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
-.topbar-title { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.content { padding: 24px 28px; }
+.main{flex:1;overflow:auto;display:flex;flex-direction:column}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.topbar-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.content{padding:20px 24px;flex:1}
 
 /* BUTTONS */
-.btn { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--card); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all .12s; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); white-space: nowrap; }
-.btn:hover { background: var(--bg); }
-.btn:active { transform: scale(.98); }
-.btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
-.btn-primary:hover { background: var(--accent2); }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.btn-ghost { border-color: transparent; background: transparent; box-shadow: none; }
-.btn-ghost:hover { background: var(--bg); }
-.btn-danger { background: #fef2f2; color: var(--danger); border-color: #fecaca; }
-.btn-danger:hover { background: #fee2e2; }
-.btn-success { background: #f0fdf4; color: var(--success); border-color: #bbf7d0; }
+.btn{padding:7px 13px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:12.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .12s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:var(--shadow)}
+.btn:hover{background:var(--bg)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:#fff;border-color:transparent}
+.btn-primary:hover{background:var(--accent2)}
+.btn-success{background:var(--success);color:#fff;border-color:transparent}
+.btn-success:hover{background:#059669}
+.btn-warn{background:var(--warn);color:#fff;border-color:transparent}
+.btn-sm{padding:4px 9px;font-size:12px}
+.btn-ghost{border-color:transparent;background:transparent;box-shadow:none}
+.btn-ghost:hover{background:var(--bg)}
+.btn-danger{background:#fef2f2;color:var(--danger);border-color:#fecaca}
+.btn-danger:hover{background:#fee2e2}
 
 /* CARDS */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
-.card-p { padding: 18px; }
-
-/* METRICS */
-.metric-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-.metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--c, var(--accent)); }
-.metric-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
-.metric-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--c, var(--text)); }
-.metric-sub { font-size: 11px; color: var(--light); margin-top: 4px; }
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow)}
+.card-p{padding:16px}
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--accent))}
+.metric-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+.metric-value{font-size:26px;font-weight:700;letter-spacing:-1px;color:var(--c,var(--text))}
+.metric-sub{font-size:11px;color:var(--light);margin-top:3px}
 
 /* TABLE */
-table { width: 100%; border-collapse: collapse; }
-th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); background: #f8fafc; }
-td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: #f8fafc; cursor: pointer; }
+table{width:100%;border-collapse:collapse}
+th{padding:9px 13px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);background:#f8fafc}
+td{padding:11px 13px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f8fafc;cursor:pointer}
 
 /* BADGE */
-.badge { padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
-.avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.badge{padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
 
 /* INPUT */
-.input { background: #f8fafc; border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: inherit; width: 100%; outline: none; transition: border .12s; }
-.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
-select.input { cursor: pointer; }
-textarea.input { resize: vertical; min-height: 70px; }
-.field { margin-bottom: 13px; }
-.field-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.input{background:#f8fafc;border:1px solid var(--border2);border-radius:8px;padding:8px 11px;color:var(--text);font-size:13px;font-family:inherit;width:100%;outline:none;transition:border .12s}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+select.input{cursor:pointer}
+textarea.input{resize:vertical;min-height:65px}
+.field{margin-bottom:12px}
+.field-label{font-size:10.5px;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.field-row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
 
 /* KANBAN */
-.kanban-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; min-height: 400px; }
-.kanban-scroll::-webkit-scrollbar { height: 6px; }
-.kanban-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-.k-col { background: #f1f5f9; border: 1px solid var(--border); border-radius: 12px; min-width: 200px; flex: 0 0 200px; display: flex; flex-direction: column; transition: border-color .12s, background .12s; }
-.k-col.drag-over { border-color: var(--accent); background: var(--accent-bg); }
-.k-head { padding: 12px 12px 10px; border-bottom: 1px solid var(--border); }
-.k-stage-row { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
-.k-count { font-size: 11px; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 1px 7px; color: var(--muted); margin-left: auto; }
-.k-total { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
-.k-body { padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 7px; overflow-y: auto; max-height: 70vh; }
-.k-card { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 11px 12px; cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
-.k-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,.1); transform: translateY(-1px); }
-.k-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.k-phone { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
-.k-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
-.k-amount { font-size: 13px; font-weight: 700; color: var(--accent); }
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.kanban-scroll{display:flex;gap:9px;overflow-x:auto;padding-bottom:10px;min-height:400px}
+.kanban-scroll::-webkit-scrollbar{height:5px}
+.kanban-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+.k-col{background:#f1f5f9;border:1px solid var(--border);border-radius:12px;min-width:185px;flex:0 0 185px;display:flex;flex-direction:column;transition:border-color .12s,background .12s}
+.k-col.drag-over{border-color:var(--accent);background:var(--accent-bg)}
+.k-head{padding:11px 11px 9px;border-bottom:1px solid var(--border)}
+.k-stage-row{font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:6px}
+.k-count{font-size:11px;background:#fff;border:1px solid var(--border);border-radius:20px;padding:1px 6px;color:var(--muted);margin-left:auto}
+.k-total{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500}
+.k-body{padding:7px;flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:68vh}
+.k-card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px 11px;cursor:pointer;transition:all .12s;box-shadow:var(--shadow)}
+.k-card:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.1);transform:translateY(-1px)}
+.k-name{font-size:12.5px;font-weight:700;margin-bottom:2px}
+.k-phone{font-size:11px;color:var(--muted);margin-bottom:5px}
+.k-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
 
 /* MODAL */
-.overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); }
-.modal { background: var(--card); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.2); width: 860px; max-width: 100%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
-.modal-sm { width: 460px; }
-.modal-hd { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.modal-title { font-size: 17px; font-weight: 700; }
-.modal-body { flex: 1; overflow-y: auto; }
-.modal-ft { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.modal{background:var(--card);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:900px;max-width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-sm{width:460px}
+.modal-md{width:600px}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-title{font-size:16px;font-weight:700}
+.modal-body{flex:1;overflow-y:auto}
+.modal-ft{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
 
 /* TABS */
-.tabs { display: flex; gap: 2px; padding: 14px 22px 0; border-bottom: 1px solid var(--border); background: #f8fafc; overflow-x: auto; flex-shrink: 0; }
-.tabs::-webkit-scrollbar { height: 3px; }
-.tab { padding: 8px 14px; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); transition: all .12s; white-space: nowrap; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; }
-.tab.active { background: var(--card); color: var(--accent); border-color: var(--border); }
-.tab:hover:not(.active) { color: var(--text); }
-.tab-body { padding: 20px 22px; }
+.tabs{display:flex;gap:2px;padding:12px 20px 0;border-bottom:1px solid var(--border);background:#f8fafc;overflow-x:auto;flex-shrink:0}
+.tabs::-webkit-scrollbar{height:3px}
+.tab{padding:7px 12px;border-radius:8px 8px 0 0;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);transition:all .12s;white-space:nowrap;border:1px solid transparent;border-bottom:none;margin-bottom:-1px}
+.tab.active{background:var(--card);color:var(--accent);border-color:var(--border)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-body{padding:18px 20px}
 
 /* PROGRESS */
-.prog-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-.prog-bar { height: 100%; border-radius: 3px; transition: width .3s; }
+.prog-wrap{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-bar{height:100%;border-radius:3px;transition:width .3s}
 
 /* CHECKLIST */
-.cl-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-.cl-item:last-child { border-bottom: none; }
-.cl-item:hover { opacity: .8; }
-.cl-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .12s; }
-.cl-box.done { background: var(--success); border-color: var(--success); }
+.cl-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.cl-item:last-child{border-bottom:none}
+.cl-box{width:17px;height:17px;border-radius:4px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.cl-box.done{background:var(--success);border-color:var(--success)}
 
-/* TASK */
-.task-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
-.task-row:last-child { border-bottom: none; }
-.task-chk { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all .12s; }
+/* ACCOMP STAGES */
+.accomp-stages{display:flex;gap:0;margin:10px 0;overflow-x:auto}
+.accomp-step{flex:1;min-width:70px;text-align:center;position:relative}
+.accomp-step::before{content:'';position:absolute;top:10px;left:0;right:0;height:2px;background:var(--border);z-index:0}
+.accomp-step:first-child::before{left:50%}
+.accomp-step:last-child::before{right:50%}
+.accomp-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);background:var(--card);display:flex;align-items:center;justify-content:center;margin:0 auto 5px;font-size:9px;font-weight:700;position:relative;z-index:1;transition:all .12s;cursor:pointer}
+.accomp-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+.accomp-dot.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(59,130,246,.2)}
+.accomp-label{font-size:9px;color:var(--muted);font-weight:500;line-height:1.2}
 
-/* STAGE PROGRESS BAR */
-.accomp-stages { display: flex; gap: 0; margin: 12px 0; }
-.accomp-step { flex: 1; text-align: center; position: relative; }
-.accomp-step::before { content: ''; position: absolute; top: 10px; left: 0; right: 0; height: 2px; background: var(--border); z-index: 0; }
-.accomp-step:first-child::before { left: 50%; }
-.accomp-step:last-child::before { right: 50%; }
-.accomp-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border2); background: var(--card); display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 10px; font-weight: 700; position: relative; z-index: 1; transition: all .12s; }
-.accomp-dot.done { background: var(--success); border-color: var(--success); color: #fff; }
-.accomp-dot.active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.2); }
-.accomp-label { font-size: 9px; color: var(--muted); font-weight: 500; line-height: 1.2; }
+/* SEARCH */
+.search-wrap{position:relative}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none}
+.search-wrap input{padding-left:32px}
 
-/* SEARCH BAR */
-.search-wrap { position: relative; }
-.search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; pointer-events: none; }
-.search-wrap input { padding-left: 34px; }
+/* CREDIT GRID */
+.credit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.credit-option{border:2px solid var(--border);border-radius:8px;padding:8px 8px;cursor:pointer;text-align:center;transition:all .12s}
+.credit-option.sel{border-color:var(--accent);background:var(--accent-bg)}
+.credit-option:hover:not(.sel){border-color:var(--border2)}
 
-/* FILTER BAR */
-.filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy)}
+.login-box{background:var(--card);border-radius:16px;padding:36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo-title{font-size:22px;font-weight:800;color:var(--navy)}
+.login-logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
 
-/* KPI TABLE */
-.kpi-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-.kpi-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+/* WA BADGE */
+.wa-badge{background:#25d36622;color:#25d366;border:1px solid #25d36644;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+
+/* TOGGLE */
+.toggle{width:40px;height:22px;background:var(--border2);border-radius:20px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--accent)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle.on::after{left:21px}
+
+/* SECTION HDR */
+.section-hdr{font-weight:700;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 
 /* COMMENT */
-.comment-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
-.comment-item:last-child { border-bottom: none; }
-.comment-meta { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: flex; gap: 8px; }
-.comment-text { font-size: 13px; line-height: 1.5; }
-
-/* TAGS */
-.source-badge { padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
-
-/* LOADING */
-.loading { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--muted); font-size: 14px; gap: 10px; }
+.comment-item{padding:9px 0;border-bottom:1px solid var(--border)}
+.comment-item:last-child{border-bottom:none}
+.comment-meta{font-size:11px;color:var(--muted);margin-bottom:3px;display:flex;gap:8px;align-items:center}
+.comment-text{font-size:13px;line-height:1.5}
 
 /* TOAST */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 9999; box-shadow: var(--shadow-md); }
+.toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;box-shadow:var(--shadow-md)}
 
-/* CONTRACT HIGHLIGHT */
-.contract-box { background: linear-gradient(135deg, #eff6ff, #f5f3ff); border: 1px solid #c7d2fe; border-radius: 10px; padding: 16px; }
-.contract-amount { font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+/* CONTRACT BOX */
+.contract-box{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #c7d2fe;border-radius:10px;padding:14px}
+.contract-amount{font-size:26px;font-weight:800;color:var(--accent);letter-spacing:-1px}
 
-/* CREDIT STATUS */
-.credit-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-.credit-option { border: 2px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; text-align: center; transition: all .12s; }
-.credit-option.selected { border-color: var(--accent); background: var(--accent-bg); }
-.credit-option:hover:not(.selected) { border-color: var(--border2); }
+/* SOURCE */
+.src-badge{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+/* KPI */
+.kpi-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.kpi-fill{height:100%;background:var(--accent);border-radius:4px}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
 </style>
 </head>
 <body>
@@ -203,41 +211,67 @@ textarea.input { resize: vertical; min-height: 70px; }
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
-const SK = 'mortgage_crm_v1';
+const { useState, useEffect, useRef, useCallback } = React;
+const SK = 'mortg_crm_v3';
 
-// ═══════════════════════════ CONSTANTS ════════════════════════════
-const PIPELINE = [
-  { id:'new_lead',      label:'Новый лид',        color:'#6366f1' },
-  { id:'in_work',       label:'Взят в работу',    color:'#0ea5e9' },
-  { id:'analysis',      label:'Анализ клиента',   color:'#f59e0b' },
-  { id:'consultation',  label:'Платная консульт.',color:'#a855f7' },
-  { id:'contract',      label:'Договор',          color:'#ec4899' },
-  { id:'accompaniment', label:'Сопровождение',    color:'#14b8a6' },
-  { id:'approval',      label:'Одобрение',        color:'#10b981' },
-  { id:'deal',          label:'Сделка',           color:'#f97316' },
-  { id:'issuance',      label:'Выдача ипотеки',   color:'#22c55e' },
-  { id:'closed',        label:'Закрыто',          color:'#64748b' },
+// ══════════════════════════ CONSTANTS ══════════════════════════════
+const DEFAULT_PIPELINE = [
+  { id:'new_lead',      label:'Новый лид',          color:'#6366f1' },
+  { id:'in_work',       label:'Взят в работу',      color:'#0ea5e9' },
+  { id:'analysis',      label:'Анализ клиента',     color:'#f59e0b' },
+  { id:'consultation',  label:'Платная консульт.',  color:'#a855f7' },
+  { id:'contract',      label:'Договор',            color:'#ec4899' },
+  { id:'accompaniment', label:'Сопровождение',      color:'#14b8a6' },
+  { id:'approval',      label:'Одобрение',          color:'#10b981' },
+  { id:'deal',          label:'Сделка',             color:'#f97316' },
+  { id:'issuance',      label:'Выдача ипотеки',     color:'#22c55e' },
+  { id:'closed',        label:'Закрыто',            color:'#64748b' },
 ];
-const PL_MAP = Object.fromEntries(PIPELINE.map(p=>[p.id,p]));
+
+const DEFAULT_MANAGERS = [
+  { id:'m1', name:'Айгерим Байсейтова', phone:'+7 701 000-00-01', role:'manager', color:'#6366f1', active:true },
+  { id:'m2', name:'Данияр Сейтов',      phone:'+7 702 000-00-02', role:'manager', color:'#10b981', active:true },
+  { id:'m3', name:'Мадина Касымова',    phone:'+7 705 000-00-03', role:'manager', color:'#f59e0b', active:true },
+  { id:'m4', name:'Руслан Тулеев',      phone:'+7 747 000-00-04', role:'manager', color:'#ec4899', active:true },
+];
+
+const ROLES = [
+  { id:'admin',    label:'Техник/Администратор', color:'#ef4444' },
+  { id:'head',     label:'Руководитель',         color:'#8b5cf6' },
+  { id:'manager',  label:'Менеджер',             color:'#3b82f6' },
+  { id:'specialist',label:'Ипотечный специалист',color:'#14b8a6'},
+  { id:'qa',       label:'Отдел контроля',       color:'#f59e0b' },
+];
+
+const USERS = [
+  { id:'u_admin', name:'Администратор', login:'admin',   password:'admin123',   role:'admin',    managerId:null },
+  { id:'u_head',  name:'Руководитель',  login:'head',    password:'head123',    role:'head',     managerId:null },
+  { id:'u_m1',    name:'Айгерим Б.',    login:'aigerim', password:'aigerim123', role:'manager',  managerId:'m1' },
+  { id:'u_m2',    name:'Данияр С.',     login:'daniyar', password:'daniyar123', role:'manager',  managerId:'m2' },
+  { id:'u_m3',    name:'Мадина К.',     login:'madina',  password:'madina123',  role:'manager',  managerId:'m3' },
+  { id:'u_m4',    name:'Руслан Т.',     login:'ruslan',  password:'ruslan123',  role:'manager',  managerId:'m4' },
+];
 
 const SOURCES = [
-  {id:'instagram',label:'Instagram'},{id:'tiktok',label:'TikTok'},
-  {id:'whatsapp',label:'WhatsApp'},{id:'recommendation',label:'Рекомендация'},
-  {id:'site',label:'Сайт'},{id:'kaspi',label:'Kaspi'},
-  {id:'telegram',label:'Telegram'},{id:'other',label:'Другое'},
+  {id:'instagram',label:'Instagram',color:'#e1306c'},
+  {id:'tiktok',label:'TikTok',color:'#010101'},
+  {id:'whatsapp',label:'WhatsApp',color:'#25d366'},
+  {id:'recommendation',label:'Рекомендация',color:'#f59e0b'},
+  {id:'site',label:'Сайт',color:'#3b82f6'},
+  {id:'kaspi',label:'Kaspi',color:'#ef4444'},
+  {id:'telegram',label:'Telegram',color:'#0088cc'},
+  {id:'other',label:'Другое',color:'#64748b'},
 ];
-const SOURCE_COLORS = {instagram:'#e1306c',tiktok:'#010101',whatsapp:'#25d366',recommendation:'#f59e0b',site:'#3b82f6',kaspi:'#ef4444',telegram:'#0088cc',other:'#64748b'};
+const SRC_MAP = Object.fromEntries(SOURCES.map(s=>[s.id,s]));
 
 const CONTACT_STATUSES = ['Дозвонился','Не отвечает','Перезвонить','Отказ','Думает','Назначена встреча'];
-const MARITAL_STATUSES = ['Женат/Замужем','Холост/Не замужем','Разведён(а)','Вдовец/Вдова'];
-const WORK_TYPES = [{id:'official',label:'Официальная'},{id:'ip',label:'ИП'},{id:'self',label:'Самозанятый'},{id:'none',label:'Без офиц. работы'}];
-const DOWN_TYPES = [{id:'cash',label:'Наличка'},{id:'deposit',label:'Депозит'},{id:'mixed',label:'Смешанный'}];
-
+const MARITAL = ['Женат/Замужем','Холост/Не замужем','Разведён(а)','Вдовец/Вдова'];
+const WORK_TYPES = [{id:'official',l:'Официальная'},{id:'ip',l:'ИП'},{id:'self',l:'Самозанятый'},{id:'none',l:'Без офиц.работы'}];
+const DOWN_TYPES = [{id:'cash',l:'Наличка'},{id:'deposit',l:'Депозит'},{id:'mixed',l:'Смешанный'}];
 const CREDIT_STATUSES = [
   {id:'good',label:'Хорошая',color:'#10b981'},{id:'medium',label:'Средняя',color:'#f59e0b'},
   {id:'bad',label:'Плохая',color:'#ef4444'},{id:'overdue',label:'Просрочки',color:'#dc2626'},
-  {id:'current',label:'Текущие кредиты',color:'#f97316'},{id:'microloans',label:'Микрозаймы',color:'#f97316'},
+  {id:'current',label:'Тек. кредиты',color:'#f97316'},{id:'microloans',label:'Микрозаймы',color:'#f97316'},
   {id:'arrests',label:'Аресты',color:'#991b1b'},{id:'none',label:'Нет КИ',color:'#64748b'},
 ];
 const CR_MAP = Object.fromEntries(CREDIT_STATUSES.map(c=>[c.id,c]));
@@ -256,38 +290,76 @@ const CONTRACT_TYPES = [
   {id:'rental',label:'Арендное жилье',amount:0},
   {id:'otbasy',label:'Отбасы банк',amount:0},
   {id:'commercial',label:'Коммерческая ипотека',amount:0},
-  {id:'no_income',label:'Без подтверждения дохода',amount:0},
+  {id:'no_income',label:'Без подтвержд. дохода',amount:0},
 ];
 const CT_MAP = Object.fromEntries(CONTRACT_TYPES.map(c=>[c.id,c]));
 
 const ACCOMP_STAGES = ['Сбор документов','Проверка БКИ','Подготовка доходов','Выбор программы','Подача заявки','Одобрение','Поиск квартиры','Оценка','Сделка','Выдача ипотеки','Закрытие'];
-
 const TASK_TYPES = ['Позвонить','Запросить документы','Отправить договор','Назначить встречу','Проверить депозит','Проверить БКИ','Другое'];
-const MANAGERS = ['Айгерим Б.','Данияр С.','Мадина К.','Руслан Т.'];
 const CITIES = ['Алматы','Астана','Шымкент','Актобе','Другой'];
 
-const CHECKLISTS = {
-  full:      {name:'Стандартное',items:['ИИН проверен','Доход подтверждён','КИ проверена','ПВ подтверждён','Договор подписан','Банк выбран','Заявка подана','Одобрение получено','Квартира найдена','Оценка проведена','Сделка оформлена']},
-  nauryz:    {name:'Наурыз',items:['Депозит проверен','Срок депозита','Подтверждение дохода','Пенсионные','КИ проверена','Справки получены','Оценка недвижимости']},
-  otbasy:    {name:'Отбасы',items:['Депозит 36+ мес','Мин. ставка','БКИ справка','Справка о доходах','Воен. учёт (муж)','2 НДФЛ','Оценка имущества']},
-  commercial:{name:'Коммерческая',items:['БИН компании','Баланс предприятия','Налог. задолженность','Оборот по счёту','Залоговое имущество','Страховка']},
-  online:    {name:'Онлайн',items:['Документы получены','Zoom-консультация','КП отправлено','Договор онлайн','Заявка подана']},
-};
+const DEFAULT_CHECKLIST_TEMPLATES = [
+  { id:'tpl_base',  name:'Базовый (все этапы)', stage:'all', color:'#3b82f6', items:[
+    {id:'ci1',text:'ИИН проверен',type:'check'},
+    {id:'ci2',text:'ЭЦП заёмщика получено',type:'ecp'},
+    {id:'ci3',text:'ЭЦП созаёмщика получено',type:'ecp'},
+    {id:'ci4',text:'Доход подтверждён',type:'check'},
+    {id:'ci5',text:'КИ проверена',type:'check'},
+    {id:'ci6',text:'ПВ подтверждён',type:'check'},
+    {id:'ci7',text:'Договор подписан',type:'check'},
+    {id:'ci8',text:'Банк выбран',type:'check'},
+  ]},
+  { id:'tpl_docs', name:'Документы', stage:'accompaniment', color:'#8b5cf6', items:[
+    {id:'cd1',text:'Удостоверение личности',type:'doc'},
+    {id:'cd2',text:'Справка о доходах (форма 2)',type:'doc'},
+    {id:'cd3',text:'Выписка из ЕНПФ',type:'doc'},
+    {id:'cd4',text:'Справка с БКИ',type:'doc'},
+    {id:'cd5',text:'Договор купли-продажи',type:'doc'},
+    {id:'cd6',text:'Оценочный отчёт',type:'doc'},
+  ]},
+  { id:'tpl_otbasy', name:'Отбасы банк', stage:'contract', color:'#14b8a6', items:[
+    {id:'co1',text:'Депозит 36+ месяцев',type:'check'},
+    {id:'co2',text:'Минимальная ставка подтверждена',type:'check'},
+    {id:'co3',text:'Справка БКИ',type:'doc'},
+    {id:'co4',text:'Справка о доходах',type:'doc'},
+    {id:'co5',text:'ЭЦП заёмщика',type:'ecp'},
+    {id:'co6',text:'ЭЦП созаёмщика',type:'ecp'},
+    {id:'co7',text:'Воен. учёт (муж.)',type:'doc'},
+    {id:'co8',text:'Оценка имущества',type:'doc'},
+  ]},
+  { id:'tpl_nauryz', name:'Наурыз', stage:'contract', color:'#f59e0b', items:[
+    {id:'cn1',text:'Депозит проверен',type:'check'},
+    {id:'cn2',text:'Срок депозита',type:'check'},
+    {id:'cn3',text:'Подтверждение дохода',type:'doc'},
+    {id:'cn4',text:'Пенсионные отчисления',type:'doc'},
+    {id:'cn5',text:'КИ проверена',type:'check'},
+    {id:'cn6',text:'Справки получены',type:'doc'},
+    {id:'cn7',text:'ЭЦП заёмщика',type:'ecp'},
+    {id:'cn8',text:'Оценка недвижимости',type:'doc'},
+  ]},
+];
 
 function uid(){return Math.random().toString(36).slice(2,9)}
 function fmt(n){return n?new Intl.NumberFormat('ru').format(Math.round(n)):'-'}
 function today(){return new Date().toISOString().split('T')[0]}
 function nowStr(){return new Date().toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
 
-function emptyClient(){
+function emptyClient(managerId=''){
   return {
-    id:uid(), fio:'',iin:'',phone:'',city:'Алматы',manager:MANAGERS[0],
-    dateIn:today(),source:'instagram',stage:'new_lead',contactStatus:'',
-    maritalStatus:'',children:'',
+    id:uid(),fio:'',iin:'',phone:'',city:'Алматы',
+    manager:managerId,dateIn:today(),source:'instagram',stage:'new_lead',
+    isWhatsApp:false,waMsgPreview:'',
+    contactStatus:'',maritalStatus:'',children:'',
     officialIncome:'',extraIncome:'',extraIncomeConfirmed:false,
     pensionContributions:'',workExperience:'',workType:'official',
     downPayment:'',downPaymentType:'cash',depositBank:'',depositAmount:'',depositTerm:'',
-    creditStatus:'good',hasOverdue:false,creditsCount:'',monthlyLoad:'',
+    // Отбасы
+    otbasyDeposit:false,otbasyReward:'',otbasyQueue:'',otbasyQueueYear:'',otbasyQueueCity:'',
+    // Completed contracts
+    contracts5y:{hasAssignment:false,cedent:'',contractCode:'',hasOverdue:false,overdueDays:'',overdueAmount:''},
+    contracts5yPlus:{hasAssignment:false,cedent:'',contractCode:'',hasOverdue:false,overdueDays:'',overdueAmount:''},
+    contractAmountsManual:false,
+    creditStatus:'good',hasOverdueCredit:false,creditsCount:'',monthlyLoad:'',
     hadBankRefusal:false,hasRefinancing:false,problematicCredits:false,courtRestrictions:false,
     isReassignment:false,reassignmentComplex:'',reassignmentDeveloper:'',
     reassignmentAmount:'',mortgageBalance:'',reassignmentBank:'',hasDebt:false,urgentSale:false,
@@ -299,53 +371,64 @@ function emptyClient(){
   };
 }
 
-const DEMO = [
-  {...emptyClient(),id:'c1',fio:'Айша Бекова',iin:'950101300456',phone:'+7 701 234-56-78',city:'Алматы',manager:'Айгерим Б.',dateIn:'2025-05-12',source:'instagram',stage:'new_lead',contactStatus:'Не отвечает',officialIncome:'450000',workType:'official',creditStatus:'good'},
-  {...emptyClient(),id:'c2',fio:'Марат Сейтов',iin:'880515401123',phone:'+7 702 345-67-89',city:'Астана',manager:'Данияр С.',dateIn:'2025-05-11',source:'whatsapp',stage:'in_work',contactStatus:'Назначена встреча',officialIncome:'350000',extraIncome:'150000',workType:'ip',creditStatus:'medium',creditsCount:'2',monthlyLoad:'80000'},
-  {...emptyClient(),id:'c3',fio:'Гульнара Иванова',iin:'920320300789',phone:'+7 705 456-78-90',city:'Алматы',manager:'Мадина К.',dateIn:'2025-05-10',source:'recommendation',stage:'analysis',contactStatus:'Дозвонился',officialIncome:'600000',workType:'official',creditStatus:'good',downPaymentType:'deposit',depositBank:'Отбасы',depositAmount:'5000000',depositTerm:'36 мес'},
-  {...emptyClient(),id:'c4',fio:'Тимур Ахметов',iin:'850720400321',phone:'+7 747 567-89-01',city:'Шымкент',manager:'Руслан Т.',dateIn:'2025-05-09',source:'instagram',stage:'consultation',contactStatus:'Думает',officialIncome:'800000',workType:'official',creditStatus:'good'},
-  {...emptyClient(),id:'c5',fio:'Зарина Смакова',iin:'910630300654',phone:'+7 777 678-90-12',city:'Астана',manager:'Айгерим Б.',dateIn:'2025-04-28',source:'tiktok',stage:'contract',contactStatus:'Дозвонился',contractType:'full_all',contractAmount:1100000,officialIncome:'700000',extraIncome:'300000',workType:'official',creditStatus:'good',comments:[{id:'cc1',text:'Договор подписан! Клиент очень доволен условиями.',date:'2025-04-30',author:'Айгерим Б.'}]},
-  {...emptyClient(),id:'c6',fio:'Нурлан Джаксыбеков',iin:'870915401456',phone:'+7 701 789-01-23',city:'Алматы',manager:'Данияр С.',dateIn:'2025-04-20',source:'site',stage:'accompaniment',contactStatus:'Дозвонился',contractType:'full_search',contractAmount:800000,accompStageIndex:3,responsibleManager:'Данияр С.',mortgageSpecialist:'Самал И.',officialIncome:'900000',workType:'official',creditStatus:'medium',checklists:{full:['ИИН проверен','Доход подтверждён','КИ проверена','ПВ подтверждён','Договор подписан','Банк выбран']}},
-  {...emptyClient(),id:'c7',fio:'Динара Касымова',iin:'930210300987',phone:'+7 775 890-12-34',city:'Актобе',manager:'Мадина К.',dateIn:'2025-04-15',source:'kaspi',stage:'approval',contactStatus:'Дозвонился',contractType:'full_extra',contractAmount:900000,accompStageIndex:5,officialIncome:'550000',workType:'official',creditStatus:'good'},
-  {...emptyClient(),id:'c8',fio:'Болат Рахимов',iin:'781205400789',phone:'+7 702 901-23-45',city:'Алматы',manager:'Руслан Т.',dateIn:'2025-04-12',source:'whatsapp',stage:'deal',contactStatus:'Дозвонился',contractType:'full',contractAmount:600000,accompStageIndex:8,officialIncome:'1200000',workType:'ip',creditStatus:'good'},
-  {...emptyClient(),id:'c9',fio:'Алима Сарова',iin:'960410300654',phone:'+7 777 012-34-56',city:'Алматы',manager:'Айгерим Б.',dateIn:'2025-04-08',source:'recommendation',stage:'closed',contactStatus:'Дозвонился',contractType:'full_all',contractAmount:1100000,accompStageIndex:10,officialIncome:'950000',workType:'official',creditStatus:'good',comments:[{id:'cc2',text:'Ипотека выдана! 27,000,000 ₸. Клиент очень доволен.',date:'2025-05-05',author:'Айгерим Б.'}]},
+const DEMO_CLIENTS = [
+  {...emptyClient('m1'),id:'c1',fio:'Айша Бекова',iin:'950101300456',phone:'+7 701 234-56-78',city:'Алматы',manager:'m1',source:'instagram',stage:'new_lead',contactStatus:'Не отвечает',officialIncome:'450000',workType:'official',creditStatus:'good'},
+  {...emptyClient('m2'),id:'c2',fio:'Марат Сейтов',iin:'880515401123',phone:'+7 702 345-67-89',city:'Астана',manager:'m2',source:'whatsapp',stage:'in_work',isWhatsApp:true,contactStatus:'Назначена встреча',officialIncome:'350000',extraIncome:'150000',workType:'ip',creditStatus:'medium',creditsCount:'2',monthlyLoad:'80000'},
+  {...emptyClient('m3'),id:'c3',fio:'Гульнара Иванова',iin:'920320300789',phone:'+7 705 456-78-90',city:'Алматы',manager:'m3',source:'recommendation',stage:'analysis',contactStatus:'Дозвонился',officialIncome:'600000',creditStatus:'good',downPaymentType:'deposit',depositBank:'Отбасы',depositAmount:'5000000',depositTerm:'36 мес',otbasyDeposit:true,otbasyQueueYear:'2023',otbasyQueueCity:'Алматы'},
+  {...emptyClient('m4'),id:'c4',fio:'Тимур Ахметов',iin:'850720400321',phone:'+7 747 567-89-01',city:'Шымкент',manager:'m4',source:'instagram',stage:'consultation',officialIncome:'800000',creditStatus:'good'},
+  {...emptyClient('m1'),id:'c5',fio:'Зарина Смакова',iin:'910630300654',phone:'+7 777 678-90-12',city:'Астана',manager:'m1',source:'tiktok',stage:'contract',contractType:'full_all',contractAmount:1100000,officialIncome:'700000',creditStatus:'good'},
+  {...emptyClient('m2'),id:'c6',fio:'Нурлан Джаксыбеков',iin:'870915401456',phone:'+7 701 789-01-23',city:'Алматы',manager:'m2',source:'site',stage:'accompaniment',contractType:'full_search',contractAmount:800000,accompStageIndex:3,responsibleManager:'m2',mortgageSpecialist:'Самал И.',officialIncome:'900000',creditStatus:'medium',checklists:{tpl_base:['ci1','ci2','ci4','ci5','ci6','ci7']}},
+  {...emptyClient('m3'),id:'c7',fio:'Динара Касымова',iin:'930210300987',phone:'+7 775 890-12-34',city:'Актобе',manager:'m3',source:'kaspi',stage:'approval',contractType:'full_extra',contractAmount:900000,accompStageIndex:5,officialIncome:'550000',creditStatus:'good'},
+  {...emptyClient('m1'),id:'c8',fio:'Болат Рахимов',iin:'781205400789',phone:'+7 702 901-23-45',city:'Алматы',manager:'m1',source:'whatsapp',isWhatsApp:true,stage:'closed',contractType:'full',contractAmount:600000,accompStageIndex:10,officialIncome:'1200000',creditStatus:'good',comments:[{id:'cc1',text:'Ипотека выдана! Клиент очень доволен.',date:'5 май, 10:00',author:'Айгерим Б.',stage:'closed'}]},
 ];
 
-// ═══════════════════════════ HELPERS ══════════════════════════════
-function MH({title,subtitle,onClose}){
+// ══════════════════════════ HELPERS ═══════════════════════════════
+function MH({title,sub,onClose}){
   return <div className="modal-hd">
-    <div><div className="modal-title">{title}</div>{subtitle&&<div style={{fontSize:12,color:'var(--muted)',marginTop:2}}>{subtitle}</div>}</div>
+    <div><div className="modal-title">{title}</div>{sub&&<div style={{fontSize:11,color:'var(--muted)',marginTop:2}}>{sub}</div>}</div>
     <button className="btn btn-ghost btn-sm" onClick={onClose}><i className="ti ti-x"/></button>
   </div>;
 }
 function Fl({label,children}){return <div className="field"><div className="field-label">{label}</div>{children}</div>}
-function MA({onClose,onSave,label='Сохранить',danger}){
+function MA({onClose,onSave,label='Сохранить',saving}){
   return <div className="modal-ft">
     <button className="btn" onClick={onClose}>Отмена</button>
-    <button className={`btn ${danger?'btn-danger':'btn-primary'}`} onClick={onSave}>{label}</button>
+    <button className="btn btn-primary" onClick={onSave} disabled={saving}>{label}</button>
   </div>;
 }
-function StageTag({stageId}){
-  const s=PL_MAP[stageId];
+function Toggle({on,onClick}){return <div className={`toggle${on?' on':''}`} onClick={onClick}/>}
+function StageTag({stageId,pipeline}){
+  const s=(pipeline||DEFAULT_PIPELINE).find(p=>p.id===stageId);
   if(!s)return null;
   return <span className="badge" style={{background:s.color+'22',color:s.color}}>{s.label}</span>;
 }
-function CreditTag({statusId}){
-  const c=CR_MAP[statusId];
-  if(!c)return null;
+function CreditTag({cid}){
+  const c=CR_MAP[cid];if(!c)return null;
   return <span className="badge" style={{background:c.color+'22',color:c.color}}>{c.label}</span>;
 }
-function SourceTag({src}){
-  const s=SOURCES.find(x=>x.id===src);
-  return <span className="source-badge" style={{background:SOURCE_COLORS[src]+'22',color:SOURCE_COLORS[src]}}>{s?.label||src}</span>;
+function SrcTag({src}){
+  const s=SRC_MAP[src];if(!s)return null;
+  return <span className="src-badge" style={{background:s.color+'22',color:s.color}}>{s.label}</span>;
+}
+function ManagerName({id,managers}){
+  const m=(managers||DEFAULT_MANAGERS).find(x=>x.id===id);
+  return m?m.name:id||'—';
 }
 
-// ═══════════════════════════ APP ══════════════════════════════════
+// ══════════════════════════ APP ROOT ══════════════════════════════
 function App(){
-  const [page,setPage]=useState('dashboard');
-  const [clients,setClients]=useState(()=>{
-    try{const s=localStorage.getItem(SK);return s?JSON.parse(s):DEMO;}catch{return DEMO;}
+  const [store,setStore]=useState(()=>{
+    try{const s=localStorage.getItem(SK);return s?JSON.parse(s):{
+      clients:DEMO_CLIENTS,
+      managers:DEFAULT_MANAGERS,
+      pipeline:DEFAULT_PIPELINE,
+      checklistTemplates:DEFAULT_CHECKLIST_TEMPLATES,
+      users:USERS,
+      waLeads:[],
+    };}catch{return{clients:DEMO_CLIENTS,managers:DEFAULT_MANAGERS,pipeline:DEFAULT_PIPELINE,checklistTemplates:DEFAULT_CHECKLIST_TEMPLATES,users:USERS,waLeads:[]};}
   });
+  const [currentUser,setCurrentUser]=useState(null);
+  const [page,setPage]=useState('dashboard');
   const [modal,setModal]=useState(null);
   const [search,setSearch]=useState('');
   const [filterManager,setFilterManager]=useState('');
@@ -355,57 +438,97 @@ function App(){
   const [toast,setToast]=useState(null);
   const toastRef=useRef(null);
 
-  useEffect(()=>{try{localStorage.setItem(SK,JSON.stringify(clients));}catch{}},[clients]);
+  useEffect(()=>{try{localStorage.setItem(SK,JSON.stringify(store));}catch{}},[store]);
 
   function showToast(msg){setToast(msg);clearTimeout(toastRef.current);toastRef.current=setTimeout(()=>setToast(null),2500);}
-  function upd(fn){setClients(cs=>{const n=[...cs];fn(n);return n;});}
-  function saveClient(c){
-    upd(cs=>{const idx=cs.findIndex(x=>x.id===c.id);idx>=0?cs.splice(idx,1,c):cs.push(c);});
-    showToast(c.fio?`${c.fio} сохранён`:'Клиент добавлен');
-    setModal(null);
-  }
-  function delClient(id){upd(cs=>cs.splice(cs.findIndex(x=>x.id===id),1));showToast('Удалено');setModal(null);}
-  function moveClient(id,stage){upd(cs=>{const c=cs.find(x=>x.id===id);if(c)c.stage=stage;});showToast(`Переведён: ${PL_MAP[stage]?.label}`);}
+  function upd(fn){setStore(s=>{const n=JSON.parse(JSON.stringify(s));fn(n);return n;});}
 
-  const filtered=clients.filter(c=>{
+  function saveClient(c){upd(s=>{const i=s.clients.findIndex(x=>x.id===c.id);i>=0?s.clients.splice(i,1,c):s.clients.push(c)});showToast(c.fio?`${c.fio} сохранён`:'Клиент добавлен');setModal(null);}
+  function delClient(id){upd(s=>{s.clients.splice(s.clients.findIndex(x=>x.id===id),1)});showToast('Удалено');setModal(null);}
+  function moveClient(id,stage){upd(s=>{const c=s.clients.find(x=>x.id===id);if(c)c.stage=stage});showToast(`Этап: ${(store.pipeline||DEFAULT_PIPELINE).find(p=>p.id===stage)?.label}`);}
+  function saveManager(m){upd(s=>{const i=s.managers.findIndex(x=>x.id===m.id);i>=0?s.managers.splice(i,1,m):s.managers.push(m)});showToast('Сохранено');setModal(null);}
+  function delManager(id){upd(s=>{s.managers.splice(s.managers.findIndex(x=>x.id===id),1)});showToast('Менеджер удалён');setModal(null);}
+  function saveTpl(t){upd(s=>{const i=s.checklistTemplates.findIndex(x=>x.id===t.id);i>=0?s.checklistTemplates.splice(i,1,t):s.checklistTemplates.push(t)});showToast('Шаблон сохранён');setModal(null);}
+  function delTpl(id){upd(s=>{s.checklistTemplates.splice(s.checklistTemplates.findIndex(x=>x.id===id),1)});showToast('Шаблон удалён');}
+  function savePipelineStage(p){upd(s=>{const i=s.pipeline.findIndex(x=>x.id===p.id);i>=0?s.pipeline.splice(i,1,p):s.pipeline.push(p)});showToast('Этап сохранён');setModal(null);}
+  function delPipelineStage(id){upd(s=>{s.pipeline.splice(s.pipeline.findIndex(x=>x.id===id),1)});showToast('Этап удалён');}
+  function importWaLead(lead){
+    const c={...emptyClient(lead.assignTo||''),fio:lead.fio||'',phone:lead.phone||'',source:'whatsapp',isWhatsApp:true,waMsgPreview:lead.rawText||'',stage:'new_lead'};
+    upd(s=>s.clients.push(c));showToast('Лид из WhatsApp добавлен!');setModal(null);
+  }
+
+  // Role-based visibility
+  function canSee(p){
+    if(!currentUser)return false;
+    const r=currentUser.role;
+    if(r==='admin'||r==='head')return true;
+    if(r==='manager')return['dashboard','clients','tasks'].includes(p);
+    if(r==='specialist')return['dashboard','clients','tasks'].includes(p);
+    if(r==='qa')return['dashboard','clients','kpi'].includes(p);
+    return false;
+  }
+
+  const myManagers=store.managers||DEFAULT_MANAGERS;
+  const myPipeline=store.pipeline||DEFAULT_PIPELINE;
+  const myTpls=store.checklistTemplates||DEFAULT_CHECKLIST_TEMPLATES;
+
+  // filter clients by role
+  const visibleClients=store.clients.filter(c=>{
+    if(currentUser?.role==='manager'){const m=myManagers.find(x=>x.id===currentUser.managerId);if(!m)return false;return c.manager===currentUser.managerId;}
+    return true;
+  });
+  const filtered=visibleClients.filter(c=>{
     if(search&&!c.fio.toLowerCase().includes(search.toLowerCase())&&!c.phone.includes(search)&&!c.iin.includes(search))return false;
     if(filterManager&&c.manager!==filterManager)return false;
     if(filterStage&&c.stage!==filterStage)return false;
     return true;
   });
 
-  const NAV=[
+  if(!currentUser){
+    return <LoginPage users={store.users} onLogin={u=>{setCurrentUser(u);setPage('dashboard');}}/>;
+  }
+
+  const role=ROLES.find(r=>r.id===currentUser.role);
+
+  const NAV_ITEMS=[
     {id:'dashboard',label:'Дашборд',icon:'ti-layout-dashboard'},
     {id:'clients',label:'Клиенты',icon:'ti-users'},
     {id:'tasks',label:'Задачи',icon:'ti-checkbox'},
-    {id:'kpi',label:'KPI сотрудников',icon:'ti-chart-bar'},
-  ];
+    {id:'kpi',label:'KPI',icon:'ti-chart-bar'},
+    {id:'whatsapp',label:'WhatsApp лиды',icon:'ti-brand-whatsapp'},
+    {id:'settings',label:'Настройки',icon:'ti-settings'},
+  ].filter(n=>canSee(n.id)||n.id==='settings'&&(currentUser.role==='admin')||n.id==='whatsapp'&&(currentUser.role!=='qa'));
 
   return <div className="app">
     {/* SIDEBAR */}
     <div className="sb">
       <div className="sb-logo">
-        <div className="sb-logo-title"><i className="ti ti-home-filled" style={{color:'var(--accent)'}}/>Ипотека CRM</div>
+        <div className="sb-logo-title"><i className="ti ti-home-filled" style={{color:'#3b82f6'}}/>Ипотека CRM</div>
         <div className="sb-logo-sub">Система управления клиентами</div>
       </div>
       <div className="sb-nav">
-        <div className="sb-section">Навигация</div>
-        {NAV.map(n=><div key={n.id} className={`sb-item${page===n.id?' active':''}`} onClick={()=>setPage(n.id)}>
+        <div className="sb-section">Меню</div>
+        {NAV_ITEMS.map(n=><div key={n.id} className={`sb-item${page===n.id?' active':''}`} onClick={()=>{setPage(n.id);setSearch('');setFilterStage('');setFilterManager('');}}>
           <i className={`ti ${n.icon}`}/>{n.label}
+          {n.id==='whatsapp'&&<span style={{background:'#25d36633',color:'#25d366',borderRadius:20,padding:'1px 5px',fontSize:10,fontWeight:700,marginLeft:'auto'}}>{store.clients.filter(c=>c.isWhatsApp&&c.stage==='new_lead').length||''}</span>}
         </div>)}
-        <div className="sb-section" style={{marginTop:16}}>Воронка</div>
-        {PIPELINE.map(p=>{
-          const cnt=clients.filter(c=>c.stage===p.id).length;
+        <div className="sb-section" style={{marginTop:12}}>Воронка</div>
+        {myPipeline.map(p=>{
+          const cnt=visibleClients.filter(c=>c.stage===p.id).length;
           return <div key={p.id} className="sb-item" style={{justifyContent:'space-between'}} onClick={()=>{setPage('clients');setFilterStage(p.id);}}>
-            <span style={{display:'flex',alignItems:'center',gap:8}}><span className="dot" style={{background:p.color}}/>{p.label}</span>
-            {cnt>0&&<span style={{background:p.color+'33',color:p.color,borderRadius:20,padding:'1px 7px',fontSize:11,fontWeight:700}}>{cnt}</span>}
+            <span style={{display:'flex',alignItems:'center',gap:7}}><span className="dot" style={{background:p.color}}/>{p.label}</span>
+            {cnt>0&&<span style={{background:p.color+'33',color:p.color,borderRadius:20,padding:'1px 6px',fontSize:10,fontWeight:700}}>{cnt}</span>}
           </div>;
         })}
       </div>
       <div className="sb-footer">
         <div className="sb-user">
-          <div className="sb-avatar">АБ</div>
-          <div><div style={{fontSize:12,fontWeight:600,color:'#94a3b8'}}>Руководитель</div><div style={{fontSize:11,color:'#475569'}}>Полный доступ</div></div>
+          <div className="sb-avatar" style={{background:role?.color||'#3b82f6'}}>{currentUser.name[0]}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:11,fontWeight:600,color:'#94a3b8',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{currentUser.name}</div>
+            <span className="sb-badge" style={{background:role?.color+'33',color:role?.color}}>{role?.label}</span>
+          </div>
+          <button className="btn btn-ghost btn-sm" style={{color:'#64748b',padding:'4px'}} onClick={()=>setCurrentUser(null)} title="Выйти"><i className="ti ti-logout" style={{fontSize:15}}/></button>
         </div>
       </div>
     </div>
@@ -413,74 +536,104 @@ function App(){
     {/* MAIN */}
     <div className="main">
       <div className="topbar">
-        <div className="topbar-title">{NAV.find(n=>n.id===page)?.label||'CRM'}</div>
+        <div className="topbar-title">{NAV_ITEMS.find(n=>n.id===page)?.label||'CRM'}</div>
         <div className="topbar-right">
           {page==='clients'&&<>
-            <div className="search-wrap"><i className="ti ti-search"/><input className="input" style={{width:220}} placeholder="Поиск клиента..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
-            <select className="input" style={{width:150}} value={filterManager} onChange={e=>setFilterManager(e.target.value)}>
-              <option value="">Все менеджеры</option>{MANAGERS.map(m=><option key={m} value={m}>{m}</option>)}
-            </select>
-            <select className="input" style={{width:160}} value={filterStage} onChange={e=>setFilterStage(e.target.value)}>
-              <option value="">Все этапы</option>{PIPELINE.map(p=><option key={p.id} value={p.id}>{p.label}</option>)}
+            <div className="search-wrap"><i className="ti ti-search"/><input className="input" style={{width:200}} placeholder="Поиск клиента..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+            {currentUser.role!=='manager'&&<select className="input" style={{width:140}} value={filterManager} onChange={e=>setFilterManager(e.target.value)}>
+              <option value="">Все менеджеры</option>{myManagers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
+            </select>}
+            <select className="input" style={{width:150}} value={filterStage} onChange={e=>setFilterStage(e.target.value)}>
+              <option value="">Все этапы</option>{myPipeline.map(p=><option key={p.id} value={p.id}>{p.label}</option>)}
             </select>
           </>}
-          <button className="btn btn-primary" onClick={()=>setModal({type:'client',item:emptyClient()})}>
+          <button className="btn btn-primary" onClick={()=>setModal({type:'client',item:emptyClient(currentUser.managerId||'')})}>
             <i className="ti ti-plus"/>Новый клиент
           </button>
         </div>
       </div>
+
       <div className="content">
-        {page==='dashboard'&&<Dashboard clients={clients} onOpen={c=>setModal({type:'client',item:c})}/>}
-        {page==='clients'&&<ClientsPage clients={filtered} allClients={clients} onOpen={c=>setModal({type:'client',item:c})} dragId={dragId} setDragId={setDragId} dragOver={dragOver} setDragOver={setDragOver} onMove={moveClient}/>}
-        {page==='tasks'&&<TasksPage clients={clients} onOpen={c=>setModal({type:'client',item:c})} onSave={saveClient}/>}
-        {page==='kpi'&&<KPIPage clients={clients}/>}
+        {page==='dashboard'&&<Dashboard clients={visibleClients} managers={myManagers} pipeline={myPipeline} onOpen={c=>setModal({type:'client',item:c})}/>}
+        {page==='clients'&&<ClientsPage clients={filtered} managers={myManagers} pipeline={myPipeline} onOpen={c=>setModal({type:'client',item:c})} dragId={dragId} setDragId={setDragId} dragOver={dragOver} setDragOver={setDragOver} onMove={moveClient}/>}
+        {page==='tasks'&&<TasksPage clients={visibleClients} managers={myManagers} onOpen={c=>setModal({type:'client',item:c})}/>}
+        {page==='kpi'&&<KPIPage clients={visibleClients} managers={myManagers}/>}
+        {page==='whatsapp'&&<WhatsAppPage clients={visibleClients} managers={myManagers} onImport={importWaLead} onOpen={c=>setModal({type:'client',item:c})}/>}
+        {page==='settings'&&currentUser.role==='admin'&&<SettingsPage store={store} managers={myManagers} pipeline={myPipeline} templates={myTpls}
+          onSaveManager={saveManager} onDelManager={delManager}
+          onSavePipeline={savePipelineStage} onDelPipeline={delPipelineStage}
+          onSaveTpl={saveTpl} onDelTpl={delTpl}
+          onOpenModal={setModal}
+        />}
+        {page==='settings'&&currentUser.role!=='admin'&&<div style={{textAlign:'center',padding:60,color:'var(--muted)'}}>
+          <i className="ti ti-lock" style={{fontSize:40,display:'block',marginBottom:12,opacity:.3}}/>Доступ только для администратора
+        </div>}
       </div>
     </div>
 
     {/* MODALS */}
-    {modal?.type==='client'&&<ClientModal key={modal.item.id} client={modal.item} onSave={saveClient} onDelete={delClient} onClose={()=>setModal(null)}/>}
+    {modal?.type==='client'&&<ClientModal key={modal.item.id} client={modal.item} managers={myManagers} pipeline={myPipeline} templates={myTpls} currentUser={currentUser} onSave={saveClient} onDelete={delClient} onClose={()=>setModal(null)}/>}
+    {modal?.type==='manager'&&<ManagerModal item={modal.item} onSave={saveManager} onClose={()=>setModal(null)}/>}
+    {modal?.type==='pipeline'&&<PipelineModal item={modal.item} onSave={savePipelineStage} onClose={()=>setModal(null)}/>}
+    {modal?.type==='template'&&<TemplateModal item={modal.item} pipeline={myPipeline} onSave={saveTpl} onClose={()=>setModal(null)}/>}
+    {modal?.type==='wa_import'&&<WaImportModal managers={myManagers} onImport={importWaLead} onClose={()=>setModal(null)}/>}
     {toast&&<div className="toast"><i className="ti ti-check"/> {toast}</div>}
   </div>;
 }
 
-// ═══════════════════════════ DASHBOARD ════════════════════════════
-function Dashboard({clients,onOpen}){
-  const now=new Date(),month=now.getMonth(),year=now.getFullYear();
-  const thisMonth=clients.filter(c=>{const d=new Date(c.createdAt);return d.getMonth()===month&&d.getFullYear()===year;});
-  const active=clients.filter(c=>!['closed'].includes(c.stage));
+// ══════════════════════════ LOGIN ══════════════════════════════════
+function LoginPage({users,onLogin}){
+  const [login,setLogin]=useState('');
+  const [pass,setPass]=useState('');
+  const [err,setErr]=useState('');
+  function tryLogin(){
+    const u=users.find(x=>x.login===login&&x.password===pass);
+    if(u)onLogin(u);else setErr('Неверный логин или пароль');
+  }
+  const hints=[{l:'admin',p:'admin123',r:'Техник'},{l:'head',p:'head123',r:'Руководитель'},{l:'aigerim',p:'aigerim123',r:'Менеджер'},{l:'daniyar',p:'daniyar123',r:'Менеджер'}];
+  return <div className="login-wrap">
+    <div className="login-box">
+      <div className="login-logo">
+        <div style={{fontSize:28,marginBottom:6}}>🏠</div>
+        <div className="login-logo-title">Ипотека CRM</div>
+        <div className="login-logo-sub">Введите ваши данные для входа</div>
+      </div>
+      <Fl label="Логин"><input className="input" value={login} onChange={e=>{setLogin(e.target.value);setErr('')}} placeholder="Ваш логин" onKeyDown={e=>e.key==='Enter'&&tryLogin()}/></Fl>
+      <Fl label="Пароль"><input className="input" type="password" value={pass} onChange={e=>{setPass(e.target.value);setErr('')}} placeholder="Ваш пароль" onKeyDown={e=>e.key==='Enter'&&tryLogin()}/></Fl>
+      {err&&<div style={{color:'var(--danger)',fontSize:12,marginBottom:10,textAlign:'center'}}>{err}</div>}
+      <button className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginBottom:16}} onClick={tryLogin}><i className="ti ti-login"/>Войти</button>
+      <div style={{background:'#f8fafc',borderRadius:8,padding:'10px',border:'1px solid var(--border)'}}>
+        <div style={{fontSize:10,fontWeight:700,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:8}}>Тестовые аккаунты</div>
+        {hints.map(h=><div key={h.l} style={{display:'flex',justifyContent:'space-between',fontSize:11,marginBottom:4,cursor:'pointer',padding:'3px 6px',borderRadius:5,hover:'background:#e2e8f0'}} onClick={()=>{setLogin(h.l);setPass(h.p);setErr('')}}>
+          <span style={{fontWeight:600}}>{h.l} / {h.p}</span><span style={{color:'var(--muted)'}}>{h.r}</span>
+        </div>)}
+      </div>
+    </div>
+  </div>;
+}
+
+// ══════════════════════════ DASHBOARD ══════════════════════════════
+function Dashboard({clients,managers,pipeline,onOpen}){
   const withContract=clients.filter(c=>c.contractType);
   const revenue=withContract.reduce((s,c)=>s+c.contractAmount,0);
   const inAccomp=clients.filter(c=>c.stage==='accompaniment');
-  const approved=clients.filter(c=>['approval','deal','issuance','closed'].includes(c.stage));
   const closed=clients.filter(c=>c.stage==='closed');
+  const waNew=clients.filter(c=>c.isWhatsApp&&c.stage==='new_lead');
 
-  const managerStats=MANAGERS.map(m=>{
-    const mc=clients.filter(c=>c.manager===m);
+  const stats=managers.map(m=>{
+    const mc=clients.filter(c=>c.manager===m.id);
     const contracts=mc.filter(c=>c.contractType);
     const rev=contracts.reduce((s,c)=>s+c.contractAmount,0);
-    const conv=mc.length?Math.round(contracts.length/mc.length*100):0;
-    return {name:m,leads:mc.length,contracts:contracts.length,revenue:rev,conversion:conv};
+    return {m,leads:mc.length,contracts:contracts.length,revenue:rev,conv:mc.length?Math.round(contracts.length/mc.length*100):0};
   }).sort((a,b)=>b.revenue-a.revenue);
-
-  const maxRev=Math.max(...managerStats.map(m=>m.revenue),1);
-
-  // Funnel conversions
-  const funnelData=[
-    {label:'Лиды',count:clients.length},
-    {label:'В работе',count:clients.filter(c=>c.stage!=='new_lead').length},
-    {label:'Консультация',count:clients.filter(c=>['consultation','contract','accompaniment','approval','deal','issuance','closed'].includes(c.stage)).length},
-    {label:'Договор',count:withContract.length},
-    {label:'Одобрение',count:approved.length},
-    {label:'Закрыто',count:closed.length},
-  ];
 
   return <div>
     <div className="metric-grid">
       {[
-        {label:'Новых лидов (месяц)',value:thisMonth.length,sub:`${clients.length} всего`,color:'#6366f1'},
-        {label:'Активных клиентов',value:active.length,sub:`${inAccomp.length} в сопровождении`,color:'#0ea5e9'},
-        {label:'Договоров',value:withContract.length,sub:`${Math.round(withContract.length/Math.max(clients.length,1)*100)}% конверсия`,color:'#ec4899'},
-        {label:'Выручка',value:fmt(revenue)+' ₸',sub:`среднее: ${fmt(revenue/Math.max(withContract.length,1))} ₸`,color:'#10b981'},
+        {label:'Всего клиентов',value:clients.length,sub:`${clients.filter(c=>c.stage==='new_lead').length} новых лидов`,color:'#6366f1'},
+        {label:'Договоров',value:withContract.length,sub:`Конверсия: ${clients.length?Math.round(withContract.length/clients.length*100):0}%`,color:'#ec4899'},
+        {label:'Выручка',value:fmt(revenue)+' ₸',sub:`Среднее: ${fmt(revenue/Math.max(withContract.length,1))} ₸`,color:'#10b981'},
+        {label:'WhatsApp лиды',value:waNew.length,sub:'Ожидают обработки',color:'#25d366'},
       ].map(({label,value,sub,color})=><div key={label} className="metric-card" style={{'--c':color}}>
         <div className="metric-label">{label}</div>
         <div className="metric-value">{value}</div>
@@ -488,551 +641,849 @@ function Dashboard({clients,onOpen}){
       </div>)}
     </div>
 
-    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
-      {/* FUNNEL */}
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
       <div className="card card-p">
-        <div style={{fontWeight:700,fontSize:14,marginBottom:14}}>Воронка продаж</div>
-        {funnelData.map((f,i)=>{
-          const pct=Math.round(f.count/Math.max(funnelData[0].count,1)*100);
-          return <div key={f.label} style={{marginBottom:12}}>
+        <div style={{fontWeight:700,fontSize:13,marginBottom:12}}>Воронка продаж</div>
+        {pipeline.map((p,i)=>{
+          const cnt=clients.filter(c=>c.stage===p.id).length;
+          const pct=Math.round(cnt/Math.max(clients.length,1)*100);
+          return <div key={p.id} style={{marginBottom:10}}>
             <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}>
-              <span style={{fontWeight:500}}>{f.label}</span>
-              <span style={{color:'var(--muted)'}}>{f.count} клиентов</span>
+              <span style={{display:'flex',alignItems:'center',gap:6}}><span className="dot" style={{background:p.color}}/>{p.label}</span>
+              <span style={{color:'var(--muted)',fontWeight:600}}>{cnt}</span>
             </div>
-            <div className="prog-wrap">
-              <div className="prog-bar" style={{width:`${pct}%`,background:PIPELINE[Math.min(i,PIPELINE.length-1)].color}}/>
-            </div>
+            <div className="prog-wrap"><div className="prog-bar" style={{width:`${pct}%`,background:p.color}}/></div>
           </div>;
         })}
       </div>
-
-      {/* PIPELINE SUMMARY */}
       <div className="card card-p">
-        <div style={{fontWeight:700,fontSize:14,marginBottom:14}}>Этапы воронки</div>
-        <div style={{display:'flex',flexDirection:'column',gap:6}}>
-          {PIPELINE.map(p=>{
-            const cnt=clients.filter(c=>c.stage===p.id).length;
-            const rev=clients.filter(c=>c.stage===p.id&&c.contractAmount).reduce((s,c)=>s+c.contractAmount,0);
-            return <div key={p.id} style={{display:'flex',alignItems:'center',gap:10,padding:'7px 10px',borderRadius:8,background:'#f8fafc',border:'1px solid var(--border)'}}>
-              <span className="dot" style={{background:p.color}}/>
-              <span style={{flex:1,fontSize:13,fontWeight:500}}>{p.label}</span>
-              <span style={{background:p.color+'22',color:p.color,borderRadius:20,padding:'2px 8px',fontSize:11,fontWeight:700}}>{cnt}</span>
-              {rev>0&&<span style={{fontSize:11,color:'var(--muted)'}}>{fmt(rev)} ₸</span>}
-            </div>;
-          })}
-        </div>
+        <div style={{fontWeight:700,fontSize:13,marginBottom:12}}>Рейтинг менеджеров</div>
+        {stats.map((s,i)=><div key={s.m.id} style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+          <div className="avatar" style={{background:s.m.color+'22',color:s.m.color,width:28,height:28,fontSize:11}}>{s.m.name[0]}</div>
+          <div style={{flex:1}}>
+            <div style={{display:'flex',justifyContent:'space-between',marginBottom:3}}>
+              <span style={{fontWeight:600,fontSize:12}}>{s.m.name}</span>
+              <span style={{fontWeight:700,color:'var(--success)',fontSize:12}}>{s.revenue>0?fmt(s.revenue)+' ₸':'—'}</span>
+            </div>
+            <div className="kpi-bar"><div className="kpi-fill" style={{width:`${Math.round(s.revenue/Math.max(...stats.map(x=>x.revenue),1)*100)}%`,background:s.m.color}}/></div>
+          </div>
+          <span style={{fontSize:11,color:'var(--muted)',fontWeight:600,flexShrink:0}}>{s.conv}%</span>
+        </div>)}
       </div>
     </div>
 
-    {/* MANAGERS TABLE */}
-    <div className="card" style={{overflow:'hidden'}}>
-      <div style={{padding:'14px 18px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14}}>Рейтинг менеджеров</div>
-      <table>
-        <thead><tr>
-          {['Менеджер','Лиды','Договоры','Выручка','Конверсия','Прогресс'].map(h=><th key={h}>{h}</th>)}
-        </tr></thead>
-        <tbody>
-          {managerStats.map((m,i)=><tr key={m.name}>
-            <td>
-              <div style={{display:'flex',alignItems:'center',gap:10}}>
-                <div className="avatar" style={{background:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4]+'22',color:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4],fontSize:12}}>{m.name[0]}</div>
-                <div style={{fontWeight:600}}>{m.name}</div>
-              </div>
-            </td>
-            <td>{m.leads}</td>
-            <td><span style={{background:'#eff6ff',color:'var(--accent)',borderRadius:20,padding:'2px 8px',fontSize:12,fontWeight:700}}>{m.contracts}</span></td>
-            <td style={{fontWeight:700,color:'var(--success)'}}>{m.revenue>0?fmt(m.revenue)+' ₸':'—'}</td>
-            <td><span style={{color:m.conversion>=50?'var(--success)':m.conversion>=25?'var(--warn)':'var(--danger)',fontWeight:700}}>{m.conversion}%</span></td>
-            <td style={{width:140}}>
-              <div className="kpi-bar"><div className="kpi-fill" style={{width:`${Math.round(m.revenue/maxRev*100)}%`,background:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4]}}/></div>
-            </td>
-          </tr>)}
-        </tbody>
-      </table>
-    </div>
+    {waNew.length>0&&<div className="card card-p" style={{border:'1px solid #25d36644',background:'#f0fdf4'}}>
+      <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+        <i className="ti ti-brand-whatsapp" style={{fontSize:20,color:'#25d366'}}/>
+        <div style={{fontWeight:700,fontSize:13}}>Новые WhatsApp лиды ({waNew.length})</div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8}}>
+        {waNew.slice(0,6).map(c=><div key={c.id} style={{background:'#fff',borderRadius:8,padding:'10px',border:'1px solid #bbf7d0',cursor:'pointer'}} onClick={()=>onOpen(c)}>
+          <div style={{fontWeight:600,fontSize:13}}>{c.fio||c.phone}</div>
+          {c.waMsgPreview&&<div style={{fontSize:11,color:'var(--muted)',marginTop:3,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{c.waMsgPreview}</div>}
+        </div>)}
+      </div>
+    </div>}
   </div>;
 }
 
-// ═══════════════════════════ CLIENTS PAGE ═════════════════════════
-function ClientsPage({clients,allClients,onOpen,dragId,setDragId,dragOver,setDragOver,onMove}){
+// ══════════════════════════ CLIENTS PAGE ══════════════════════════
+function ClientsPage({clients,managers,pipeline,onOpen,dragId,setDragId,dragOver,setDragOver,onMove}){
   return <div className="kanban-scroll">
-    {PIPELINE.map(p=>{
-      const stageClients=clients.filter(c=>c.stage===p.id);
-      const stageRev=stageClients.reduce((s,c)=>s+c.contractAmount,0);
+    {pipeline.map(p=>{
+      const sc=clients.filter(c=>c.stage===p.id);
+      const sv=sc.reduce((s,c)=>s+c.contractAmount,0);
       return <div key={p.id} className={`k-col${dragOver===p.id?' drag-over':''}`}
         onDragOver={e=>{e.preventDefault();setDragOver(p.id)}}
         onDragLeave={()=>setDragOver(null)}
         onDrop={e=>{e.preventDefault();if(dragId)onMove(dragId,p.id);setDragId(null);setDragOver(null);}}>
         <div className="k-head">
-          <div className="k-stage-row">
-            <span className="dot" style={{background:p.color}}/>
-            <span style={{color:p.color}}>{p.label}</span>
-            <span className="k-count">{stageClients.length}</span>
-          </div>
-          {stageRev>0&&<div className="k-total">{fmt(stageRev)} ₸</div>}
+          <div className="k-stage-row"><span className="dot" style={{background:p.color}}/><span style={{color:p.color}}>{p.label}</span><span className="k-count">{sc.length}</span></div>
+          {sv>0&&<div className="k-total">{fmt(sv)} ₸</div>}
         </div>
         <div className="k-body">
-          {stageClients.map(c=><KCard key={c.id} client={c} stageColor={p.color} onOpen={()=>onOpen(c)} setDragId={setDragId}/>)}
-          {stageClients.length===0&&<div style={{textAlign:'center',color:'var(--light)',fontSize:12,padding:'20px 0'}}>Нет клиентов</div>}
+          {sc.map(c=><KCard key={c.id} client={c} managers={managers} stageColor={p.color} onOpen={()=>onOpen(c)} setDragId={setDragId}/>)}
+          {sc.length===0&&<div style={{textAlign:'center',color:'var(--light)',fontSize:11,padding:'18px 0'}}>Нет клиентов</div>}
         </div>
       </div>;
     })}
   </div>;
 }
-function KCard({client:c,stageColor,onOpen,setDragId}){
+function KCard({client:c,managers,stageColor,onOpen,setDragId}){
   const ct=CT_MAP[c.contractType];
   const cr=CR_MAP[c.creditStatus];
+  const m=managers.find(x=>x.id===c.manager);
   return <div className="k-card" draggable onDragStart={e=>{e.stopPropagation();setDragId(c.id)}} onDragEnd={()=>setDragId(null)} onClick={onOpen}>
-    <div className="k-name">{c.fio||'—'}</div>
-    <div className="k-phone">{c.phone||c.city}</div>
+    <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:3}}>
+      {c.isWhatsApp&&<i className="ti ti-brand-whatsapp" style={{fontSize:12,color:'#25d366',flexShrink:0}}/>}
+      <div className="k-name">{c.fio||'—'}</div>
+    </div>
+    <div className="k-phone">{c.phone}{c.city?` · ${c.city}`:''}</div>
     <div className="k-tags">
-      <SourceTag src={c.source}/>
+      <SrcTag src={c.source}/>
       {c.creditStatus&&<span className="badge" style={{background:cr?.color+'22',color:cr?.color}}>{cr?.label}</span>}
     </div>
-    {c.contactStatus&&<div style={{fontSize:11,marginBottom:6}}><span className={`badge ${c.contactStatus==='Дозвонился'?'':''}` } style={{background:'#f1f5f9',color:'var(--muted)'}}><i className="ti ti-phone" style={{fontSize:10}}/>{c.contactStatus}</span></div>}
-    {ct&&<div style={{fontWeight:700,color:stageColor,fontSize:13}}>{fmt(ct.amount)} ₸</div>}
-    <div style={{fontSize:10,color:'var(--light)',marginTop:4}}>{c.manager} · {c.dateIn}</div>
+    {c.contactStatus&&<div style={{fontSize:11,marginBottom:5}}><span className="badge" style={{background:'#f1f5f9',color:'var(--muted)'}}><i className="ti ti-phone" style={{fontSize:10}}/>{c.contactStatus}</span></div>}
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+      {ct&&ct.amount>0?<div style={{fontWeight:700,color:stageColor,fontSize:12}}>{fmt(c.contractAmount)} ₸</div>:<div/>}
+      {m&&<div style={{fontSize:10,color:'var(--light)',display:'flex',alignItems:'center',gap:4}}><span className="dot" style={{background:m.color,width:5,height:5}}/>{m.name.split(' ')[0]}</div>}
+    </div>
   </div>;
 }
 
-// ═══════════════════════════ CLIENT MODAL ═════════════════════════
-function ClientModal({client,onSave,onDelete,onClose}){
+// ══════════════════════════ CLIENT MODAL ══════════════════════════
+function ClientModal({client,managers,pipeline,templates,currentUser,onSave,onDelete,onClose}){
   const [f,sf]=useState({...client});
   const [tab,setTab]=useState('profile');
   const [newComment,setNewComment]=useState('');
   const [newTask,setNewTask]=useState({type:TASK_TYPES[0],text:'',due:''});
+  const set=(k,v)=>sf(x=>({...x,[k]:v}));
 
-  function set(k,v){sf(x=>({...x,[k]:v}));}
-  function save(){onSave({...f});}
-
+  const canEdit=currentUser.role!=='qa';
   const ct=CT_MAP[f.contractType];
-  const totalDone=Object.values(f.checklists).flat().length;
-  const allItems=Object.keys(CHECKLISTS).reduce((s,k)=>s+CHECKLISTS[k].items.length,0);
 
-  function addComment(){
-    if(!newComment.trim())return;
-    set('comments',[...f.comments,{id:uid(),text:newComment,date:nowStr(),author:'Вы'}]);
-    setNewComment('');
-  }
-  function addTask(){
-    if(!newTask.text.trim())return;
-    set('tasks',[...f.tasks,{id:uid(),...newTask,done:false,created:nowStr()}]);
-    setNewTask({type:TASK_TYPES[0],text:'',due:''});
-  }
+  function addComment(){if(!newComment.trim())return;set('comments',[...f.comments,{id:uid(),text:newComment,date:nowStr(),author:currentUser.name,stage:f.stage}]);setNewComment('');}
+  function addTask(){if(!newTask.text.trim()&&!newTask.type)return;set('tasks',[...f.tasks,{id:uid(),...newTask,done:false,created:nowStr()}]);setNewTask({type:TASK_TYPES[0],text:'',due:''});}
   function toggleTask(id){set('tasks',f.tasks.map(t=>t.id===id?{...t,done:!t.done}:t));}
   function delTask(id){set('tasks',f.tasks.filter(t=>t.id!==id));}
-  function toggleCheck(prog,item){
-    const cur=(f.checklists[prog]||[]);
-    set('checklists',{...f.checklists,[prog]:cur.includes(item)?cur.filter(x=>x!==item):[...cur,item]});
-  }
-  function selectContract(id){
-    const ct=CT_MAP[id];
-    sf(x=>({...x,contractType:id,contractAmount:ct?.amount||0}));
+  function toggleCheck(tplId,itemId){
+    const cur=(f.checklists[tplId]||[]);
+    set('checklists',{...f.checklists,[tplId]:cur.includes(itemId)?cur.filter(x=>x!==itemId):[...cur,itemId]});
   }
 
   const TABS=[
-    {id:'profile',label:'Профиль'},
-    {id:'analysis',label:'Анализ'},
-    {id:'credit',label:'Кредитная история'},
-    {id:'contract',label:'Договор'},
-    {id:'reassignment',label:'Переуступка'},
-    {id:'accompaniment',label:'Сопровождение'},
-    {id:'checklist',label:'Чек-лист'},
-    {id:'tasks',label:`Задачи (${f.tasks.filter(t=>!t.done).length})`},
-    {id:'history',label:`История (${f.comments.length})`},
+    {id:'profile',l:'Профиль'},{id:'analysis',l:'Анализ'},{id:'credit',l:'КИ'},
+    {id:'otbasy',l:'Отбасы'},{id:'contract',l:'Договор'},{id:'reassignment',l:'Переуступка'},
+    {id:'accomp',l:'Сопровождение'},{id:'checklist',l:`Чек-лист`},
+    {id:'tasks',l:`Задачи (${f.tasks.filter(t=>!t.done).length})`},
+    {id:'history',l:`История (${f.comments.length})`},
   ];
+
+  const itemTypeIcon={check:'ti-checkbox',ecp:'ti-writing-sign',doc:'ti-file-text'};
+  const itemTypeLabel={check:'Пункт',ecp:'ЭЦП',doc:'Документ'};
 
   return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
     <div className="modal">
-      <MH title={f.fio||'Новый клиент'} subtitle={<span style={{display:'flex',gap:6,alignItems:'center'}}><StageTag stageId={f.stage}/><span style={{color:'var(--muted)'}}>{f.manager}</span></span>} onClose={onClose}/>
+      <MH title={f.fio||'Новый клиент'} sub={<span style={{display:'flex',gap:6,alignItems:'center'}}>
+        <StageTag stageId={f.stage} pipeline={pipeline}/>
+        {f.isWhatsApp&&<span className="wa-badge"><i className="ti ti-brand-whatsapp" style={{fontSize:11}}/>WhatsApp</span>}
+        <span style={{color:'var(--muted)',fontSize:11}}>{managers.find(m=>m.id===f.manager)?.name}</span>
+      </span>} onClose={onClose}/>
 
       {/* Stage selector */}
-      <div style={{padding:'10px 22px',borderBottom:'1px solid var(--border)',background:'#f8fafc',display:'flex',gap:6,overflowX:'auto'}}>
-        {PIPELINE.map(p=><button key={p.id} onClick={()=>set('stage',p.id)}
-          style={{padding:'4px 10px',borderRadius:20,border:`1.5px solid ${f.stage===p.id?p.color:'transparent'}`,background:f.stage===p.id?p.color+'22':'transparent',color:f.stage===p.id?p.color:'var(--muted)',fontSize:11,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap',transition:'all .12s'}}>
+      <div style={{padding:'9px 20px',borderBottom:'1px solid var(--border)',background:'#f8fafc',display:'flex',gap:5,overflowX:'auto'}}>
+        {pipeline.map(p=><button key={p.id} onClick={()=>canEdit&&set('stage',p.id)}
+          style={{padding:'3px 9px',borderRadius:20,border:`1.5px solid ${f.stage===p.id?p.color:'transparent'}`,background:f.stage===p.id?p.color+'22':'transparent',color:f.stage===p.id?p.color:'var(--muted)',fontSize:11,fontWeight:700,cursor:canEdit?'pointer':'default',whiteSpace:'nowrap',transition:'all .12s'}}>
           {p.label}
         </button>)}
       </div>
 
       <div className="tabs">
-        {TABS.map(t=><div key={t.id} className={`tab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}</div>)}
+        {TABS.map(t=><div key={t.id} className={`tab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.l}</div>)}
       </div>
 
-      <div className="modal-body">
-        <div className="tab-body">
+      <div className="modal-body"><div className="tab-body">
 
-          {/* ── PROFILE ── */}
-          {tab==='profile'&&<>
-            <div className="field-row3">
-              <Fl label="ФИО *"><input className="input" value={f.fio} onChange={e=>set('fio',e.target.value)} placeholder="Фамилия Имя Отчество"/></Fl>
-              <Fl label="ИИН *"><input className="input" value={f.iin} onChange={e=>set('iin',e.target.value)} placeholder="123456789012" maxLength={12}/></Fl>
-              <Fl label="Телефон *"><input className="input" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="+7 701 000-00-00"/></Fl>
+        {/* PROFILE */}
+        {tab==='profile'&&<>
+          <div className="field-row3">
+            <Fl label="ФИО *"><input className="input" value={f.fio} onChange={e=>set('fio',e.target.value)} placeholder="Фамилия Имя Отчество" readOnly={!canEdit}/></Fl>
+            <Fl label="ИИН"><input className="input" value={f.iin} onChange={e=>set('iin',e.target.value)} placeholder="123456789012" maxLength={12} readOnly={!canEdit}/></Fl>
+            <Fl label="Телефон"><input className="input" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="+7 701 000-00-00" readOnly={!canEdit}/></Fl>
+          </div>
+          <div className="field-row">
+            <Fl label="Город"><select className="input" value={f.city} onChange={e=>set('city',e.target.value)} disabled={!canEdit}>{CITIES.map(c=><option key={c}>{c}</option>)}</select></Fl>
+            <Fl label="Менеджер"><select className="input" value={f.manager} onChange={e=>set('manager',e.target.value)} disabled={!canEdit||currentUser.role==='manager'}>
+              <option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
+            </select></Fl>
+          </div>
+          <div className="field-row">
+            <Fl label="Дата поступления"><input className="input" type="date" value={f.dateIn} onChange={e=>set('dateIn',e.target.value)} readOnly={!canEdit}/></Fl>
+            <Fl label="Источник лида"><select className="input" value={f.source} onChange={e=>set('source',e.target.value)} disabled={!canEdit}>{SOURCES.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}</select></Fl>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14,padding:'10px',background:'var(--bg)',borderRadius:8}}>
+            <i className="ti ti-brand-whatsapp" style={{fontSize:18,color:'#25d366'}}/>
+            <span style={{fontSize:13,fontWeight:500}}>Лид из WhatsApp</span>
+            <Toggle on={f.isWhatsApp} onClick={()=>canEdit&&set('isWhatsApp',!f.isWhatsApp)}/>
+          </div>
+          {f.isWhatsApp&&<Fl label="Сообщение из WhatsApp"><textarea className="input" value={f.waMsgPreview} onChange={e=>set('waMsgPreview',e.target.value)} placeholder="Текст из чата WhatsApp..." style={{minHeight:60}}/></Fl>}
+          <Fl label="Статус связи">
+            <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+              {CONTACT_STATUSES.map(s=><button key={s} onClick={()=>canEdit&&set('contactStatus',s)}
+                style={{padding:'5px 11px',borderRadius:20,border:`1.5px solid ${f.contactStatus===s?'var(--accent)':'var(--border2)'}`,background:f.contactStatus===s?'var(--accent-bg)':'transparent',color:f.contactStatus===s?'var(--accent)':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:f.contactStatus===s?700:400}}>
+                {s}
+              </button>)}
             </div>
-            <div className="field-row">
-              <Fl label="Город"><select className="input" value={f.city} onChange={e=>set('city',e.target.value)}>{CITIES.map(c=><option key={c}>{c}</option>)}</select></Fl>
-              <Fl label="Менеджер"><select className="input" value={f.manager} onChange={e=>set('manager',e.target.value)}>{MANAGERS.map(m=><option key={m}>{m}</option>)}</select></Fl>
-            </div>
-            <div className="field-row">
-              <Fl label="Дата поступления"><input className="input" type="date" value={f.dateIn} onChange={e=>set('dateIn',e.target.value)}/></Fl>
-              <Fl label="Источник лида"><select className="input" value={f.source} onChange={e=>set('source',e.target.value)}>{SOURCES.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}</select></Fl>
-            </div>
-            <Fl label="Статус связи">
-              <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-                {CONTACT_STATUSES.map(s=><button key={s} onClick={()=>set('contactStatus',s)}
-                  style={{padding:'5px 12px',borderRadius:20,border:`1.5px solid ${f.contactStatus===s?'var(--accent)':'var(--border2)'}`,background:f.contactStatus===s?'var(--accent-bg)':'transparent',color:f.contactStatus===s?'var(--accent)':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:f.contactStatus===s?700:400}}>
-                  {s}
+          </Fl>
+        </>}
+
+        {/* ANALYSIS */}
+        {tab==='analysis'&&<>
+          <div className="section-hdr">Личные данные</div>
+          <div className="field-row">
+            <Fl label="Семейное положение"><select className="input" value={f.maritalStatus} onChange={e=>set('maritalStatus',e.target.value)} disabled={!canEdit}><option value="">Не указано</option>{MARITAL.map(s=><option key={s}>{s}</option>)}</select></Fl>
+            <Fl label="Количество детей"><input className="input" type="number" min="0" value={f.children} onChange={e=>set('children',e.target.value)} readOnly={!canEdit}/></Fl>
+          </div>
+          <div className="section-hdr">Финансы</div>
+          <div className="field-row">
+            <Fl label="Официальный доход (₸)"><input className="input" type="number" value={f.officialIncome} onChange={e=>set('officialIncome',e.target.value)} readOnly={!canEdit}/></Fl>
+            <Fl label="Дополнительный доход (₸)"><input className="input" type="number" value={f.extraIncome} onChange={e=>set('extraIncome',e.target.value)} readOnly={!canEdit}/></Fl>
+          </div>
+          <div className="field-row">
+            <Fl label="Пенсионные отчисления (₸)"><input className="input" type="number" value={f.pensionContributions} onChange={e=>set('pensionContributions',e.target.value)} readOnly={!canEdit}/></Fl>
+            <Fl label="Рабочий стаж (лет)"><input className="input" type="number" value={f.workExperience} onChange={e=>set('workExperience',e.target.value)} readOnly={!canEdit}/></Fl>
+          </div>
+          <div className="field-row">
+            <Fl label="Тип занятости"><select className="input" value={f.workType} onChange={e=>set('workType',e.target.value)} disabled={!canEdit}>{WORK_TYPES.map(w=><option key={w.id} value={w.id}>{w.l}</option>)}</select></Fl>
+            <Fl label="Доп. доход подтверждён?">
+              <div style={{display:'flex',gap:7,marginTop:4}}>
+                {['Да','Нет'].map(v=><button key={v} onClick={()=>canEdit&&set('extraIncomeConfirmed',v==='Да')}
+                  style={{flex:1,padding:'7px',borderRadius:8,border:`1.5px solid ${f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--border2)'}`,background:f.extraIncomeConfirmed===(v==='Да')?'var(--accent-bg)':'transparent',cursor:'pointer',fontWeight:600,fontSize:13,color:f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--muted)'}}>
+                  {v}
                 </button>)}
               </div>
             </Fl>
-          </>}
+          </div>
+          <div className="section-hdr">Первоначальный взнос</div>
+          <div className="field-row">
+            <Fl label="Сумма ПВ (₸)"><input className="input" type="number" value={f.downPayment} onChange={e=>set('downPayment',e.target.value)} readOnly={!canEdit}/></Fl>
+            <Fl label="Тип ПВ"><select className="input" value={f.downPaymentType} onChange={e=>set('downPaymentType',e.target.value)} disabled={!canEdit}>{DOWN_TYPES.map(d=><option key={d.id} value={d.id}>{d.l}</option>)}</select></Fl>
+          </div>
+          {(f.downPaymentType==='deposit'||f.downPaymentType==='mixed')&&<div className="field-row3">
+            <Fl label="Банк депозита"><input className="input" value={f.depositBank} onChange={e=>set('depositBank',e.target.value)}/></Fl>
+            <Fl label="Сумма депозита (₸)"><input className="input" type="number" value={f.depositAmount} onChange={e=>set('depositAmount',e.target.value)}/></Fl>
+            <Fl label="Срок накопления"><input className="input" value={f.depositTerm} onChange={e=>set('depositTerm',e.target.value)} placeholder="36 мес"/></Fl>
+          </div>}
+        </>}
 
-          {/* ── ANALYSIS ── */}
-          {tab==='analysis'&&<>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:12,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Личные данные</div>
-            <div className="field-row">
-              <Fl label="Семейное положение"><select className="input" value={f.maritalStatus} onChange={e=>set('maritalStatus',e.target.value)}><option value="">Не указано</option>{MARITAL_STATUSES.map(s=><option key={s}>{s}</option>)}</select></Fl>
-              <Fl label="Количество детей"><input className="input" type="number" min="0" value={f.children} onChange={e=>set('children',e.target.value)} placeholder="0"/></Fl>
+        {/* CREDIT */}
+        {tab==='credit'&&<>
+          <Fl label="Статус кредитной истории">
+            <div className="credit-grid">
+              {CREDIT_STATUSES.map(s=><div key={s.id} className={`credit-option${f.creditStatus===s.id?' sel':''}`} onClick={()=>canEdit&&set('creditStatus',s.id)}>
+                <span className="dot" style={{background:s.color,display:'block',margin:'0 auto 4px'}}/>
+                <div style={{fontSize:11,fontWeight:600,color:f.creditStatus===s.id?s.color:'var(--text)'}}>{s.label}</div>
+              </div>)}
             </div>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:12,marginTop:8,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Финансы</div>
+          </Fl>
+          <div className="field-row">
+            <Fl label="Количество кредитов"><input className="input" type="number" value={f.creditsCount} onChange={e=>set('creditsCount',e.target.value)}/></Fl>
+            <Fl label="Ежемес. нагрузка (₸)"><input className="input" type="number" value={f.monthlyLoad} onChange={e=>set('monthlyLoad',e.target.value)}/></Fl>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:7,marginTop:4}}>
+            {[['hasOverdueCredit','Есть просрочки'],['hadBankRefusal','Был отказ банка'],['hasRefinancing','Рефинансирование'],['problematicCredits','Проблемные кредиты'],['courtRestrictions','Суд. ограничения']].map(([k,label])=><div key={k} onClick={()=>canEdit&&set(k,!f[k])}
+              style={{display:'flex',alignItems:'center',gap:8,padding:'9px 10px',border:`1px solid ${f[k]?'var(--danger)':'var(--border)'}`,borderRadius:8,cursor:'pointer',background:f[k]?'#fef2f2':'transparent'}}>
+              <div style={{width:16,height:16,borderRadius:3,border:`2px solid ${f[k]?'var(--danger)':'var(--border2)'}`,background:f[k]?'var(--danger)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                {f[k]&&<i className="ti ti-check" style={{fontSize:10,color:'#fff'}}/>}
+              </div>
+              <span style={{fontSize:12,fontWeight:500,color:f[k]?'var(--danger)':'var(--text)'}}>{label}</span>
+            </div>)}
+          </div>
+          <div className="section-hdr" style={{marginTop:16}}>Завершённые договора (до 5 лет)</div>
+          {[['contracts5y','До 5 лет'],['contracts5yPlus','Более 5 лет']].map(([key,lbl])=>{
+            const val=f[key]||{};
+            const upd2=(k,v)=>set(key,{...val,[k]:v});
+            return <div key={key} style={{background:'#f8fafc',borderRadius:10,padding:'12px',border:'1px solid var(--border)',marginBottom:10}}>
+              <div style={{fontWeight:600,fontSize:12,marginBottom:10,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.04em'}}>{lbl}</div>
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
+                <span style={{fontSize:13}}>Есть уступки?</span>
+                <Toggle on={val.hasAssignment||false} onClick={()=>upd2('hasAssignment',!val.hasAssignment)}/>
+              </div>
+              {val.hasAssignment&&<div className="field-row3" style={{marginBottom:8}}>
+                <Fl label="Наименование цессионария"><input className="input" value={val.cedent||''} onChange={e=>upd2('cedent',e.target.value)}/></Fl>
+                <Fl label="Код контракта"><input className="input" value={val.contractCode||''} onChange={e=>upd2('contractCode',e.target.value)}/></Fl>
+                <Fl label="Передан стандартно?"><select className="input" value={val.transferred||''} onChange={e=>upd2('transferred',e.target.value)}><option value="">—</option><option>Да</option><option>Нет</option></select></Fl>
+              </div>}
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:8}}>
+                <span style={{fontSize:13}}>Есть просрочка?</span>
+                <Toggle on={val.hasOverdue||false} onClick={()=>upd2('hasOverdue',!val.hasOverdue)}/>
+              </div>
+              {val.hasOverdue&&<div className="field-row">
+                <Fl label="Количество дней просрочки"><input className="input" type="number" value={val.overdueDays||''} onChange={e=>upd2('overdueDays',e.target.value)}/></Fl>
+                <Fl label="Сумма просрочки (₸) — вручную"><input className="input" value={val.overdueAmount||''} onChange={e=>upd2('overdueAmount',e.target.value)} placeholder="Вводится вручную"/></Fl>
+              </div>}
+            </div>;
+          })}
+        </>}
+
+        {/* ОТБАСЫ */}
+        {tab==='otbasy'&&<>
+          <div style={{background:'linear-gradient(135deg,#f0fdfa,#ecfdf5)',border:'1px solid #6ee7b7',borderRadius:10,padding:'14px',marginBottom:14}}>
+            <div style={{fontWeight:700,fontSize:14,color:'#065f46',marginBottom:4,display:'flex',alignItems:'center',gap:8}}><i className="ti ti-building-bank" style={{fontSize:18}}/>Отбасы банк</div>
+            <div style={{fontSize:12,color:'#047857'}}>Заполните поля специфичные для Отбасы банка</div>
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14,padding:'10px',background:'var(--bg)',borderRadius:8}}>
+            <span style={{fontWeight:600}}>Депозит Отбасы</span>
+            <Toggle on={f.otbasyDeposit} onClick={()=>set('otbasyDeposit',!f.otbasyDeposit)}/>
+          </div>
+          {f.otbasyDeposit&&<>
             <div className="field-row">
-              <Fl label="Официальный доход (₸)"><input className="input" type="number" value={f.officialIncome} onChange={e=>set('officialIncome',e.target.value)} placeholder="0"/></Fl>
-              <Fl label="Дополнительный доход (₸)"><input className="input" type="number" value={f.extraIncome} onChange={e=>set('extraIncome',e.target.value)} placeholder="0"/></Fl>
+              <Fl label="Вознаграждение (%)"><input className="input" type="number" step="0.1" value={f.otbasyReward} onChange={e=>set('otbasyReward',e.target.value)} placeholder="0.0"/></Fl>
+              <Fl label="Категория очереди"><input className="input" value={f.otbasyQueue} onChange={e=>set('otbasyQueue',e.target.value)} placeholder="Стандарт / Молодёжь и т.д."/></Fl>
             </div>
             <div className="field-row">
-              <Fl label="Пенсионные отчисления (₸)"><input className="input" type="number" value={f.pensionContributions} onChange={e=>set('pensionContributions',e.target.value)} placeholder="0"/></Fl>
-              <Fl label="Рабочий стаж (лет)"><input className="input" type="number" value={f.workExperience} onChange={e=>set('workExperience',e.target.value)} placeholder="0"/></Fl>
+              <Fl label="Год постановки в очередь"><input className="input" type="number" value={f.otbasyQueueYear} onChange={e=>set('otbasyQueueYear',e.target.value)} placeholder="2020"/></Fl>
+              <Fl label="Город постановки в очередь"><select className="input" value={f.otbasyQueueCity} onChange={e=>set('otbasyQueueCity',e.target.value)}><option value="">—</option>{CITIES.map(c=><option key={c}>{c}</option>)}</select></Fl>
             </div>
+          </>}
+        </>}
+
+        {/* CONTRACT */}
+        {tab==='contract'&&<>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:7,marginBottom:14}}>
+            {CONTRACT_TYPES.map(ct=><div key={ct.id} onClick={()=>canEdit&&sf(x=>({...x,contractType:ct.id,contractAmount:ct.amount||x.contractAmount}))}
+              style={{padding:'10px 12px',borderRadius:9,border:`2px solid ${f.contractType===ct.id?'var(--accent)':'var(--border)'}`,background:f.contractType===ct.id?'var(--accent-bg)':'var(--bg)',cursor:'pointer',transition:'all .12s'}}>
+              <div style={{fontWeight:600,fontSize:12,color:f.contractType===ct.id?'var(--accent)':'var(--text)'}}>{ct.label}</div>
+              {ct.amount>0&&<div style={{fontWeight:800,fontSize:15,color:f.contractType===ct.id?'var(--accent)':'var(--muted)',marginTop:2}}>{fmt(ct.amount)} ₸</div>}
+              {ct.amount===0&&<div style={{fontSize:11,color:'var(--light)',marginTop:2}}>сумма вручную</div>}
+            </div>)}
+          </div>
+          {f.contractType&&<div className="contract-box" style={{marginBottom:14}}>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>Сумма договора</div>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
+              <div className="contract-amount">{fmt(f.contractAmount)} ₸</div>
+              <div><div style={{fontWeight:600,fontSize:13}}>{CT_MAP[f.contractType]?.label}</div></div>
+            </div>
+            <Fl label="Сумма (₸) — введите вручную"><input className="input" type="number" value={f.contractAmount} onChange={e=>set('contractAmount',+e.target.value)}/></Fl>
+          </div>}
+          <div className="field-row">
+            <Fl label="Ссылка на Miro"><input className="input" value={f.miroLink} onChange={e=>set('miroLink',e.target.value)} placeholder="https://miro.com/..."/></Fl>
+            <Fl label="Roadmap"><input className="input" value={f.roadmapLink} onChange={e=>set('roadmapLink',e.target.value)} placeholder="https://..."/></Fl>
+          </div>
+          <Fl label="Google Drive (документы)"><input className="input" value={f.driveLink} onChange={e=>set('driveLink',e.target.value)} placeholder="https://drive.google.com/..."/></Fl>
+          {(f.miroLink||f.roadmapLink||f.driveLink)&&<div style={{display:'flex',gap:7,flexWrap:'wrap',marginTop:6}}>
+            {f.miroLink&&<a href={f.miroLink} target="_blank" className="btn btn-sm"><i className="ti ti-external-link"/>Miro</a>}
+            {f.roadmapLink&&<a href={f.roadmapLink} target="_blank" className="btn btn-sm"><i className="ti ti-map"/>Roadmap</a>}
+            {f.driveLink&&<a href={f.driveLink} target="_blank" className="btn btn-sm"><i className="ti ti-brand-google-drive"/>Drive</a>}
+          </div>}
+        </>}
+
+        {/* REASSIGNMENT */}
+        {tab==='reassignment'&&<>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14,padding:'10px',background:'var(--bg)',borderRadius:8}}>
+            <span style={{fontWeight:600,fontSize:13}}>Клиент идёт через переуступку</span>
+            <Toggle on={f.isReassignment} onClick={()=>canEdit&&set('isReassignment',!f.isReassignment)}/>
+          </div>
+          {f.isReassignment&&<>
             <div className="field-row">
-              <Fl label="Тип занятости"><select className="input" value={f.workType} onChange={e=>set('workType',e.target.value)}>{WORK_TYPES.map(w=><option key={w.id} value={w.id}>{w.label}</option>)}</select></Fl>
-              <Fl label="Подтверждается доп. доход?">
-                <div style={{display:'flex',gap:8,marginTop:4}}>
-                  {['Да','Нет'].map(v=><button key={v} onClick={()=>set('extraIncomeConfirmed',v==='Да')} style={{flex:1,padding:'8px',borderRadius:8,border:`1.5px solid ${f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--border2)'}`,background:f.extraIncomeConfirmed===(v==='Да')?'var(--accent-bg)':'transparent',cursor:'pointer',fontWeight:600,fontSize:13,color:f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--muted)'}}>{v}</button>)}
+              <Fl label="Жилой комплекс"><input className="input" value={f.reassignmentComplex} onChange={e=>set('reassignmentComplex',e.target.value)} placeholder="Название ЖК"/></Fl>
+              <Fl label="Застройщик"><input className="input" value={f.reassignmentDeveloper} onChange={e=>set('reassignmentDeveloper',e.target.value)}/></Fl>
+            </div>
+            <div className="field-row3">
+              <Fl label="Сумма переуступки (₸)"><input className="input" type="number" value={f.reassignmentAmount} onChange={e=>set('reassignmentAmount',e.target.value)}/></Fl>
+              <Fl label="Остаток ипотеки (₸)"><input className="input" type="number" value={f.mortgageBalance} onChange={e=>set('mortgageBalance',e.target.value)}/></Fl>
+              <Fl label="Банк"><input className="input" value={f.reassignmentBank} onChange={e=>set('reassignmentBank',e.target.value)}/></Fl>
+            </div>
+            <div style={{display:'flex',gap:10}}>
+              {[['hasDebt','Есть задолженность','#f59e0b'],['urgentSale','Срочная продажа','#ef4444']].map(([k,label,color])=><div key={k} onClick={()=>canEdit&&set(k,!f[k])}
+                style={{flex:1,display:'flex',alignItems:'center',gap:8,padding:'10px',border:`1px solid ${f[k]?color:' var(--border)'}`,borderRadius:8,cursor:'pointer',background:f[k]?color+'11':'transparent'}}>
+                <div style={{width:16,height:16,borderRadius:3,border:`2px solid ${f[k]?color:'var(--border2)'}`,background:f[k]?color:'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                  {f[k]&&<i className="ti ti-check" style={{fontSize:10,color:'#fff'}}/>}
                 </div>
-              </Fl>
+                <span style={{fontSize:13,fontWeight:600}}>{label}</span>
+              </div>)}
             </div>
-            <div style={{fontWeight:700,fontSize:13,marginBottom:12,marginTop:8,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Первоначальный взнос</div>
-            <div className="field-row">
-              <Fl label="Сумма ПВ (₸)"><input className="input" type="number" value={f.downPayment} onChange={e=>set('downPayment',e.target.value)} placeholder="0"/></Fl>
-              <Fl label="Тип ПВ"><select className="input" value={f.downPaymentType} onChange={e=>set('downPaymentType',e.target.value)}>{DOWN_TYPES.map(d=><option key={d.id} value={d.id}>{d.label}</option>)}</select></Fl>
-            </div>
-            {(f.downPaymentType==='deposit'||f.downPaymentType==='mixed')&&<div className="field-row3">
-              <Fl label="Банк депозита"><input className="input" value={f.depositBank} onChange={e=>set('depositBank',e.target.value)} placeholder="Название банка"/></Fl>
-              <Fl label="Сумма депозита (₸)"><input className="input" type="number" value={f.depositAmount} onChange={e=>set('depositAmount',e.target.value)}/></Fl>
-              <Fl label="Срок накопления"><input className="input" value={f.depositTerm} onChange={e=>set('depositTerm',e.target.value)} placeholder="36 мес"/></Fl>
-            </div>}
           </>}
+        </>}
 
-          {/* ── CREDIT ── */}
-          {tab==='credit'&&<>
-            <Fl label="Статус кредитной истории">
-              <div className="credit-grid">
-                {CREDIT_STATUSES.map(s=><div key={s.id} className={`credit-option${f.creditStatus===s.id?' selected':''}`} onClick={()=>set('creditStatus',s.id)}>
-                  <span className="dot" style={{background:s.color,marginBottom:4,display:'block',margin:'0 auto 4px'}}/>
-                  <div style={{fontSize:11,fontWeight:600,color:f.creditStatus===s.id?s.color:'var(--text)'}}>{s.label}</div>
-                </div>)}
+        {/* ACCOMPANIMENT */}
+        {tab==='accomp'&&<>
+          <div className="field-row">
+            <Fl label="Ответственный менеджер"><select className="input" value={f.responsibleManager} onChange={e=>set('responsibleManager',e.target.value)} disabled={!canEdit}>
+              <option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}
+            </select></Fl>
+            <Fl label="Ипотечный специалист"><input className="input" value={f.mortgageSpecialist} onChange={e=>set('mortgageSpecialist',e.target.value)} placeholder="ФИО специалиста"/></Fl>
+          </div>
+          <div className="section-hdr">Этапы сопровождения</div>
+          <div className="accomp-stages">
+            {ACCOMP_STAGES.map((s,i)=><div key={s} className="accomp-step" onClick={()=>canEdit&&set('accompStageIndex',i)}>
+              <div className={`accomp-dot${i<f.accompStageIndex?' done':i===f.accompStageIndex?' active':''}`}>
+                {i<f.accompStageIndex?<i className="ti ti-check" style={{fontSize:9}}/>:i+1}
+              </div>
+              <div className="accomp-label">{s}</div>
+            </div>)}
+          </div>
+          <div style={{marginTop:12,padding:'12px',background:'var(--accent-bg)',borderRadius:9,border:'1px solid #bfdbfe'}}>
+            <div style={{fontWeight:700,fontSize:13,color:'var(--accent)'}}>Текущий: {ACCOMP_STAGES[f.accompStageIndex]}</div>
+            <div style={{fontSize:11,color:'var(--muted)',marginTop:2}}>{f.accompStageIndex} из {ACCOMP_STAGES.length} этапов завершено</div>
+          </div>
+        </>}
+
+        {/* CHECKLIST */}
+        {tab==='checklist'&&<>
+          {templates.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:40}}>Нет шаблонов. Создайте в Настройках.</div>}
+          {templates.map(tpl=>{
+            const done=(f.checklists[tpl.id]||[]);
+            const pct=Math.round(done.length/Math.max(tpl.items.length,1)*100);
+            return <div key={tpl.id} style={{marginBottom:16,background:'#f8fafc',borderRadius:10,padding:'13px',border:`1px solid ${pct===100?tpl.color:'var(--border)'}`}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:9}}>
+                <div style={{fontWeight:700,fontSize:13,display:'flex',alignItems:'center',gap:7}}>
+                  <span style={{width:10,height:10,borderRadius:2,background:tpl.color,display:'inline-block'}}/>
+                  {tpl.name}
+                  {tpl.stage!=='all'&&<span className="badge" style={{background:'#f1f5f9',color:'var(--muted)'}}>{pipeline.find(p=>p.id===tpl.stage)?.label||tpl.stage}</span>}
+                </div>
+                <span style={{fontSize:11,fontWeight:700,color:pct===100?'var(--success)':'var(--accent)'}}>{done.length}/{tpl.items.length} · {pct}%</span>
+              </div>
+              <div className="prog-wrap" style={{marginBottom:10}}>
+                <div className="prog-bar" style={{width:`${pct}%`,background:pct===100?'var(--success)':tpl.color}}/>
+              </div>
+              {tpl.items.map(item=>{
+                const isDone=done.includes(item.id);
+                const icon=itemTypeIcon[item.type||'check'];
+                return <div key={item.id} className="cl-item" onClick={()=>toggleCheck(tpl.id,item.id)}>
+                  <div className={`cl-box${isDone?' done':''}`} style={{background:isDone?tpl.color:undefined,borderColor:isDone?tpl.color:undefined}}>
+                    {isDone&&<i className="ti ti-check" style={{fontSize:10,color:'#fff'}}/>}
+                  </div>
+                  <i className={`ti ${icon}`} style={{fontSize:13,color:(item.type==='ecp'?'#8b5cf6':item.type==='doc'?'#0ea5e9':'var(--muted)'),flexShrink:0}}/>
+                  <span style={{fontSize:13,flex:1,textDecoration:isDone?'line-through':'none',color:isDone?'var(--muted)':'var(--text)'}}>{item.text}</span>
+                  <span style={{fontSize:10,color:'var(--light)',background:'#f1f5f9',borderRadius:4,padding:'1px 5px'}}>{itemTypeLabel[item.type||'check']}</span>
+                </div>;
+              })}
+            </div>;
+          })}
+        </>}
+
+        {/* TASKS */}
+        {tab==='tasks'&&<>
+          <div style={{background:'#f8fafc',borderRadius:10,padding:'13px',border:'1px solid var(--border)',marginBottom:14}}>
+            <div style={{fontWeight:700,fontSize:12,marginBottom:9,textTransform:'uppercase',letterSpacing:'.04em',color:'var(--muted)'}}>Новая задача</div>
+            <div className="field-row">
+              <Fl label="Тип"><select className="input" value={newTask.type} onChange={e=>setNewTask(x=>({...x,type:e.target.value}))}>{TASK_TYPES.map(t=><option key={t}>{t}</option>)}</select></Fl>
+              <Fl label="Срок"><input className="input" type="date" value={newTask.due} onChange={e=>setNewTask(x=>({...x,due:e.target.value}))}/></Fl>
+            </div>
+            <Fl label="Описание"><input className="input" value={newTask.text} onChange={e=>setNewTask(x=>({...x,text:e.target.value}))} placeholder="Детали задачи..." onKeyDown={e=>e.key==='Enter'&&addTask()}/></Fl>
+            <button className="btn btn-primary btn-sm" onClick={addTask}><i className="ti ti-plus"/>Добавить</button>
+          </div>
+          {f.tasks.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет задач</div>}
+          {f.tasks.map(t=><div key={t.id} style={{display:'flex',alignItems:'center',gap:9,padding:'10px 0',borderBottom:'1px solid var(--border)'}}>
+            <div style={{width:17,height:17,borderRadius:'50%',border:`2px solid ${t.done?'var(--success)':'var(--border2)'}`,background:t.done?'var(--success)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',flexShrink:0}} onClick={()=>toggleTask(t.id)}>
+              {t.done&&<i className="ti ti-check" style={{fontSize:10,color:'#fff'}}/>}
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:600,fontSize:13,textDecoration:t.done?'line-through':'none',color:t.done?'var(--muted)':'var(--text)'}}>{t.type}</div>
+              {t.text&&<div style={{fontSize:11,color:'var(--muted)'}}>{t.text}</div>}
+              {t.due&&<div style={{fontSize:10,color:t.due<today()&&!t.done?'var(--danger)':'var(--light)'}}>До: {t.due}</div>}
+            </div>
+            <button className="btn btn-ghost btn-sm" style={{color:'var(--danger)'}} onClick={()=>delTask(t.id)}><i className="ti ti-trash"/></button>
+          </div>)}
+        </>}
+
+        {/* HISTORY */}
+        {tab==='history'&&<>
+          <div style={{marginBottom:14}}>
+            <Fl label="Добавить заметку">
+              <div style={{display:'flex',gap:8}}>
+                <textarea className="input" value={newComment} onChange={e=>setNewComment(e.target.value)} placeholder="Результат звонка, статус переговоров..." style={{minHeight:55}}/>
+                <button className="btn btn-primary" style={{alignSelf:'flex-end',flexShrink:0}} onClick={addComment}><i className="ti ti-send"/></button>
               </div>
             </Fl>
-            <div style={{marginTop:16}}>
-              <div className="field-row">
-                <Fl label="Количество кредитов"><input className="input" type="number" value={f.creditsCount} onChange={e=>set('creditsCount',e.target.value)} placeholder="0"/></Fl>
-                <Fl label="Ежемес. нагрузка (₸)"><input className="input" type="number" value={f.monthlyLoad} onChange={e=>set('monthlyLoad',e.target.value)} placeholder="0"/></Fl>
-              </div>
-              <div className="field-row">
-                {[['hasOverdue','Есть просрочки'],['hadBankRefusal','Был отказ банка'],['hasRefinancing','Рефинансирование'],['problematicCredits','Проблемные кредиты'],['courtRestrictions','Суд. ограничения']].map(([k,label])=><div key={k} style={{display:'flex',alignItems:'center',gap:8,padding:'10px',border:'1px solid var(--border)',borderRadius:8,cursor:'pointer',background:f[k]?'#fef2f2':'transparent'}} onClick={()=>set(k,!f[k])}>
-                  <div style={{width:18,height:18,borderRadius:4,border:`2px solid ${f[k]?'var(--danger)':'var(--border2)'}`,background:f[k]?'var(--danger)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                    {f[k]&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
-                  </div>
-                  <span style={{fontSize:12,fontWeight:500,color:f[k]?'var(--danger)':'var(--text)'}}>{label}</span>
-                </div>)}
-              </div>
+          </div>
+          {f.comments.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет записей</div>}
+          {[...f.comments].reverse().map(c=><div key={c.id} className="comment-item">
+            <div className="comment-meta">
+              <i className="ti ti-message" style={{fontSize:11}}/>
+              <span style={{fontWeight:600}}>{c.author}</span>
+              <span>{c.date}</span>
+              {c.stage&&<StageTag stageId={c.stage} pipeline={pipeline}/>}
             </div>
-          </>}
+            <div className="comment-text">{c.text}</div>
+          </div>)}
+        </>}
 
-          {/* ── CONTRACT ── */}
-          {tab==='contract'&&<>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:16}}>
-              {CONTRACT_TYPES.map(ct=><div key={ct.id} onClick={()=>selectContract(ct.id)}
-                style={{padding:'12px 14px',borderRadius:10,border:`2px solid ${f.contractType===ct.id?'var(--accent)':'var(--border)'}`,background:f.contractType===ct.id?'var(--accent-bg)':'var(--bg)',cursor:'pointer',transition:'all .12s'}}>
-                <div style={{fontWeight:600,fontSize:13,color:f.contractType===ct.id?'var(--accent)':'var(--text)'}}>{ct.label}</div>
-                {ct.amount>0&&<div style={{fontWeight:800,fontSize:16,color:f.contractType===ct.id?'var(--accent)':'var(--muted)',marginTop:3}}>{fmt(ct.amount)} ₸</div>}
-              </div>)}
-            </div>
-            {f.contractType&&<div className="contract-box">
-              <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>Итого по договору</div>
-              <div style={{display:'flex',alignItems:'center',gap:16}}>
-                <div className="contract-amount">{fmt(f.contractAmount)} ₸</div>
-                <div>
-                  <div style={{fontWeight:600}}>{CT_MAP[f.contractType]?.label}</div>
-                  <div style={{fontSize:12,color:'var(--muted)'}}>Менеджер: {f.manager}</div>
-                </div>
-              </div>
-              <div style={{marginTop:12}}>
-                <Fl label="Сумма по договору (если другая)">
-                  <input className="input" type="number" value={f.contractAmount} onChange={e=>set('contractAmount',+e.target.value)}/>
-                </Fl>
-              </div>
-            </div>}
-            <div style={{marginTop:16}}>
-              <div className="field-row">
-                <Fl label="Ссылка на Miro"><input className="input" value={f.miroLink} onChange={e=>set('miroLink',e.target.value)} placeholder="https://miro.com/..."/></Fl>
-                <Fl label="Ссылка на Roadmap"><input className="input" value={f.roadmapLink} onChange={e=>set('roadmapLink',e.target.value)} placeholder="https://..."/></Fl>
-              </div>
-              <Fl label="Google Drive (документы)"><input className="input" value={f.driveLink} onChange={e=>set('driveLink',e.target.value)} placeholder="https://drive.google.com/..."/></Fl>
-              {(f.miroLink||f.roadmapLink||f.driveLink)&&<div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
-                {f.miroLink&&<a href={f.miroLink} target="_blank" className="btn btn-sm"><i className="ti ti-external-link"/>Miro</a>}
-                {f.roadmapLink&&<a href={f.roadmapLink} target="_blank" className="btn btn-sm"><i className="ti ti-map"/>Roadmap</a>}
-                {f.driveLink&&<a href={f.driveLink} target="_blank" className="btn btn-sm"><i className="ti ti-brand-google-drive"/>Drive</a>}
-              </div>}
-            </div>
-          </>}
-
-          {/* ── REASSIGNMENT ── */}
-          {tab==='reassignment'&&<>
-            <div style={{marginBottom:14}}>
-              <Fl label="Переуступка?">
-                <div style={{display:'flex',gap:8}}>
-                  {['Да','Нет'].map(v=><button key={v} onClick={()=>set('isReassignment',v==='Да')} style={{flex:1,padding:'8px',borderRadius:8,border:`1.5px solid ${f.isReassignment===(v==='Да')?'var(--accent)':'var(--border2)'}`,background:f.isReassignment===(v==='Да')?'var(--accent-bg)':'transparent',cursor:'pointer',fontWeight:600,fontSize:13,color:f.isReassignment===(v==='Да')?'var(--accent)':'var(--muted)'}}>{v}</button>)}
-                </div>
-              </Fl>
-            </div>
-            {f.isReassignment&&<>
-              <div className="field-row">
-                <Fl label="Жилой комплекс"><input className="input" value={f.reassignmentComplex} onChange={e=>set('reassignmentComplex',e.target.value)} placeholder="Название ЖК"/></Fl>
-                <Fl label="Застройщик"><input className="input" value={f.reassignmentDeveloper} onChange={e=>set('reassignmentDeveloper',e.target.value)} placeholder="Название застройщика"/></Fl>
-              </div>
-              <div className="field-row3">
-                <Fl label="Сумма переуступки (₸)"><input className="input" type="number" value={f.reassignmentAmount} onChange={e=>set('reassignmentAmount',e.target.value)}/></Fl>
-                <Fl label="Остаток ипотеки (₸)"><input className="input" type="number" value={f.mortgageBalance} onChange={e=>set('mortgageBalance',e.target.value)}/></Fl>
-                <Fl label="Банк"><input className="input" value={f.reassignmentBank} onChange={e=>set('reassignmentBank',e.target.value)} placeholder="Название банка"/></Fl>
-              </div>
-              <div style={{display:'flex',gap:16,marginTop:8}}>
-                {[['hasDebt','Есть задолженность'],['urgentSale','Срочная продажа']].map(([k,label])=><div key={k} style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',border:'1px solid var(--border)',borderRadius:8,cursor:'pointer',flex:1,background:f[k]?'#fffbeb':'transparent'}} onClick={()=>set(k,!f[k])}>
-                  <div style={{width:18,height:18,borderRadius:4,border:`2px solid ${f[k]?'var(--warn)':'var(--border2)'}`,background:f[k]?'var(--warn)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                    {f[k]&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
-                  </div>
-                  <span style={{fontSize:13,fontWeight:600}}>{label}</span>
-                </div>)}
-              </div>
-            </>}
-          </>}
-
-          {/* ── ACCOMPANIMENT ── */}
-          {tab==='accompaniment'&&<>
-            <div className="field-row">
-              <Fl label="Ответственный менеджер"><select className="input" value={f.responsibleManager} onChange={e=>set('responsibleManager',e.target.value)}><option value="">Не назначен</option>{MANAGERS.map(m=><option key={m}>{m}</option>)}</select></Fl>
-              <Fl label="Ипотечный специалист"><input className="input" value={f.mortgageSpecialist} onChange={e=>set('mortgageSpecialist',e.target.value)} placeholder="ФИО специалиста"/></Fl>
-            </div>
-            <div style={{fontWeight:700,fontSize:13,margin:'8px 0 12px',color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Этап сопровождения</div>
-            <div className="accomp-stages">
-              {ACCOMP_STAGES.map((s,i)=><div key={s} className="accomp-step" onClick={()=>set('accompStageIndex',i)}>
-                <div className={`accomp-dot${i<f.accompStageIndex?' done':i===f.accompStageIndex?' active':''}`}>
-                  {i<f.accompStageIndex?<i className="ti ti-check" style={{fontSize:10}}/>:i+1}
-                </div>
-                <div className="accomp-label">{s}</div>
-              </div>)}
-            </div>
-            <div style={{marginTop:16,padding:'12px',background:'var(--accent-bg)',borderRadius:10,border:'1px solid #bfdbfe'}}>
-              <div style={{fontWeight:700,fontSize:13,color:'var(--accent)'}}>Текущий этап: {ACCOMP_STAGES[f.accompStageIndex]}</div>
-              <div style={{fontSize:12,color:'var(--muted)',marginTop:3}}>Завершено {f.accompStageIndex} из {ACCOMP_STAGES.length} этапов</div>
-            </div>
-          </>}
-
-          {/* ── CHECKLIST ── */}
-          {tab==='checklist'&&<>
-            {Object.keys(CHECKLISTS).map(prog=>{
-              const cl=CHECKLISTS[prog];
-              const done=(f.checklists[prog]||[]);
-              const pct=Math.round(done.length/cl.items.length*100);
-              return <div key={prog} style={{marginBottom:20,background:'#f8fafc',borderRadius:10,padding:'14px',border:'1px solid var(--border)'}}>
-                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-                  <div style={{fontWeight:700,fontSize:14}}>{cl.name}</div>
-                  <div style={{display:'flex',alignItems:'center',gap:10}}>
-                    <span style={{fontSize:12,color:'var(--muted)',fontWeight:600}}>{done.length}/{cl.items.length}</span>
-                    <span style={{fontSize:12,fontWeight:700,color:pct===100?'var(--success)':'var(--accent)'}}>{pct}%</span>
-                  </div>
-                </div>
-                <div className="prog-wrap" style={{marginBottom:10}}>
-                  <div className="prog-bar" style={{width:`${pct}%`,background:pct===100?'var(--success)':'var(--accent)'}}/>
-                </div>
-                {cl.items.map(item=>{
-                  const isDone=done.includes(item);
-                  return <div key={item} className="cl-item" onClick={()=>toggleCheck(prog,item)}>
-                    <div className={`cl-box${isDone?' done':''}`}>{isDone&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}</div>
-                    <span style={{fontSize:13,textDecoration:isDone?'line-through':'none',color:isDone?'var(--muted)':'var(--text)'}}>{item}</span>
-                  </div>;
-                })}
-              </div>;
-            })}
-          </>}
-
-          {/* ── TASKS ── */}
-          {tab==='tasks'&&<>
-            <div style={{background:'#f8fafc',borderRadius:10,padding:'14px',border:'1px solid var(--border)',marginBottom:16}}>
-              <div style={{fontWeight:700,fontSize:13,marginBottom:10}}>Добавить задачу</div>
-              <div className="field-row">
-                <Fl label="Тип задачи"><select className="input" value={newTask.type} onChange={e=>setNewTask(x=>({...x,type:e.target.value}))}>{TASK_TYPES.map(t=><option key={t}>{t}</option>)}</select></Fl>
-                <Fl label="Срок"><input className="input" type="date" value={newTask.due} onChange={e=>setNewTask(x=>({...x,due:e.target.value}))}/></Fl>
-              </div>
-              <Fl label="Описание"><input className="input" value={newTask.text} onChange={e=>setNewTask(x=>({...x,text:e.target.value}))} placeholder="Детали задачи..." onKeyDown={e=>e.key==='Enter'&&addTask()}/></Fl>
-              <button className="btn btn-primary btn-sm" onClick={addTask}><i className="ti ti-plus"/>Добавить задачу</button>
-            </div>
-            {f.tasks.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет задач</div>}
-            {f.tasks.map(t=><div key={t.id} className="task-row">
-              <div className={`task-chk`} style={{background:t.done?'var(--success)':'transparent',borderColor:t.done?'var(--success)':'var(--border2)'}} onClick={()=>toggleTask(t.id)}>
-                {t.done&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
-              </div>
-              <div style={{flex:1}}>
-                <div style={{fontWeight:600,fontSize:13,textDecoration:t.done?'line-through':'none',color:t.done?'var(--muted)':'var(--text)'}}>{t.type}</div>
-                {t.text&&<div style={{fontSize:12,color:'var(--muted)'}}>{t.text}</div>}
-                {t.due&&<div style={{fontSize:11,color:'var(--light)'}}>До: {t.due}</div>}
-              </div>
-              <button className="btn btn-ghost btn-sm" style={{color:'var(--danger)'}} onClick={()=>delTask(t.id)}><i className="ti ti-trash"/></button>
-            </div>)}
-          </>}
-
-          {/* ── HISTORY ── */}
-          {tab==='history'&&<>
-            <div style={{marginBottom:14}}>
-              <Fl label="Новый комментарий">
-                <div style={{display:'flex',gap:8}}>
-                  <textarea className="input" value={newComment} onChange={e=>setNewComment(e.target.value)} placeholder="Добавьте заметку, результат звонка, статус..." style={{minHeight:60}}/>
-                  <button className="btn btn-primary" style={{alignSelf:'flex-end',flexShrink:0}} onClick={addComment}><i className="ti ti-send"/>Добавить</button>
-                </div>
-              </Fl>
-            </div>
-            {f.comments.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет записей</div>}
-            {[...f.comments].reverse().map(c=><div key={c.id} className="comment-item">
-              <div className="comment-meta"><i className="ti ti-message" style={{fontSize:12}}/><span>{c.author}</span><span>{c.date}</span></div>
-              <div className="comment-text">{c.text}</div>
-            </div>)}
-          </>}
-
-        </div>
-      </div>
+      </div></div>
 
       <div className="modal-ft">
-        <button className="btn btn-danger btn-sm" onClick={()=>onDelete(f.id)}><i className="ti ti-trash"/>Удалить</button>
+        {canEdit&&<button className="btn btn-danger btn-sm" onClick={()=>onDelete(f.id)}><i className="ti ti-trash"/>Удалить</button>}
         <div style={{flex:1}}/>
-        <button className="btn" onClick={onClose}>Отмена</button>
-        <button className="btn btn-primary" onClick={save}><i className="ti ti-device-floppy"/>Сохранить</button>
+        <button className="btn" onClick={onClose}>Закрыть</button>
+        {canEdit&&<button className="btn btn-primary" onClick={()=>onSave({...f})}><i className="ti ti-device-floppy"/>Сохранить</button>}
       </div>
     </div>
   </div>;
 }
 
-// ═══════════════════════════ TASKS PAGE ═══════════════════════════
-function TasksPage({clients,onOpen,onSave}){
-  const allTasks=clients.flatMap(c=>c.tasks.map(t=>({...t,clientId:c.id,clientName:c.fio,client:c})));
-  const open=allTasks.filter(t=>!t.done);
-  const done=allTasks.filter(t=>t.done);
+// ══════════════════════════ WHATSAPP PAGE ══════════════════════════
+function WhatsAppPage({clients,managers,onImport,onOpen}){
+  const waClients=clients.filter(c=>c.isWhatsApp);
+  const [showInfo,setShowInfo]=useState(false);
 
   return <div>
-    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20}}>
+    <div className="metric-grid" style={{gridTemplateColumns:'repeat(3,1fr)'}}>
       {[
-        {label:'Открытых задач',value:open.length,color:'var(--warn)'},
-        {label:'Завершено',value:done.length,color:'var(--success)'},
-        {label:'Всего',value:allTasks.length,color:'var(--accent)'},
+        {label:'WhatsApp лидов',value:waClients.length,color:'#25d366'},
+        {label:'Ожидают обработки',value:waClients.filter(c=>c.stage==='new_lead').length,color:'#f59e0b'},
+        {label:'В работе',value:waClients.filter(c=>c.stage!=='new_lead'&&c.stage!=='closed').length,color:'#3b82f6'},
       ].map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}>
         <div className="metric-label">{label}</div>
         <div className="metric-value">{value}</div>
       </div>)}
     </div>
-    {open.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:60,background:'var(--card)',borderRadius:12,border:'1px solid var(--border)'}}>
-      <i className="ti ti-circle-check" style={{fontSize:40,color:'var(--success)',display:'block',marginBottom:12}}/>Все задачи выполнены!
+
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+      {/* MANUAL IMPORT */}
+      <div className="card card-p">
+        <div style={{fontWeight:700,fontSize:14,marginBottom:4,display:'flex',alignItems:'center',gap:8}}>
+          <i className="ti ti-user-plus" style={{color:'#25d366',fontSize:18}}/>Добавить WhatsApp лид
+        </div>
+        <div style={{fontSize:12,color:'var(--muted)',marginBottom:12}}>Вручную добавьте клиента, пришедшего из WhatsApp</div>
+        <WaImportModal managers={managers} onImport={onImport} inline/>
+      </div>
+
+      {/* WEBHOOK INFO */}
+      <div className="card card-p" style={{border:'1px solid #bbf7d0',background:'#f0fdf4'}}>
+        <div style={{fontWeight:700,fontSize:14,marginBottom:4,display:'flex',alignItems:'center',gap:8}}>
+          <i className="ti ti-api" style={{color:'#16a34a',fontSize:18}}/>Автоинтеграция с WhatsApp
+          <button className="btn btn-sm" style={{marginLeft:'auto'}} onClick={()=>setShowInfo(!showInfo)}>
+            {showInfo?'Скрыть':'Как настроить?'}
+          </button>
+        </div>
+        {showInfo&&<div style={{fontSize:12,lineHeight:1.7,color:'#065f46'}}>
+          <div style={{fontWeight:700,marginBottom:8}}>Для автоматической передачи лидов из WhatsApp нужно:</div>
+          <div style={{marginBottom:6}}>1. <b>WhatsApp Business API</b> — зарегистрироваться на <a href="https://business.whatsapp.com" target="_blank" style={{color:'var(--accent)'}}>business.whatsapp.com</a></div>
+          <div style={{marginBottom:6}}>2. <b>n8n или Make (ex-Integromat)</b> — бесплатный/дешёвый инструмент автоматизации. При получении сообщения в WA — создаёт лид в CRM через API.</div>
+          <div style={{marginBottom:6}}>3. <b>Telegram-бот</b> — альтернатива: бот пересылает заявки из WA/TG в CRM.</div>
+          <div style={{marginBottom:10}}>4. <b>Webhook URL</b> вашей CRM (нужен бэкенд на Supabase — см. инструкцию по деплою)</div>
+          <div style={{background:'#dcfce7',borderRadius:7,padding:'8px',fontFamily:'monospace',fontSize:11,wordBreak:'break-all'}}>POST https://ваш-проект.supabase.co/functions/v1/wa-lead</div>
+          <div style={{marginTop:8,fontSize:11,color:'#047857'}}>💡 Самый простой путь: n8n (бесплатно на self-hosted) → WhatsApp → CRM</div>
+        </div>}
+        {!showInfo&&<div style={{fontSize:12,color:'#16a34a'}}>Настройте автоматическую передачу лидов из WhatsApp Business API через n8n или Make</div>}
+      </div>
+    </div>
+
+    {/* WA CLIENTS TABLE */}
+    {waClients.length>0&&<div className="card" style={{overflow:'hidden'}}>
+      <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14,display:'flex',alignItems:'center',gap:8}}>
+        <i className="ti ti-brand-whatsapp" style={{color:'#25d366'}}/>WhatsApp клиенты ({waClients.length})
+      </div>
+      <table>
+        <thead><tr>{['Клиент','Телефон','Менеджер','Этап','Источник',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
+        <tbody>
+          {waClients.map(c=>{
+            const m=managers.find(x=>x.id===c.manager);
+            const p=DEFAULT_PIPELINE.find(x=>x.id===c.stage);
+            return <tr key={c.id} onClick={()=>onOpen(c)}>
+              <td><div style={{fontWeight:600}}>{c.fio||c.phone}</div>{c.waMsgPreview&&<div style={{fontSize:11,color:'var(--muted)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:200}}>{c.waMsgPreview}</div>}</td>
+              <td><a href={`https://wa.me/${c.phone.replace(/\D/g,'')}`} target="_blank" style={{color:'#25d366',fontWeight:600,textDecoration:'none'}} onClick={e=>e.stopPropagation()}><i className="ti ti-brand-whatsapp"/>{c.phone}</a></td>
+              <td>{m?<span style={{display:'flex',alignItems:'center',gap:5}}><span className="dot" style={{background:m.color}}/>{m.name}</span>:'—'}</td>
+              <td>{p&&<span className="badge" style={{background:p.color+'22',color:p.color}}>{p.label}</span>}</td>
+              <td><span className="src-badge" style={{background:'#25d36622',color:'#25d366'}}>WhatsApp</span></td>
+              <td><button className="btn btn-ghost btn-sm"><i className="ti ti-arrow-right"/></button></td>
+            </tr>;
+          })}
+        </tbody>
+      </table>
     </div>}
-    {open.length>0&&<div className="card" style={{overflow:'hidden',marginBottom:16}}>
-      <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14}}>Открытые задачи ({open.length})</div>
+  </div>;
+}
+
+function WaImportModal({managers,onImport,onClose,inline}){
+  const [f,setF]=useState({fio:'',phone:'',assignTo:'',rawText:''});
+  const set=(k,v)=>setF(x=>({...x,[k]:v}));
+  function save(){onImport({...f});if(!inline){onClose?.();}else setF({fio:'',phone:'',assignTo:'',rawText:''});}
+  const content=<>
+    <Fl label="Имя клиента (из переписки)"><input className="input" value={f.fio} onChange={e=>set('fio',e.target.value)} placeholder="Как написал клиент"/></Fl>
+    <Fl label="Телефон WhatsApp"><input className="input" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="+7 701 000-00-00"/></Fl>
+    <Fl label="Назначить менеджеру"><select className="input" value={f.assignTo} onChange={e=>set('assignTo',e.target.value)}><option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></Fl>
+    <Fl label="Сообщение из чата (вставьте текст)"><textarea className="input" value={f.rawText} onChange={e=>set('rawText',e.target.value)} placeholder="Привет, хочу узнать про ипотеку..." style={{minHeight:65}}/></Fl>
+    <button className="btn btn-success" style={{width:'100%',justifyContent:'center'}} onClick={save}><i className="ti ti-brand-whatsapp"/>Добавить как лид</button>
+  </>;
+  if(inline)return <div>{content}</div>;
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className="modal modal-md">
+      <MH title="Добавить WhatsApp лид" onClose={onClose}/>
+      <div style={{padding:'18px 20px'}}>{content}</div>
+    </div>
+  </div>;
+}
+
+// ══════════════════════════ TASKS PAGE ═════════════════════════════
+function TasksPage({clients,managers,onOpen}){
+  const all=clients.flatMap(c=>c.tasks.map(t=>({...t,clientId:c.id,clientFio:c.fio,client:c})));
+  const open=all.filter(t=>!t.done);
+  const done=all.filter(t=>t.done);
+  return <div>
+    <div className="metric-grid" style={{gridTemplateColumns:'repeat(3,1fr)',marginBottom:16}}>
+      {[{label:'Открытых',value:open.length,color:'var(--warn)'},{label:'Просрочено',value:open.filter(t=>t.due&&t.due<today()).length,color:'var(--danger)'},{label:'Завершено',value:done.length,color:'var(--success)'}]
+        .map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}><div className="metric-label">{label}</div><div className="metric-value">{value}</div></div>)}
+    </div>
+    {open.length>0&&<div className="card" style={{overflow:'hidden',marginBottom:14}}>
+      <div style={{padding:'10px 14px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:13}}>Открытые задачи ({open.length})</div>
       <table>
         <thead><tr>{['Задача','Клиент','Тип','Срок',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
-        <tbody>
-          {open.map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
-            <td style={{fontWeight:600}}>{t.text||t.type}</td>
-            <td>{t.clientName}</td>
-            <td><span className="badge" style={{background:'var(--accent-bg)',color:'var(--accent)'}}>{t.type}</span></td>
-            <td style={{color:t.due&&t.due<today()?'var(--danger)':'var(--muted)',fontWeight:t.due&&t.due<today()?700:400}}>{t.due||'—'}</td>
-            <td><button className="btn btn-sm btn-ghost"><i className="ti ti-arrow-right"/></button></td>
-          </tr>)}
-        </tbody>
+        <tbody>{open.map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
+          <td style={{fontWeight:600}}>{t.text||t.type}</td>
+          <td>{t.clientFio}</td>
+          <td><span className="badge" style={{background:'var(--accent-bg)',color:'var(--accent)'}}>{t.type}</span></td>
+          <td style={{color:t.due&&t.due<today()?'var(--danger)':'var(--muted)',fontWeight:t.due&&t.due<today()?700:400}}>{t.due||'—'}{t.due&&t.due<today()&&' ⚠️'}</td>
+          <td><button className="btn btn-ghost btn-sm"><i className="ti ti-arrow-right"/></button></td>
+        </tr>)}</tbody>
       </table>
     </div>}
     {done.length>0&&<div className="card" style={{overflow:'hidden'}}>
-      <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14,color:'var(--muted)'}}>Завершённые задачи ({done.length})</div>
+      <div style={{padding:'10px 14px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:13,color:'var(--muted)'}}>Завершённые ({done.length})</div>
       <table>
-        <thead><tr>{['Задача','Клиент','Тип',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
-        <tbody>
-          {done.map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
-            <td style={{textDecoration:'line-through',color:'var(--muted)'}}>{t.text||t.type}</td>
-            <td>{t.clientName}</td>
-            <td><span className="badge" style={{background:'#f0fdf4',color:'var(--success)'}}>{t.type}</span></td>
-            <td><i className="ti ti-circle-check" style={{color:'var(--success)'}}/></td>
-          </tr>)}
-        </tbody>
+        <thead><tr>{['Задача','Клиент',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
+        <tbody>{done.slice(0,20).map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
+          <td style={{textDecoration:'line-through',color:'var(--muted)'}}>{t.text||t.type}</td>
+          <td>{t.clientFio}</td>
+          <td><i className="ti ti-circle-check" style={{color:'var(--success)'}}/></td>
+        </tr>)}</tbody>
       </table>
     </div>}
   </div>;
 }
 
-// ═══════════════════════════ KPI PAGE ════════════════════════════
-function KPIPage({clients}){
-  const stats=MANAGERS.map(m=>{
-    const mc=clients.filter(c=>c.manager===m);
-    const contracts=mc.filter(c=>c.contractType);
-    const revenue=contracts.reduce((s,c)=>s+c.contractAmount,0);
-    const inWork=mc.filter(c=>c.stage!=='new_lead'&&c.stage!=='closed');
-    const approved=mc.filter(c=>['approval','deal','issuance','closed'].includes(c.stage));
-    const closed=mc.filter(c=>c.stage==='closed');
-    const convLD=mc.length?Math.round(contracts.length/mc.length*100):0;
-    const convCA=contracts.length?Math.round(approved.length/contracts.length*100):0;
-    const tasks=mc.flatMap(c=>c.tasks);
-    return {name:m,leads:mc.length,inWork:inWork.length,contracts:contracts.length,revenue,approved:approved.length,closed:closed.length,convLD,convCA,tasks:tasks.length,tasksDone:tasks.filter(t=>t.done).length};
+// ══════════════════════════ KPI PAGE ══════════════════════════════
+function KPIPage({clients,managers}){
+  const stats=managers.map(m=>{
+    const mc=clients.filter(c=>c.manager===m.id);
+    const ct=mc.filter(c=>c.contractType);
+    const rev=ct.reduce((s,c)=>s+c.contractAmount,0);
+    const appr=mc.filter(c=>['approval','deal','issuance','closed'].includes(c.stage));
+    const clsd=mc.filter(c=>c.stage==='closed');
+    return {m,leads:mc.length,inWork:mc.filter(c=>c.stage!=='new_lead'&&c.stage!=='closed').length,contracts:ct.length,revenue:rev,approved:appr.length,closed:clsd.length,
+      convLD:mc.length?Math.round(ct.length/mc.length*100):0,convCA:ct.length?Math.round(appr.length/ct.length*100):0};
   }).sort((a,b)=>b.revenue-a.revenue);
   const maxRev=Math.max(...stats.map(s=>s.revenue),1);
+  const totalRev=stats.reduce((s,x)=>s+x.revenue,0);
+  return <div>
+    <div className="metric-grid">
+      {[{label:'Всего клиентов',value:clients.length,color:'#6366f1'},{label:'Договоров',value:clients.filter(c=>c.contractType).length,color:'#ec4899'},{label:'Общая выручка',value:fmt(totalRev)+' ₸',color:'#10b981'},{label:'Закрыто',value:clients.filter(c=>c.stage==='closed').length,color:'#22c55e'}]
+        .map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}><div className="metric-label">{label}</div><div className="metric-value">{value}</div></div>)}
+    </div>
+    {stats.map((s,i)=><div key={s.m.id} className="card card-p" style={{marginBottom:10}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <div className="avatar" style={{background:s.m.color+'22',color:s.m.color,width:38,height:38,fontSize:14}}>{s.m.name[0]}</div>
+          <div><div style={{fontWeight:700,fontSize:14}}>{s.m.name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{s.leads} лидов · {s.contracts} договоров</div></div>
+        </div>
+        <div style={{textAlign:'right'}}>
+          <div style={{fontWeight:800,fontSize:20,color:s.m.color,letterSpacing:'-1px'}}>{fmt(s.revenue)} ₸</div>
+          <div style={{fontSize:11,color:'var(--muted)'}}>выручка</div>
+        </div>
+      </div>
+      <div className="kpi-bar" style={{marginBottom:12}}><div className="kpi-fill" style={{width:`${Math.round(s.revenue/maxRev*100)}%`,background:s.m.color}}/></div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:7}}>
+        {[['В работе',s.inWork,'#0ea5e9'],['Договоры',s.contracts,'#ec4899'],['Одобрений',s.approved,'#10b981'],['Закрыто',s.closed,'#22c55e'],['Лид→Дог',s.convLD+'%',s.convLD>=50?'#10b981':s.convLD>=25?'#f59e0b':'#ef4444'],['Дог→Одоб',s.convCA+'%',s.convCA>=50?'#10b981':s.convCA>=25?'#f59e0b':'#ef4444']]
+          .map(([label,value,color])=><div key={label} style={{background:'#f8fafc',borderRadius:7,padding:'9px',border:'1px solid var(--border)',textAlign:'center'}}>
+            <div style={{fontSize:17,fontWeight:800,color}}>{value}</div>
+            <div style={{fontSize:9,color:'var(--muted)',fontWeight:700,textTransform:'uppercase',letterSpacing:'.04em',marginTop:2}}>{label}</div>
+          </div>)}
+      </div>
+    </div>)}
+  </div>;
+}
+
+// ══════════════════════════ SETTINGS PAGE ══════════════════════════
+function SettingsPage({store,managers,pipeline,templates,onSaveManager,onDelManager,onSavePipeline,onDelPipeline,onSaveTpl,onDelTpl,onOpenModal}){
+  const [tab,setTab]=useState('managers');
+  const TABS=[{id:'managers',l:'Менеджеры'},{id:'pipeline',l:'Воронка/Этапы'},{id:'checklists',l:'Чек-листы'},{id:'users',l:'Логины'}];
+  const COLORS=['#6366f1','#10b981','#f59e0b','#ec4899','#0ea5e9','#14b8a6','#ef4444','#8b5cf6','#f97316','#64748b'];
 
   return <div>
-    <div className="metric-grid" style={{marginBottom:20}}>
-      {[
-        {label:'Всего клиентов',value:clients.length,color:'#6366f1'},
-        {label:'Договоров подписано',value:clients.filter(c=>c.contractType).length,color:'#ec4899'},
-        {label:'Общая выручка',value:fmt(clients.reduce((s,c)=>s+c.contractAmount,0))+' ₸',color:'#10b981'},
-        {label:'Успешно закрыто',value:clients.filter(c=>c.stage==='closed').length,color:'#22c55e'},
-      ].map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}>
-        <div className="metric-label">{label}</div>
-        <div className="metric-value">{value}</div>
-      </div>)}
+    <div style={{display:'flex',gap:3,marginBottom:20,background:'var(--card)',borderRadius:10,padding:'4px',border:'1px solid var(--border)',width:'fit-content'}}>
+      {TABS.map(t=><button key={t.id} className={`btn${tab===t.id?' btn-primary':''}`} style={{boxShadow:'none',border:'none'}} onClick={()=>setTab(t.id)}>{t.l}</button>)}
     </div>
-    {stats.map((s,i)=>{
-      const colors=['#6366f1','#10b981','#f59e0b','#ec4899'];
-      const col=colors[i%4];
-      return <div key={s.name} className="card card-p" style={{marginBottom:12}}>
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <div className="avatar" style={{background:col+'22',color:col,width:40,height:40,fontSize:15}}>{s.name[0]}</div>
-            <div>
-              <div style={{fontWeight:700,fontSize:15}}>{s.name}</div>
-              <div style={{fontSize:12,color:'var(--muted)'}}>{s.leads} лидов · {s.contracts} договоров</div>
+
+    {/* MANAGERS */}
+    {tab==='managers'&&<>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+        <div style={{fontWeight:700,fontSize:15}}>Менеджеры ({managers.length})</div>
+        <button className="btn btn-primary" onClick={()=>onOpenModal({type:'manager',item:{id:uid(),name:'',phone:'',role:'manager',color:'#3b82f6',active:true}})}><i className="ti ti-plus"/>Добавить менеджера</button>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10}}>
+        {managers.map(m=><div key={m.id} className="card card-p" style={{border:`1.5px solid ${m.color}33`}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+            <div className="avatar" style={{background:m.color+'22',color:m.color,width:38,height:38,fontSize:14,fontWeight:700}}>{m.name[0]}</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700,fontSize:14}}>{m.name}</div>
+              <div style={{fontSize:11,color:'var(--muted)'}}>{m.phone}</div>
             </div>
+            <span className="badge" style={{background:m.active?'#f0fdf4':'#fef2f2',color:m.active?'var(--success)':'var(--danger)'}}>{m.active?'Активен':'Неактивен'}</span>
           </div>
-          <div style={{textAlign:'right'}}>
-            <div style={{fontWeight:800,fontSize:22,color:col,letterSpacing:'-1px'}}>{fmt(s.revenue)} ₸</div>
-            <div style={{fontSize:12,color:'var(--muted)'}}>выручка</div>
+          <div style={{display:'flex',gap:6,marginTop:6}}>
+            {COLORS.map(c=><div key={c} onClick={()=>onSaveManager({...m,color:c})} style={{width:18,height:18,borderRadius:4,background:c,cursor:'pointer',border:`2.5px solid ${m.color===c?'var(--text)':'transparent'}`,transition:'border .1s'}}/>)}
+          </div>
+          <div style={{display:'flex',gap:7,marginTop:10}}>
+            <button className="btn btn-sm" style={{flex:1,justifyContent:'center'}} onClick={()=>onOpenModal({type:'manager',item:{...m}})}><i className="ti ti-edit"/>Изменить</button>
+            <button className="btn btn-sm" style={{padding:'4px 8px',color:'var(--muted)'}} onClick={()=>onSaveManager({...m,active:!m.active})}>{m.active?<i className="ti ti-eye-off"/>:<i className="ti ti-eye"/>}</button>
+            <button className="btn btn-sm btn-danger" style={{padding:'4px 8px'}} onClick={()=>onDelManager(m.id)}><i className="ti ti-trash"/></button>
+          </div>
+        </div>)}
+      </div>
+    </>}
+
+    {/* PIPELINE */}
+    {tab==='pipeline'&&<>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+        <div style={{fontWeight:700,fontSize:15}}>Этапы воронки ({pipeline.length})</div>
+        <button className="btn btn-primary" onClick={()=>onOpenModal({type:'pipeline',item:{id:uid(),label:'',color:'#3b82f6'}})}><i className="ti ti-plus"/>Добавить этап</button>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:7}}>
+        {pipeline.map((p,i)=><div key={p.id} className="card" style={{padding:'12px 14px',display:'flex',alignItems:'center',gap:12,border:`1.5px solid ${p.color}33`}}>
+          <span style={{fontSize:13,fontWeight:700,color:'var(--muted)',width:22}}>{i+1}.</span>
+          <span className="dot" style={{background:p.color,width:10,height:10}}/>
+          <span style={{flex:1,fontWeight:600,fontSize:13,color:p.color}}>{p.label}</span>
+          <span style={{fontFamily:'monospace',fontSize:11,color:'var(--light)',background:'var(--bg)',padding:'2px 6px',borderRadius:4}}>{p.id}</span>
+          <div style={{display:'flex',gap:6}}>
+            <button className="btn btn-sm btn-ghost" onClick={()=>onOpenModal({type:'pipeline',item:{...p}})}><i className="ti ti-edit" style={{fontSize:13}}/></button>
+            <button className="btn btn-sm btn-danger" style={{padding:'4px 8px'}} onClick={()=>onDelPipeline(p.id)}><i className="ti ti-trash" style={{fontSize:13}}/></button>
+          </div>
+        </div>)}
+      </div>
+    </>}
+
+    {/* CHECKLISTS */}
+    {tab==='checklists'&&<>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+        <div style={{fontWeight:700,fontSize:15}}>Шаблоны чек-листов ({templates.length})</div>
+        <button className="btn btn-primary" onClick={()=>onOpenModal({type:'template',item:{id:uid(),name:'',stage:'all',color:'#3b82f6',items:[]}})}><i className="ti ti-plus"/>Новый шаблон</button>
+      </div>
+      {templates.map(t=><div key={t.id} className="card card-p" style={{marginBottom:10,border:`1.5px solid ${t.color}33`}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+          <div style={{fontWeight:700,fontSize:14,display:'flex',alignItems:'center',gap:7}}>
+            <span style={{width:10,height:10,borderRadius:2,background:t.color,display:'inline-block'}}/>
+            {t.name}
+            <span className="badge" style={{background:'#f1f5f9',color:'var(--muted)'}}>{t.stage==='all'?'Все этапы':pipeline.find(p=>p.id===t.stage)?.label||t.stage}</span>
+          </div>
+          <div style={{display:'flex',gap:6}}>
+            <button className="btn btn-sm" onClick={()=>onOpenModal({type:'template',item:JSON.parse(JSON.stringify(t))})}><i className="ti ti-edit"/>Изменить</button>
+            <button className="btn btn-sm btn-danger" onClick={()=>onDelTpl(t.id)}><i className="ti ti-trash"/></button>
           </div>
         </div>
-        <div className="kpi-bar" style={{marginBottom:16}}><div className="kpi-fill" style={{width:`${Math.round(s.revenue/maxRev*100)}%`,background:col}}/></div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:8}}>
-          {[
-            {label:'В работе',value:s.inWork,color:'#0ea5e9'},
-            {label:'Договоры',value:s.contracts,color:'#ec4899'},
-            {label:'Одобрений',value:s.approved,color:'#10b981'},
-            {label:'Закрыто',value:s.closed,color:'#22c55e'},
-            {label:'Лид→Дог',value:s.convLD+'%',color:s.convLD>=50?'#10b981':s.convLD>=25?'#f59e0b':'#ef4444'},
-            {label:'Дог→Одоб',value:s.convCA+'%',color:s.convCA>=50?'#10b981':s.convCA>=25?'#f59e0b':'#ef4444'},
-          ].map(({label,value,color})=><div key={label} style={{background:'#f8fafc',borderRadius:8,padding:'10px',border:'1px solid var(--border)',textAlign:'center'}}>
-            <div style={{fontSize:18,fontWeight:800,color}}>{value}</div>
-            <div style={{fontSize:10,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:'.04em',marginTop:2}}>{label}</div>
-          </div>)}
+        <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
+          {t.items.map(item=>{
+            const colors={check:'var(--muted)',ecp:'#8b5cf6',doc:'#0ea5e9'};
+            const icons={check:'ti-checkbox',ecp:'ti-writing-sign',doc:'ti-file-text'};
+            return <span key={item.id} style={{background:'#f8fafc',border:'1px solid var(--border)',borderRadius:5,padding:'2px 8px',fontSize:11,display:'flex',alignItems:'center',gap:4,color:colors[item.type||'check']}}>
+              <i className={`ti ${icons[item.type||'check']}`} style={{fontSize:11}}/>{item.text}
+            </span>;
+          })}
         </div>
-      </div>;
-    })}
+      </div>)}
+    </>}
+
+    {/* USERS */}
+    {tab==='users'&&<>
+      <div style={{fontWeight:700,fontSize:15,marginBottom:14}}>Пользователи системы</div>
+      <div style={{background:'#fffbeb',border:'1px solid #fde68a',borderRadius:10,padding:'12px',marginBottom:14,fontSize:12,color:'#92400e'}}>
+        <i className="ti ti-info-circle" style={{fontSize:14}}/> Для добавления нового пользователя — добавьте менеджера, затем отредактируйте файл CRM и добавьте логин в массив USERS. В версии с Supabase это настраивается в панели Auth.
+      </div>
+      <div className="card" style={{overflow:'hidden'}}>
+        <table>
+          <thead><tr>{['Имя','Логин','Роль','Менеджер'].map(h=><th key={h}>{h}</th>)}</tr></thead>
+          <tbody>{(store.users||USERS).map(u=>{
+            const r=ROLES.find(x=>x.id===u.role);
+            const m=managers.find(x=>x.id===u.managerId);
+            return <tr key={u.id}>
+              <td style={{fontWeight:600}}>{u.name}</td>
+              <td style={{fontFamily:'monospace',fontSize:12,color:'var(--muted)'}}>{u.login}</td>
+              <td><span className="badge" style={{background:r?.color+'22',color:r?.color}}>{r?.label}</span></td>
+              <td>{m?<span style={{display:'flex',alignItems:'center',gap:5}}><span className="dot" style={{background:m.color}}/>{m.name}</span>:'—'}</td>
+            </tr>;
+          })}</tbody>
+        </table>
+      </div>
+    </>}
+  </div>;
+}
+
+// ══════════════════════════ SIMPLE MODALS ══════════════════════════
+function ManagerModal({item,onSave,onClose}){
+  const [f,sf]=useState({...item});
+  const set=(k,v)=>sf(x=>({...x,[k]:v}));
+  const COLORS=['#6366f1','#10b981','#f59e0b','#ec4899','#0ea5e9','#14b8a6','#ef4444','#8b5cf6','#f97316'];
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className="modal modal-sm">
+      <MH title={f.id&&item.name?'Редактировать':'Новый менеджер'} onClose={onClose}/>
+      <div style={{padding:'16px 20px'}}>
+        <Fl label="ФИО *"><input className="input" value={f.name} onChange={e=>set('name',e.target.value)} placeholder="Фамилия Имя"/></Fl>
+        <Fl label="Телефон"><input className="input" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="+7 701 000-00-00"/></Fl>
+        <Fl label="Роль"><select className="input" value={f.role} onChange={e=>set('role',e.target.value)}>
+          {ROLES.filter(r=>r.id!=='admin').map(r=><option key={r.id} value={r.id}>{r.label}</option>)}
+        </select></Fl>
+        <Fl label="Цвет">
+          <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>
+            {COLORS.map(c=><div key={c} onClick={()=>set('color',c)} style={{width:24,height:24,borderRadius:5,background:c,cursor:'pointer',border:`3px solid ${f.color===c?'var(--text)':'transparent'}`,transition:'border .1s'}}/>)}
+          </div>
+        </Fl>
+        <div style={{display:'flex',alignItems:'center',gap:8,marginTop:4}}>
+          <span style={{fontSize:13,fontWeight:500}}>Активен</span>
+          <div className={`toggle${f.active?' on':''}`} onClick={()=>set('active',!f.active)}/>
+        </div>
+      </div>
+      <MA onClose={onClose} onSave={()=>onSave(f)}/>
+    </div>
+  </div>;
+}
+
+function PipelineModal({item,onSave,onClose}){
+  const [f,sf]=useState({...item});
+  const set=(k,v)=>sf(x=>({...x,[k]:v}));
+  const COLORS=['#6366f1','#0ea5e9','#f59e0b','#a855f7','#ec4899','#14b8a6','#10b981','#f97316','#22c55e','#64748b'];
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className="modal modal-sm">
+      <MH title="Этап воронки" onClose={onClose}/>
+      <div style={{padding:'16px 20px'}}>
+        <Fl label="Название этапа"><input className="input" value={f.label} onChange={e=>set('label',e.target.value)} placeholder="Например: Согласование"/></Fl>
+        <Fl label="ID (латинские, без пробелов)"><input className="input" value={f.id} onChange={e=>set('id',e.target.value.replace(/\s/g,'_').toLowerCase())} placeholder="my_stage"/></Fl>
+        <Fl label="Цвет">
+          <div style={{display:'flex',gap:7,flexWrap:'wrap'}}>
+            {COLORS.map(c=><div key={c} onClick={()=>set('color',c)} style={{width:24,height:24,borderRadius:5,background:c,cursor:'pointer',border:`3px solid ${f.color===c?'var(--text)':'transparent'}`,transition:'border .1s'}}/>)}
+          </div>
+        </Fl>
+      </div>
+      <MA onClose={onClose} onSave={()=>onSave(f)}/>
+    </div>
+  </div>;
+}
+
+function TemplateModal({item,pipeline,onSave,onClose}){
+  const [f,sf]=useState({...item,items:[...item.items]});
+  const [newItem,setNewItem]=useState({text:'',type:'check'});
+  const set=(k,v)=>sf(x=>({...x,[k]:v}));
+  const COLORS=['#3b82f6','#8b5cf6','#14b8a6','#f59e0b','#ef4444','#10b981','#ec4899','#f97316'];
+  function addItem(){if(!newItem.text.trim())return;set('items',[...f.items,{id:uid(),...newItem}]);setNewItem({text:'',type:'check'});}
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className="modal modal-md">
+      <MH title="Шаблон чек-листа" onClose={onClose}/>
+      <div style={{padding:'16px 20px',overflow:'auto',maxHeight:'72vh'}}>
+        <Fl label="Название шаблона"><input className="input" value={f.name} onChange={e=>set('name',e.target.value)} placeholder="Например: ЭЦП и документы"/></Fl>
+        <Fl label="Применять на этапе">
+          <select className="input" value={f.stage} onChange={e=>set('stage',e.target.value)}>
+            <option value="all">Все этапы</option>
+            {pipeline.map(p=><option key={p.id} value={p.id}>{p.label}</option>)}
+          </select>
+        </Fl>
+        <Fl label="Цвет">
+          <div style={{display:'flex',gap:7}}>{COLORS.map(c=><div key={c} onClick={()=>set('color',c)} style={{width:22,height:22,borderRadius:4,background:c,cursor:'pointer',border:`3px solid ${f.color===c?'var(--text)':'transparent'}`,transition:'border .1s'}}/> )}</div>
+        </Fl>
+        <Fl label={`Пункты (${f.items.length})`}>
+          <div style={{display:'flex',gap:7,marginBottom:8}}>
+            <select className="input" style={{width:130}} value={newItem.type} onChange={e=>setNewItem(x=>({...x,type:e.target.value}))}>
+              <option value="check">✓ Пункт</option>
+              <option value="ecp">🔏 ЭЦП</option>
+              <option value="doc">📄 Документ</option>
+            </select>
+            <input className="input" value={newItem.text} onChange={e=>setNewItem(x=>({...x,text:e.target.value}))} placeholder="Текст пункта..." onKeyDown={e=>e.key==='Enter'&&addItem()}/>
+            <button className="btn btn-primary" onClick={addItem}><i className="ti ti-plus"/></button>
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:5}}>
+            {f.items.map(item=>{
+              const icons={check:'ti-checkbox',ecp:'ti-writing-sign',doc:'ti-file-text'};
+              const icolors={check:'var(--muted)',ecp:'#8b5cf6',doc:'#0ea5e9'};
+              return <div key={item.id} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 10px',background:'#f8fafc',borderRadius:7,border:'1px solid var(--border)'}}>
+                <i className={`ti ${icons[item.type||'check']}`} style={{color:icolors[item.type||'check'],fontSize:14}}/>
+                <span style={{flex:1,fontSize:13}}>{item.text}</span>
+                <span style={{fontSize:10,background:'#e2e8f0',borderRadius:4,padding:'1px 5px',color:'var(--muted)'}}>{item.type||'check'}</span>
+                <button className="btn btn-ghost btn-sm" style={{color:'var(--danger)',padding:'2px 5px'}} onClick={()=>set('items',f.items.filter(i=>i.id!==item.id))}><i className="ti ti-x" style={{fontSize:12}}/></button>
+              </div>;
+            })}
+          </div>
+        </Fl>
+      </div>
+      <MA onClose={onClose} onSave={()=>onSave(f)}/>
+    </div>
   </div>;
 }
 

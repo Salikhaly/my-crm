@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM — Мой бизнес</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ─── КОНФИГУРАЦИЯ ─── Замените на свои данные из Supabase ─────────────── */
+/* Открываете index.html, меняете SUPABASE_URL и SUPABASE_KEY ниже в <script> */
+
+:root {
+  --bg: #f5f5f0;
+  --card: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.15);
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --accent: #4f6ef7;
+  --accent-bg: #e8ebff;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warn: #d97706;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+.shell { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar { width: 210px; background: var(--card); border-right: 1px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.logo { padding: 6px 10px 18px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+.logo-title { font-size: 17px; font-weight: 700; letter-spacing: -0.5px; color: var(--accent); }
+.logo-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; cursor: pointer; color: var(--muted); font-size: 13px; transition: all .12s; user-select: none; border: 1px solid transparent; }
+.nav-item:hover { background: #f5f5f0; color: var(--text); }
+.nav-item.active { background: var(--accent-bg); color: var(--accent); border-color: rgba(79,110,247,.2); font-weight: 500; }
+.nav-item i { font-size: 17px; }
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
+.sync-badge { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* MAIN */
+.main { flex: 1; padding: 28px 32px; overflow: auto; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.page-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+/* BUTTONS */
+.btn { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--card); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all .12s; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); }
+.btn:hover { background: #f5f5f0; }
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
+.btn-primary:hover { background: #3d5ce0; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-ghost { border-color: transparent; background: transparent; box-shadow: none; }
+.btn-ghost:hover { background: #f0f0ec; }
+.btn-danger-soft { background: #fef2f2; color: var(--danger); border-color: #fecaca; }
+.btn-danger-soft:hover { background: #fee2e2; }
+
+/* CARD */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); }
+
+/* METRICS */
+.metric-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); }
+.metric-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.metric-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+.metric-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* INPUTS */
+.input { background: #fafafa; border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: inherit; width: 100%; outline: none; transition: border .12s; }
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,110,247,.1); }
+select.input { cursor: pointer; }
+textarea.input { resize: vertical; min-height: 75px; }
+.field { margin-bottom: 14px; }
+.field-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+
+/* TABLE */
+table { width: 100%; border-collapse: collapse; }
+th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); background: #fafafa; }
+td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #fafafa; }
+.badge { padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+/* KANBAN */
+.kanban-wrap { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; }
+.kanban-col { background: #f5f5f0; border: 1px solid var(--border); border-radius: 12px; min-width: 185px; flex: 1; transition: border-color .12s, background .12s; }
+.kanban-col.drag-over { border-color: var(--accent); background: var(--accent-bg); }
+.kanban-head { padding: 12px 12px 9px; border-bottom: 1px solid var(--border); }
+.kanban-stage-row { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+.kanban-total { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.kanban-body { padding: 8px; min-height: 80px; display: flex; flex-direction: column; gap: 7px; }
+.deal-card { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 12px; cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
+.deal-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,110,247,.1); transform: translateY(-1px); }
+.deal-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.deal-client { font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+.deal-footer { display: flex; justify-content: space-between; align-items: center; }
+.deal-value { font-size: 13px; font-weight: 700; }
+
+/* TASKS */
+.task-list { display: flex; flex-direction: column; gap: 8px; }
+.task-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow); }
+.task-check { width: 19px; height: 19px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all .12s; }
+
+/* FINANCES */
+.fin-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--border); }
+.fin-row:last-child { border-bottom: none; }
+.fin-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+
+/* MODAL */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
+.modal { background: var(--card); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; width: 470px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
+.modal-wide { width: 720px; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-title { font-size: 17px; font-weight: 700; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+
+/* SEARCH */
+.search-wrap { position: relative; margin-bottom: 16px; }
+.search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 17px; pointer-events: none; }
+.search-wrap input { padding-left: 35px; }
+
+/* CHECKLIST */
+.checklist-tpl { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.checklist-tpl-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.checklist-tpl-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.checklist-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity .1s; }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item:hover { opacity: .8; }
+.check-box { width: 17px; height: 17px; border-radius: 4px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .12s; }
+
+/* PROGRESS */
+.progress-bar-wrap { height: 5px; background: #ededea; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--accent); border-radius: 3px; transition: width .3s; }
+
+/* TABS */
+.tabs { display: flex; gap: 4px; margin-bottom: 20px; background: #f5f5f0; border-radius: 10px; padding: 4px; }
+.tab { flex: 1; text-align: center; padding: 8px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--muted); transition: all .12s; }
+.tab.active { background: var(--card); color: var(--text); box-shadow: var(--shadow); }
+
+.section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; }
+.comment-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.comment-item:last-child { border-bottom: none; }
+.comment-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.comment-text { font-size: 13px; line-height: 1.55; }
+.stage-block { margin-bottom: 14px; }
+.stage-block-head { display: flex; align-items: center; gap: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border); margin-bottom: 8px; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.empty-state { text-align: center; padding: 50px 20px; color: var(--muted); }
+.empty-state i { font-size: 40px; margin-bottom: 12px; display: block; opacity: .4; }
+
+/* LOADING */
+.loading-screen { position: fixed; inset: 0; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; gap: 16px; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--accent-bg); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 9998; animation: slideUp .2s ease; }
+@keyframes slideUp { from { transform: translateY(10px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<!-- React -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  ⚙️  КОНФИГУРАЦИЯ — ВСТАВЬТЕ СВОИ ДАННЫЕ ИЗ SUPABASE        ║
+// ║  Supabase → Settings → API → Project URL & anon key         ║
+// ╚══════════════════════════════════════════════════════════════╝
+const SUPABASE_URL  = "https://ВАША_ССЫЛКА.supabase.co";
+const SUPABASE_KEY  = "ВАШ_ANON_KEY";
+// ─────────────────────────────────────────────────────────────
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const STAGES = ["Новый","Квалификация","Предложение","Переговоры","Выигран","Проигран"];
+const STAGE_COLOR = {"Новый":"#6b7280","Квалификация":"#4f6ef7","Предложение":"#8b5cf6","Переговоры":"#d97706","Выигран":"#16a34a","Проигран":"#dc2626"};
+const PRIO_COLOR = { high:"#dc2626", medium:"#d97706", low:"#6b7280" };
+const PRIO_LABEL = { high:"Высокий", medium:"Средний", low:"Низкий" };
+const STATUS_COLOR = { active:"#16a34a", lead:"#4f6ef7", inactive:"#6b7280" };
+const STATUS_LABEL = { active:"Активный", lead:"Лид", inactive:"Неактивный" };
+
+function uid() { return Math.random().toString(36).slice(2, 9); }
+function fmt(n) { return new Intl.NumberFormat("ru").format(Math.round(n)); }
+function today() { return new Date().toISOString().split("T")[0]; }
+function nowStr() { return new Date().toLocaleString("ru",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+
+// ─── DB HELPERS ───────────────────────────────────────────────────────────────
+const db = {
+  // clients
+  getClients: () => sb.from("clients").select("*").order("created_at", {ascending:true}),
+  addClient: (c) => sb.from("clients").insert(c).select().single(),
+  updateClient: (id, c) => sb.from("clients").update(c).eq("id", id).select().single(),
+  deleteClient: (id) => sb.from("clients").delete().eq("id", id),
+
+  // checklists
+  getChecklists: () => sb.from("checklists").select("*").order("created_at", {ascending:true}),
+  addChecklist: (t) => sb.from("checklists").insert(t).select().single(),
+  updateChecklist: (id, t) => sb.from("checklists").update(t).eq("id", id).select().single(),
+  deleteChecklist: (id) => sb.from("checklists").delete().eq("id", id),
+
+  // deals
+  getDeals: () => sb.from("deals").select("*").order("created_at", {ascending:true}),
+  addDeal: (d) => sb.from("deals").insert({...d, client_id: d.clientId}).select().single(),
+  updateDeal: (id, d) => sb.from("deals").update(d).eq("id", id).select().single(),
+  deleteDeal: (id) => sb.from("deals").delete().eq("id", id),
+
+  // tasks
+  getTasks: () => sb.from("tasks").select("*").order("created_at", {ascending:true}),
+  addTask: (t) => sb.from("tasks").insert({...t, due_date: t.dueDate}).select().single(),
+  updateTask: (id, t) => sb.from("tasks").update(t).eq("id", id).select().single(),
+  deleteTask: (id) => sb.from("tasks").delete().eq("id", id),
+
+  // finances
+  getFinances: () => sb.from("finances").select("*").order("created_at", {ascending:true}),
+  addFinance: (f) => sb.from("finances").insert(f).select().single(),
+  deleteFinance: (id) => sb.from("finances").delete().eq("id", id),
+};
+
+// Map DB row → app format
+function mapDeal(r) { return r ? {...r, clientId: r.client_id, comments: r.comments||[], checklists: r.checklists||{}} : null; }
+function mapTask(r) { return r ? {...r, dueDate: r.due_date} : null; }
+
+// ─── HELPER COMPONENTS ────────────────────────────────────────────────────────
+function MH({ title, onClose }) {
+  return <div className="modal-head"><div className="modal-title">{title}</div><button className="btn btn-ghost btn-sm" onClick={onClose}><i className="ti ti-x" /></button></div>;
+}
+function Field({ label, children }) {
+  return <div className="field"><div className="field-label">{label}</div>{children}</div>;
+}
+function MA({ onClose, onSave, saving }) {
+  return <div className="modal-actions">
+    <button className="btn" onClick={onClose}>Отмена</button>
+    <button className="btn btn-primary" onClick={onSave} disabled={saving}>{saving ? <><i className="ti ti-loader" style={{animation:"spin .7s linear infinite"}} /> Сохраняю...</> : "Сохранить"}</button>
+  </div>;
+}
+
+// ─── APP ──────────────────────────────────────────────────────────────────────
+function App() {
+  const [sec, setSec] = useState("dashboard");
+  const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [data, setData] = useState({ clients:[], deals:[], tasks:[], finances:[], checklists:[] });
+  const [modal, setModal] = useState(null);
+  const [search, setSearch] = useState("");
+  const [dragId, setDragId] = useState(null);
+  const [dragOver, setDragOver] = useState(null);
+  const toastTimer = useRef(null);
+
+  function showToast(msg) {
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 2500);
+  }
+
+  // ─── LOAD ALL DATA ───────────────────────────────────────────────────────
+  async function loadAll() {
+    setLoading(true);
+    const [c, ch, d, t, f] = await Promise.all([
+      db.getClients(), db.getChecklists(), db.getDeals(), db.getTasks(), db.getFinances()
+    ]);
+    setData({
+      clients:   c.data  || [],
+      checklists: ch.data || [],
+      deals:     (d.data || []).map(mapDeal),
+      tasks:     (t.data || []).map(mapTask),
+      finances:  f.data  || [],
+    });
+    setLoading(false);
+  }
+  useEffect(() => { loadAll(); }, []);
+
+  // ─── REALTIME ────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const channel = sb.channel("crm-realtime")
+      .on("postgres_changes", { event:"*", schema:"public" }, () => { loadAll(); })
+      .subscribe();
+    return () => sb.removeChannel(channel);
+  }, []);
+
+  // ─── CLIENT ACTIONS ──────────────────────────────────────────────────────
+  async function saveClient(c) {
+    setSyncing(true);
+    if (c.id) {
+      const { error } = await db.updateClient(c.id, { name:c.name, company:c.company, phone:c.phone, email:c.email, status:c.status });
+      if (!error) { setData(d=>({...d, clients: d.clients.map(x=>x.id===c.id?c:x)})); showToast("Клиент обновлён"); }
+    } else {
+      const { data: row, error } = await db.addClient({ name:c.name, company:c.company, phone:c.phone, email:c.email, status:c.status, created:today() });
+      if (!error && row) { setData(d=>({...d, clients:[...d.clients, row]})); showToast("Клиент добавлен"); }
+    }
+    setSyncing(false); setModal(null);
+  }
+  async function delClient(id) {
+    await db.deleteClient(id);
+    setData(d=>({...d, clients: d.clients.filter(x=>x.id!==id)}));
+    showToast("Клиент удалён");
+  }
+
+  // ─── DEAL ACTIONS ────────────────────────────────────────────────────────
+  async function saveDeal(c) {
+    setSyncing(true);
+    const payload = { title:c.title, client_id:c.clientId, value:+c.value, stage:c.stage };
+    if (c.id) {
+      const { error } = await db.updateDeal(c.id, payload);
+      if (!error) { setData(d=>({...d, deals: d.deals.map(x=>x.id===c.id?{...x,...c}:x)})); showToast("Сделка обновлена"); }
+    } else {
+      const { data: row, error } = await db.addDeal({...payload, created:today(), comments:[], checklists:{}});
+      if (!error && row) { setData(d=>({...d, deals:[...d.deals, mapDeal(row)]})); showToast("Сделка добавлена"); }
+    }
+    setSyncing(false); setModal(null);
+  }
+  async function delDeal(id) {
+    await db.deleteDeal(id);
+    setData(d=>({...d, deals: d.deals.filter(x=>x.id!==id)}));
+    showToast("Сделка удалена");
+  }
+  async function moveDeal(dealId, stage) {
+    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,stage}:x)}));
+    await db.updateDeal(dealId, { stage });
+  }
+  async function addComment(dealId, stage, text) {
+    const deal = data.deals.find(x=>x.id===dealId);
+    if (!deal) return;
+    const comments = [...(deal.comments||[]), { id:uid(), stage, text, date:nowStr() }];
+    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,comments}:x)}));
+    await db.updateDeal(dealId, { comments });
+  }
+  async function delComment(dealId, cmId) {
+    const deal = data.deals.find(x=>x.id===dealId);
+    if (!deal) return;
+    const comments = (deal.comments||[]).filter(c=>c.id!==cmId);
+    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,comments}:x)}));
+    await db.updateDeal(dealId, { comments });
+  }
+  async function toggleCheck(dealId, tplId, itemId) {
+    const deal = data.deals.find(x=>x.id===dealId);
+    if (!deal) return;
+    const prev = (deal.checklists||{})[tplId]||[];
+    const next = prev.includes(itemId) ? prev.filter(x=>x!==itemId) : [...prev, itemId];
+    const checklists = {...(deal.checklists||{}), [tplId]: next};
+    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,checklists}:x)}));
+    await db.updateDeal(dealId, { checklists });
+  }
+
+  // ─── TASK ACTIONS ────────────────────────────────────────────────────────
+  async function saveTask(c) {
+    setSyncing(true);
+    const payload = { title:c.title, due_date:c.dueDate||"", priority:c.priority };
+    if (c.id) {
+      await db.updateTask(c.id, payload);
+      setData(d=>({...d, tasks: d.tasks.map(x=>x.id===c.id?{...x,...c}:x)}));
+      showToast("Задача обновлена");
+    } else {
+      const { data: row } = await db.addTask({...payload, done:false});
+      if (row) setData(d=>({...d, tasks:[...d.tasks, mapTask(row)]}));
+      showToast("Задача добавлена");
+    }
+    setSyncing(false); setModal(null);
+  }
+  async function toggleTask(id) {
+    const task = data.tasks.find(x=>x.id===id);
+    if (!task) return;
+    const done = !task.done;
+    setData(d=>({...d, tasks: d.tasks.map(x=>x.id===id?{...x,done}:x)}));
+    await db.updateTask(id, { done });
+  }
+  async function delTask(id) {
+    await db.deleteTask(id);
+    setData(d=>({...d, tasks: d.tasks.filter(x=>x.id!==id)}));
+    showToast("Задача удалена");
+  }
+
+  // ─── FINANCE ACTIONS ─────────────────────────────────────────────────────
+  async function saveFin(c) {
+    setSyncing(true);
+    const { data: row } = await db.addFinance({ type:c.type, amount:+c.amount, description:c.description, date:c.date, category:c.category });
+    if (row) setData(d=>({...d, finances:[...d.finances, row]}));
+    showToast("Транзакция добавлена");
+    setSyncing(false); setModal(null);
+  }
+  async function delFin(id) {
+    await db.deleteFinance(id);
+    setData(d=>({...d, finances: d.finances.filter(x=>x.id!==id)}));
+    showToast("Удалено");
+  }
+
+  // ─── CHECKLIST ACTIONS ───────────────────────────────────────────────────
+  async function saveChecklist(tpl) {
+    setSyncing(true);
+    if (tpl.id) {
+      await db.updateChecklist(tpl.id, { name:tpl.name, stage:tpl.stage, color:tpl.color, items:tpl.items });
+      setData(d=>({...d, checklists: d.checklists.map(x=>x.id===tpl.id?tpl:x)}));
+      showToast("Шаблон обновлён");
+    } else {
+      const { data: row } = await db.addChecklist({ name:tpl.name, stage:tpl.stage, color:tpl.color, items:tpl.items });
+      if (row) setData(d=>({...d, checklists:[...d.checklists, row]}));
+      showToast("Шаблон создан");
+    }
+    setSyncing(false); setModal(null);
+  }
+  async function delChecklist(id) {
+    await db.deleteChecklist(id);
+    setData(d=>({...d, checklists: d.checklists.filter(x=>x.id!==id)}));
+    showToast("Шаблон удалён");
+  }
+
+  const tIncome = data.finances.filter(f=>f.type==="income").reduce((s,f)=>s+f.amount,0);
+  const tExpense = data.finances.filter(f=>f.type==="expense").reduce((s,f)=>s+f.amount,0);
+  const pipeline = data.deals.filter(d=>d.stage!=="Проигран").reduce((s,d)=>s+d.value,0);
+  const openTasks = data.tasks.filter(t=>!t.done).length;
+
+  const NAV = [
+    {id:"dashboard",label:"Дашборд",icon:"ti-layout-dashboard"},
+    {id:"clients",label:"Клиенты",icon:"ti-users"},
+    {id:"deals",label:"Сделки",icon:"ti-arrows-transfer-down"},
+    {id:"tasks",label:"Задачи",icon:"ti-checkbox"},
+    {id:"finances",label:"Финансы",icon:"ti-cash"},
+    {id:"checklists",label:"Чеклисты",icon:"ti-list-check"},
+  ];
+
+  if (loading) return <div className="loading-screen">
+    <div className="spinner" />
+    <div style={{fontSize:14,color:"var(--muted)"}}>Загружаем данные...</div>
+  </div>;
+
+  return <div className="shell">
+    {/* SIDEBAR */}
+    <div className="sidebar">
+      <div className="logo"><div className="logo-title">CRM</div><div className="logo-sub">Мой бизнес</div></div>
+      {NAV.map(n=><div key={n.id} className={`nav-item${sec===n.id?" active":""}`} onClick={()=>{setSec(n.id);setSearch("")}}>
+        <i className={`ti ${n.icon}`} />{n.label}
+      </div>)}
+      <div className="sidebar-footer">
+        {new Date().toLocaleDateString("ru",{weekday:"short",day:"numeric",month:"long"})}
+        <div className="sync-badge"><div className="sync-dot" /><span>Синхронизировано</span></div>
+      </div>
+    </div>
+
+    {/* MAIN */}
+    <div className="main">
+
+      {/* ── DASHBOARD ── */}
+      {sec==="dashboard" && <>
+        <div className="page-header"><div><div className="page-title">Дашборд</div><div className="page-sub">Обзор бизнеса в реальном времени</div></div></div>
+        <div className="metric-grid">
+          {[
+            {label:"Клиентов",value:data.clients.length,sub:`${data.clients.filter(c=>c.status==="lead").length} лидов`,color:"#4f6ef7"},
+            {label:"Воронка",value:`${fmt(pipeline)} ₸`,sub:`${data.deals.filter(d=>!["Выигран","Проигран"].includes(d.stage)).length} активных`,color:"#8b5cf6"},
+            {label:"Открытых задач",value:openTasks,sub:`${data.tasks.filter(t=>t.done).length} завершено`,color:"#d97706"},
+            {label:"Прибыль",value:`${fmt(tIncome-tExpense)} ₸`,sub:`Доход: ${fmt(tIncome)} ₸`,color:tIncome>=tExpense?"#16a34a":"#dc2626"},
+          ].map(({label,value,sub,color})=><div key={label} className="metric-card">
+            <div className="metric-label">{label}</div>
+            <div className="metric-value" style={{color}}>{value}</div>
+            <div className="metric-sub">{sub}</div>
+          </div>)}
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+          <div className="card">
+            <div className="section-label" style={{marginBottom:14}}>Воронка по этапам</div>
+            {STAGES.slice(0,5).map(s=>{
+              const cnt = data.deals.filter(d=>d.stage===s).length;
+              const pct = Math.round(cnt/(data.deals.length||1)*100);
+              return <div key={s} style={{marginBottom:12}}>
+                <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:5}}>
+                  <span style={{display:"flex",alignItems:"center",gap:7}}><span className="dot" style={{background:STAGE_COLOR[s]}} />{s}</span>
+                  <span style={{color:"var(--muted)"}}>{cnt} сд.</span>
+                </div>
+                <div className="progress-bar-wrap"><div className="progress-bar" style={{width:`${pct}%`,background:STAGE_COLOR[s]}} /></div>
+              </div>;
+            })}
+          </div>
+          <div className="card">
+            <div className="section-label" style={{marginBottom:14}}>Ближайшие задачи</div>
+            {data.tasks.slice(0,5).map(t=><div key={t.id} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:"1px solid var(--border)"}}>
+              <div className="task-check" style={{background:t.done?"#16a34a":undefined,borderColor:t.done?"#16a34a":PRIO_COLOR[t.priority]}} onClick={()=>toggleTask(t.id)}>
+                {t.done && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
+              </div>
+              <div style={{flex:1,fontSize:13,textDecoration:t.done?"line-through":"none",color:t.done?"var(--muted)":"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</div>
+              <span style={{fontSize:11,color:"var(--muted)",flexShrink:0}}>{t.dueDate}</span>
+            </div>)}
+          </div>
+        </div>
+      </>}
+
+      {/* ── CLIENTS ── */}
+      {sec==="clients" && <>
+        <div className="page-header">
+          <div><div className="page-title">Клиенты</div><div className="page-sub">{data.clients.length} контактов</div></div>
+          <button className="btn btn-primary" onClick={()=>setModal({type:"client"})}><i className="ti ti-plus" /> Добавить</button>
+        </div>
+        <div className="search-wrap"><i className="ti ti-search" /><input className="input" placeholder="Поиск..." value={search} onChange={e=>setSearch(e.target.value)} /></div>
+        <div className="card" style={{padding:0,overflow:"hidden"}}>
+          <table>
+            <thead><tr>{["Клиент","Компания","Телефон","Email","Статус",""].map(h=><th key={h}>{h}</th>)}</tr></thead>
+            <tbody>
+              {data.clients.filter(c=>!search||c.name.toLowerCase().includes(search.toLowerCase())||c.company.toLowerCase().includes(search.toLowerCase())).map(c=><tr key={c.id}>
+                <td><div style={{display:"flex",alignItems:"center",gap:10}}>
+                  <div className="avatar" style={{background:STATUS_COLOR[c.status]+"22",color:STATUS_COLOR[c.status]}}>{c.name[0]}</div>
+                  <div><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>с {c.created}</div></div>
+                </div></td>
+                <td style={{color:"var(--muted)"}}>{c.company}</td>
+                <td>{c.phone}</td>
+                <td style={{color:"var(--muted)"}}>{c.email}</td>
+                <td><span className="badge" style={{background:STATUS_COLOR[c.status]+"22",color:STATUS_COLOR[c.status]}}>{STATUS_LABEL[c.status]}</span></td>
+                <td><div style={{display:"flex",gap:6}}>
+                  <button className="btn btn-ghost btn-sm" onClick={()=>setModal({type:"client",item:c})}><i className="ti ti-edit" style={{fontSize:14}} /></button>
+                  <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delClient(c.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
+                </div></td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>
+      </>}
+
+      {/* ── DEALS ── */}
+      {sec==="deals" && <>
+        <div className="page-header">
+          <div><div className="page-title">Сделки</div><div className="page-sub">Нажмите на карточку · Перетащите для смены этапа</div></div>
+          <button className="btn btn-primary" onClick={()=>setModal({type:"deal"})}><i className="ti ti-plus" /> Добавить</button>
+        </div>
+        <div className="kanban-wrap">
+          {STAGES.map(stage=>{
+            const sDeals = data.deals.filter(d=>d.stage===stage);
+            const sVal = sDeals.reduce((s,d)=>s+d.value,0);
+            return <div key={stage} className={`kanban-col${dragOver===stage?" drag-over":""}`}
+              onDragOver={e=>{e.preventDefault();setDragOver(stage)}}
+              onDragLeave={()=>setDragOver(null)}
+              onDrop={e=>{e.preventDefault();if(dragId)moveDeal(dragId,stage);setDragId(null);setDragOver(null);}}>
+              <div className="kanban-head">
+                <div className="kanban-stage-row">
+                  <span className="dot" style={{background:STAGE_COLOR[stage]}} />{stage}
+                  <span className="badge" style={{background:"#fff",color:"var(--muted)",fontSize:11,padding:"2px 7px",marginLeft:"auto",border:"1px solid var(--border)"}}>{sDeals.length}</span>
+                </div>
+                <div className="kanban-total">{fmt(sVal)} ₸</div>
+              </div>
+              <div className="kanban-body">
+                {sDeals.map(deal=>{
+                  const cl = data.clients.find(c=>c.id===deal.clientId||c.id===deal.client_id);
+                  const cmCount = (deal.comments||[]).length;
+                  const allDone = Object.values(deal.checklists||{}).flat();
+                  const allItems = data.checklists.reduce((s,t)=>s+t.items.length,0);
+                  const pct = allItems>0 ? Math.round(allDone.length/allItems*100) : 0;
+                  return <div key={deal.id} className="deal-card" draggable
+                    onDragStart={e=>{e.stopPropagation();setDragId(deal.id)}}
+                    onDragEnd={()=>{setDragId(null);setDragOver(null)}}
+                    onClick={()=>setModal({type:"deal-detail",dealId:deal.id})}>
+                    <div className="deal-title">{deal.title}</div>
+                    {cl && <div className="deal-client"><i className="ti ti-user" style={{fontSize:11}} />{cl.name}</div>}
+                    {allItems>0 && <div style={{marginBottom:8}}>
+                      <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginBottom:3}}><span>Прогресс</span><span>{allDone.length}/{allItems}</span></div>
+                      <div className="progress-bar-wrap"><div className="progress-bar" style={{width:`${pct}%`,background:pct===100?"#16a34a":"#4f6ef7"}} /></div>
+                    </div>}
+                    <div className="deal-footer">
+                      <div className="deal-value" style={{color:STAGE_COLOR[stage]}}>{fmt(deal.value)} ₸</div>
+                      <div style={{display:"flex",alignItems:"center",gap:5}}>
+                        <span style={{fontSize:11,background:"#f5f5f0",border:"1px solid var(--border)",borderRadius:20,padding:"2px 7px",color:"var(--muted)",display:"flex",alignItems:"center",gap:3}}>
+                          <i className="ti ti-message" style={{fontSize:11}} />{cmCount}
+                        </span>
+                        <button className="btn btn-ghost btn-sm" style={{padding:"3px 6px"}} onClick={e=>{e.stopPropagation();setModal({type:"deal",item:deal})}}><i className="ti ti-edit" style={{fontSize:13}} /></button>
+                        <button className="btn btn-ghost btn-sm" style={{padding:"3px 6px",color:"var(--danger)"}} onClick={e=>{e.stopPropagation();delDeal(deal.id)}}><i className="ti ti-trash" style={{fontSize:13}} /></button>
+                      </div>
+                    </div>
+                  </div>;
+                })}
+              </div>
+            </div>;
+          })}
+        </div>
+      </>}
+
+      {/* ── TASKS ── */}
+      {sec==="tasks" && <>
+        <div className="page-header">
+          <div><div className="page-title">Задачи</div><div className="page-sub">{openTasks} открытых</div></div>
+          <button className="btn btn-primary" onClick={()=>setModal({type:"task"})}><i className="ti ti-plus" /> Добавить</button>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:20}}>
+          {["high","medium","low"].map(prio=>{
+            const tasks = data.tasks.filter(t=>t.priority===prio);
+            if(!tasks.length) return null;
+            return <div key={prio}>
+              <div className="section-label" style={{color:PRIO_COLOR[prio],marginBottom:8}}><i className="ti ti-flag" style={{fontSize:13}} /> {PRIO_LABEL[prio]} приоритет</div>
+              <div className="task-list">{tasks.map(t=><div key={t.id} className="task-item">
+                <div className="task-check" style={{background:t.done?"#16a34a":undefined,borderColor:t.done?"#16a34a":PRIO_COLOR[t.priority]}} onClick={()=>toggleTask(t.id)}>
+                  {t.done && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:t.done?400:600,textDecoration:t.done?"line-through":"none",color:t.done?"var(--muted)":"var(--text)"}}>{t.title}</div>
+                  {t.dueDate && <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}><i className="ti ti-calendar" style={{fontSize:12}} /> {t.dueDate}</div>}
+                </div>
+                <span className="badge" style={{background:PRIO_COLOR[prio]+"22",color:PRIO_COLOR[prio]}}>{PRIO_LABEL[prio]}</span>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setModal({type:"task",item:t})}><i className="ti ti-edit" style={{fontSize:14}} /></button>
+                <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delTask(t.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
+              </div>)}</div>
+            </div>;
+          })}
+        </div>
+      </>}
+
+      {/* ── FINANCES ── */}
+      {sec==="finances" && <>
+        <div className="page-header">
+          <div><div className="page-title">Финансы</div><div className="page-sub">Доходы и расходы</div></div>
+          <button className="btn btn-primary" onClick={()=>setModal({type:"finance"})}><i className="ti ti-plus" /> Добавить</button>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:20}}>
+          {[{label:"Доходы",value:tIncome,color:"#16a34a"},{label:"Расходы",value:tExpense,color:"#dc2626"},{label:"Прибыль",value:tIncome-tExpense,color:(tIncome-tExpense)>=0?"#4f6ef7":"#dc2626"}].map(({label,value,color})=>
+            <div key={label} className="metric-card"><div className="metric-label">{label}</div><div className="metric-value" style={{color}}>{fmt(value)} ₸</div></div>
+          )}
+        </div>
+        <div className="card">
+          <div className="section-label" style={{marginBottom:4}}>Транзакции</div>
+          {[...data.finances].reverse().map(f=><div key={f.id} className="fin-row">
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <div className="fin-icon" style={{background:f.type==="income"?"#16a34a22":"#dc262622"}}>
+                <i className={`ti ${f.type==="income"?"ti-arrow-up-right":"ti-arrow-down-left"}`} style={{color:f.type==="income"?"#16a34a":"#dc2626"}} />
+              </div>
+              <div><div style={{fontSize:13,fontWeight:600}}>{f.description}</div><div style={{fontSize:11,color:"var(--muted)"}}>{f.date} · {f.category}</div></div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <span style={{fontSize:15,fontWeight:700,color:f.type==="income"?"#16a34a":"#dc2626"}}>{f.type==="income"?"+":"-"}{fmt(f.amount)} ₸</span>
+              <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delFin(f.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
+            </div>
+          </div>)}
+        </div>
+      </>}
+
+      {/* ── CHECKLISTS ── */}
+      {sec==="checklists" && <>
+        <div className="page-header">
+          <div><div className="page-title">Чеклисты</div><div className="page-sub">Шаблоны применяются ко всем сделкам</div></div>
+          <button className="btn btn-primary" onClick={()=>setModal({type:"checklist"})}><i className="ti ti-plus" /> Новый шаблон</button>
+        </div>
+        {data.checklists.length===0 && <div className="empty-state"><i className="ti ti-list-check" /><p>Нет шаблонов. Создайте первый!</p></div>}
+        {data.checklists.map(tpl=><div key={tpl.id} className="checklist-tpl">
+          <div className="checklist-tpl-head">
+            <div className="checklist-tpl-title">
+              <span style={{width:12,height:12,borderRadius:3,background:tpl.color,display:"inline-block"}} />{tpl.name}
+              <span className="badge" style={{background:"#f5f5f0",color:"var(--muted)",fontSize:11}}>{tpl.stage}</span>
+            </div>
+            <div style={{display:"flex",gap:6}}>
+              <button className="btn btn-sm" onClick={()=>setModal({type:"checklist",item:tpl})}><i className="ti ti-edit" style={{fontSize:13}} /> Изменить</button>
+              <button className="btn btn-sm btn-danger-soft" onClick={()=>delChecklist(tpl.id)}><i className="ti ti-trash" style={{fontSize:13}} /></button>
+            </div>
+          </div>
+          <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>{tpl.items.length} пунктов</div>
+          {tpl.items.map(item=><div key={item.id} className="checklist-item" style={{cursor:"default"}}>
+            <div style={{width:16,height:16,borderRadius:3,border:"2px solid var(--border2)",flexShrink:0}} />
+            <span style={{fontSize:13}}>{item.text}</span>
+          </div>)}
+        </div>)}
+      </>}
+
+    </div>
+
+    {/* MODALS */}
+    {modal && <div className="overlay" onClick={e=>e.target===e.currentTarget&&setModal(null)}>
+      <div className={`modal${modal.type==="deal-detail"?" modal-wide":""}`}>
+        {modal.type==="client"      && <ClientModal     item={modal.item} onSave={saveClient} onClose={()=>setModal(null)} saving={syncing} />}
+        {modal.type==="deal"        && <DealModal       item={modal.item} clients={data.clients} onSave={saveDeal} onClose={()=>setModal(null)} saving={syncing} />}
+        {modal.type==="deal-detail" && <DealDetailModal deal={data.deals.find(d=>d.id===modal.dealId)} clients={data.clients} checklists={data.checklists} onAddComment={addComment} onDelComment={delComment} onToggleCheck={toggleCheck} onEdit={d=>setModal({type:"deal",item:d})} onClose={()=>setModal(null)} />}
+        {modal.type==="task"        && <TaskModal       item={modal.item} onSave={saveTask} onClose={()=>setModal(null)} saving={syncing} />}
+        {modal.type==="finance"     && <FinModal        item={modal.item} onSave={saveFin} onClose={()=>setModal(null)} saving={syncing} />}
+        {modal.type==="checklist"   && <ChecklistModal  item={modal.item} onSave={saveChecklist} onClose={()=>setModal(null)} saving={syncing} />}
+      </div>
+    </div>}
+
+    {/* TOAST */}
+    {toast && <div className="toast"><i className="ti ti-check" /> {toast}</div>}
+  </div>;
+}
+
+// ─── MODAL COMPONENTS ─────────────────────────────────────────────────────────
+function DealDetailModal({ deal, clients, checklists, onAddComment, onDelComment, onToggleCheck, onEdit, onClose }) {
+  const [tab, setTab] = useState("checklist");
+  const [newComment, setNewComment] = useState("");
+  const [selStage, setSelStage] = useState(deal?.stage||"Новый");
+  if(!deal) return null;
+  const cl = clients.find(c=>c.id===deal.clientId||c.id===deal.client_id);
+  const comments = deal.comments||[];
+  return <>
+    <MH title={deal.title} onClose={onClose} />
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:16,padding:"12px",background:"#f5f5f0",borderRadius:10}}>
+      {[["Клиент",cl?cl.name:"—"],["Сумма",fmt(deal.value)+" ₸"],["Этап",deal.stage],["Создана",deal.created]].map(([l,v])=>
+        <div key={l}><div style={{fontSize:11,color:"var(--muted)",marginBottom:3,fontWeight:600,textTransform:"uppercase",letterSpacing:".04em"}}>{l}</div><div style={{fontSize:13,fontWeight:600}}>{v}</div></div>
+      )}
+    </div>
+    <div style={{marginBottom:16}}><button className="btn btn-sm" onClick={()=>onEdit(deal)}><i className="ti ti-edit" style={{fontSize:13}} /> Редактировать</button></div>
+    <div className="tabs">
+      <div className={`tab${tab==="checklist"?" active":""}`} onClick={()=>setTab("checklist")}><i className="ti ti-list-check" style={{fontSize:13}} /> Чеклист</div>
+      <div className={`tab${tab==="comments"?" active":""}`} onClick={()=>setTab("comments")}><i className="ti ti-message" style={{fontSize:13}} /> Комментарии ({comments.length})</div>
+    </div>
+    {tab==="checklist" && <>
+      {checklists.length===0 && <div className="empty-state"><i className="ti ti-list-check" /><p>Нет шаблонов. Создайте в разделе «Чеклисты».</p></div>}
+      {checklists.map(tpl=>{
+        const done = (deal.checklists||{})[tpl.id]||[];
+        const pct = Math.round(done.length/(tpl.items.length||1)*100);
+        return <div key={tpl.id} className="checklist-tpl" style={{borderColor:pct===100?tpl.color:"var(--border)"}}>
+          <div className="checklist-tpl-head">
+            <div className="checklist-tpl-title"><span style={{width:10,height:10,borderRadius:2,background:tpl.color,display:"inline-block"}} />{tpl.name}</div>
+            <span style={{fontSize:12,color:"var(--muted)",fontWeight:600}}>{done.length}/{tpl.items.length}</span>
+          </div>
+          <div className="progress-bar-wrap" style={{marginBottom:12}}><div className="progress-bar" style={{width:`${pct}%`,background:pct===100?"#16a34a":tpl.color}} /></div>
+          {tpl.items.map(item=>{
+            const isDone = done.includes(item.id);
+            return <div key={item.id} className="checklist-item" onClick={()=>onToggleCheck(deal.id,tpl.id,item.id)}>
+              <div className="check-box" style={{background:isDone?tpl.color:undefined,borderColor:isDone?tpl.color:undefined}}>
+                {isDone && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
+              </div>
+              <span style={{fontSize:13,textDecoration:isDone?"line-through":"none",color:isDone?"var(--muted)":"var(--text)"}}>{item.text}</span>
+            </div>;
+          })}
+        </div>;
+      })}
+    </>}
+    {tab==="comments" && <>
+      {STAGES.map(stage=>{
+        const cms = comments.filter(c=>c.stage===stage);
+        if(!cms.length && stage!==deal.stage) return null;
+        return <div key={stage} className="stage-block">
+          <div className="stage-block-head"><span className="dot" style={{background:STAGE_COLOR[stage]}} />{stage}<span className="badge" style={{background:STAGE_COLOR[stage]+"22",color:STAGE_COLOR[stage],fontSize:11,marginLeft:"auto"}}>{cms.length} комм.</span></div>
+          {cms.length===0 ? <div style={{fontSize:12,color:"var(--muted)",fontStyle:"italic",padding:"6px 0"}}>Нет комментариев</div> :
+          cms.map(cm=><div key={cm.id} className="comment-item">
+            <div className="comment-meta"><i className="ti ti-message" style={{fontSize:12}} />{cm.date}<button className="btn btn-ghost" style={{padding:"1px 5px",fontSize:11,color:"var(--danger)",marginLeft:"auto"}} onClick={()=>onDelComment(deal.id,cm.id)}><i className="ti ti-trash" style={{fontSize:11}} /></button></div>
+            <div className="comment-text">{cm.text}</div>
+          </div>)}
+        </div>;
+      })}
+      <div style={{marginTop:14,padding:"14px",background:"#f5f5f0",borderRadius:10}}>
+        <div className="section-label" style={{marginBottom:8}}>Добавить комментарий</div>
+        <select className="input" value={selStage} onChange={e=>setSelStage(e.target.value)} style={{marginBottom:8}}>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}</select>
+        <textarea className="input" placeholder="Что произошло на этом этапе?" value={newComment} onChange={e=>setNewComment(e.target.value)} style={{marginBottom:8}} />
+        <div style={{display:"flex",justifyContent:"flex-end"}}>
+          <button className="btn btn-primary" onClick={()=>{const t=newComment.trim();if(!t)return;onAddComment(deal.id,selStage,t);setNewComment("")}}><i className="ti ti-message" style={{fontSize:13}} /> Добавить</button>
+        </div>
+      </div>
+    </>}
+  </>;
+}
+
+function ChecklistModal({ item, onSave, onClose, saving }) {
+  const [f, sf] = useState(item ? JSON.parse(JSON.stringify(item)) : {name:"",stage:"Все этапы",color:"#4f6ef7",items:[]});
+  const [newItem, setNewItem] = useState("");
+  const addItem = () => { const t=newItem.trim(); if(!t) return; sf(x=>({...x,items:[...x.items,{id:uid(),text:t}]})); setNewItem(""); };
+  return <>
+    <MH title={item?"Редактировать шаблон":"Новый шаблон"} onClose={onClose} />
+    <Field label="Название"><input className="input" value={f.name} onChange={e=>sf(x=>({...x,name:e.target.value}))} placeholder="Например: Онбординг клиента" /></Field>
+    <Field label="Применять на этапе"><select className="input" value={f.stage} onChange={e=>sf(x=>({...x,stage:e.target.value}))}>
+      <option value="Все этапы">Все этапы</option>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}
+    </select></Field>
+    <Field label="Цвет">
+      <div style={{display:"flex",gap:8}}>
+        {["#4f6ef7","#16a34a","#8b5cf6","#d97706","#dc2626","#0ea5e9"].map(c=>
+          <div key={c} onClick={()=>sf(x=>({...x,color:c}))} style={{width:26,height:26,borderRadius:6,background:c,cursor:"pointer",border:`3px solid ${f.color===c?"#1a1a1a":"transparent"}`,transition:"border .12s"}} />
+        )}
+      </div>
+    </Field>
+    <Field label={`Пункты (${f.items.length})`}>
+      <div style={{display:"flex",gap:8,marginBottom:8}}>
+        <input className="input" value={newItem} onChange={e=>setNewItem(e.target.value)} placeholder="Новый пункт..." onKeyDown={e=>e.key==="Enter"&&addItem()} />
+        <button className="btn btn-primary" onClick={addItem}><i className="ti ti-plus" /></button>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:5}}>
+        {f.items.map(item=><div key={item.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"#f5f5f0",borderRadius:7,border:"1px solid var(--border)"}}>
+          <i className="ti ti-grip-vertical" style={{color:"var(--muted)",fontSize:14}} />
+          <span style={{flex:1,fontSize:13}}>{item.text}</span>
+          <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>sf(x=>({...x,items:x.items.filter(i=>i.id!==item.id)}))}><i className="ti ti-x" style={{fontSize:13}} /></button>
+        </div>)}
+      </div>
+    </Field>
+    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
+  </>;
+}
+
+function ClientModal({ item, onSave, onClose, saving }) {
+  const [f, sf] = useState(item||{name:"",company:"",phone:"",email:"",status:"lead"});
+  return <>
+    <MH title={item?"Редактировать клиента":"Новый клиент"} onClose={onClose} />
+    <Field label="Имя"><input className="input" value={f.name} onChange={e=>sf(x=>({...x,name:e.target.value}))} placeholder="Полное имя" /></Field>
+    <Field label="Компания"><input className="input" value={f.company} onChange={e=>sf(x=>({...x,company:e.target.value}))} placeholder="Компания" /></Field>
+    <Field label="Телефон"><input className="input" value={f.phone} onChange={e=>sf(x=>({...x,phone:e.target.value}))} placeholder="+7 ..." /></Field>
+    <Field label="Email"><input className="input" value={f.email} onChange={e=>sf(x=>({...x,email:e.target.value}))} placeholder="email@example.com" /></Field>
+    <Field label="Статус"><select className="input" value={f.status} onChange={e=>sf(x=>({...x,status:e.target.value}))}>
+      <option value="lead">Лид</option><option value="active">Активный</option><option value="inactive">Неактивный</option>
+    </select></Field>
+    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
+  </>;
+}
+
+function DealModal({ item, clients, onSave, onClose, saving }) {
+  const [f, sf] = useState(item||{title:"",clientId:"",value:"",stage:"Новый"});
+  return <>
+    <MH title={item?"Редактировать сделку":"Новая сделка"} onClose={onClose} />
+    <Field label="Название"><input className="input" value={f.title} onChange={e=>sf(x=>({...x,title:e.target.value}))} placeholder="Название сделки" /></Field>
+    <Field label="Клиент"><select className="input" value={f.clientId||f.client_id||""} onChange={e=>sf(x=>({...x,clientId:e.target.value}))}>
+      <option value="">Выберите клиента</option>{clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
+    </select></Field>
+    <Field label="Сумма (₸)"><input className="input" type="number" value={f.value} onChange={e=>sf(x=>({...x,value:+e.target.value}))} placeholder="0" /></Field>
+    <Field label="Этап"><select className="input" value={f.stage} onChange={e=>sf(x=>({...x,stage:e.target.value}))}>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}</select></Field>
+    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
+  </>;
+}
+
+function TaskModal({ item, onSave, onClose, saving }) {
+  const [f, sf] = useState(item||{title:"",dueDate:"",priority:"medium"});
+  return <>
+    <MH title={item?"Редактировать задачу":"Новая задача"} onClose={onClose} />
+    <Field label="Задача"><input className="input" value={f.title} onChange={e=>sf(x=>({...x,title:e.target.value}))} placeholder="Что нужно сделать?" /></Field>
+    <Field label="Срок"><input className="input" type="date" value={f.dueDate||f.due_date||""} onChange={e=>sf(x=>({...x,dueDate:e.target.value}))} /></Field>
+    <Field label="Приоритет"><select className="input" value={f.priority} onChange={e=>sf(x=>({...x,priority:e.target.value}))}>
+      <option value="high">Высокий</option><option value="medium">Средний</option><option value="low">Низкий</option>
+    </select></Field>
+    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
+  </>;
+}
+
+function FinModal({ item, onSave, onClose, saving }) {
+  const [f, sf] = useState(item||{type:"income",amount:"",description:"",date:today(),category:"Услуги"});
+  return <>
+    <MH title="Добавить транзакцию" onClose={onClose} />
+    <Field label="Тип"><select className="input" value={f.type} onChange={e=>sf(x=>({...x,type:e.target.value}))}>
+      <option value="income">Доход</option><option value="expense">Расход</option>
+    </select></Field>
+    <Field label="Сумма (₸)"><input className="input" type="number" value={f.amount} onChange={e=>sf(x=>({...x,amount:+e.target.value}))} placeholder="0" /></Field>
+    <Field label="Описание"><input className="input" value={f.description} onChange={e=>sf(x=>({...x,description:e.target.value}))} placeholder="За что?" /></Field>
+    <Field label="Категория"><input className="input" value={f.category} onChange={e=>sf(x=>({...x,category:e.target.value}))} placeholder="Услуги, Аренда..." /></Field>
+    <Field label="Дата"><input className="input" type="date" value={f.date} onChange={e=>sf(x=>({...x,date:e.target.value}))} /></Field>
+    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
+  </>;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

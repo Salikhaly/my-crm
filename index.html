@@ -3,852 +3,1040 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRM — Мой бизнес</title>
+<title>Ипотека CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-/* ─── КОНФИГУРАЦИЯ ─── Замените на свои данные из Supabase ─────────────── */
-/* Открываете index.html, меняете SUPABASE_URL и SUPABASE_KEY ниже в <script> */
-
 :root {
-  --bg: #f5f5f0;
-  --card: #ffffff;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.15);
-  --text: #1a1a1a;
-  --muted: #6b7280;
-  --accent: #4f6ef7;
-  --accent-bg: #e8ebff;
-  --success: #16a34a;
-  --danger: #dc2626;
-  --warn: #d97706;
-  --radius: 10px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --navy: #0f172a; --navy2: #1e293b; --navy3: #334155;
+  --accent: #3b82f6; --accent2: #1d4ed8; --accent-bg: #eff6ff;
+  --success: #10b981; --warn: #f59e0b; --danger: #ef4444;
+  --purple: #8b5cf6; --teal: #14b8a6; --pink: #ec4899; --orange: #f97316;
+  --bg: #f1f5f9; --card: #ffffff;
+  --border: #e2e8f0; --border2: #cbd5e1;
+  --text: #0f172a; --muted: #64748b; --light: #94a3b8;
+  --radius: 10px; --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.1);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
-.shell { display: flex; min-height: 100vh; }
+body { font-family: 'IBM Plex Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 13.5px; }
+.app { display: flex; min-height: 100vh; }
 
 /* SIDEBAR */
-.sidebar { width: 210px; background: var(--card); border-right: 1px solid var(--border); padding: 20px 12px; display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-.logo { padding: 6px 10px 18px; border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-.logo-title { font-size: 17px; font-weight: 700; letter-spacing: -0.5px; color: var(--accent); }
-.logo-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; cursor: pointer; color: var(--muted); font-size: 13px; transition: all .12s; user-select: none; border: 1px solid transparent; }
-.nav-item:hover { background: #f5f5f0; color: var(--text); }
-.nav-item.active { background: var(--accent-bg); color: var(--accent); border-color: rgba(79,110,247,.2); font-weight: 500; }
-.nav-item i { font-size: 17px; }
-.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); text-align: center; }
-.sync-badge { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; }
-.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.sb { width: 220px; background: var(--navy); color: #fff; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sb-logo { padding: 20px 18px 16px; border-bottom: 1px solid #1e293b; }
+.sb-logo-title { font-size: 16px; font-weight: 700; letter-spacing: -.3px; color: #fff; display: flex; align-items: center; gap: 8px; }
+.sb-logo-sub { font-size: 11px; color: #64748b; margin-top: 3px; }
+.sb-nav { padding: 12px 10px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.sb-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; color: #94a3b8; font-size: 13px; font-weight: 500; transition: all .12s; user-select: none; }
+.sb-item:hover { background: #1e293b; color: #fff; }
+.sb-item.active { background: var(--accent); color: #fff; }
+.sb-item i { font-size: 17px; width: 20px; flex-shrink: 0; }
+.sb-section { padding: 8px 18px 4px; font-size: 10px; font-weight: 700; letter-spacing: .08em; color: #475569; text-transform: uppercase; margin-top: 8px; }
+.sb-footer { padding: 14px 16px; border-top: 1px solid #1e293b; font-size: 11px; color: #475569; }
+.sb-user { display: flex; align-items: center; gap: 8px; }
+.sb-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
 
 /* MAIN */
-.main { flex: 1; padding: 28px 32px; overflow: auto; }
-.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
-.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-.page-sub { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.main { flex: 1; overflow: auto; }
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+.topbar-title { font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.content { padding: 24px 28px; }
 
 /* BUTTONS */
-.btn { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--card); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all .12s; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); }
-.btn:hover { background: #f5f5f0; }
+.btn { padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--card); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all .12s; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); white-space: nowrap; }
+.btn:hover { background: var(--bg); }
 .btn:active { transform: scale(.98); }
 .btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
-.btn-primary:hover { background: #3d5ce0; }
+.btn-primary:hover { background: var(--accent2); }
 .btn-sm { padding: 5px 10px; font-size: 12px; }
 .btn-ghost { border-color: transparent; background: transparent; box-shadow: none; }
-.btn-ghost:hover { background: #f0f0ec; }
-.btn-danger-soft { background: #fef2f2; color: var(--danger); border-color: #fecaca; }
-.btn-danger-soft:hover { background: #fee2e2; }
+.btn-ghost:hover { background: var(--bg); }
+.btn-danger { background: #fef2f2; color: var(--danger); border-color: #fecaca; }
+.btn-danger:hover { background: #fee2e2; }
+.btn-success { background: #f0fdf4; color: var(--success); border-color: #bbf7d0; }
 
-/* CARD */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); }
+/* CARDS */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+.card-p { padding: 18px; }
 
 /* METRICS */
 .metric-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); }
-.metric-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-.metric-value { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-.metric-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-/* INPUTS */
-.input { background: #fafafa; border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: inherit; width: 100%; outline: none; transition: border .12s; }
-.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,110,247,.1); }
-select.input { cursor: pointer; }
-textarea.input { resize: vertical; min-height: 75px; }
-.field { margin-bottom: 14px; }
-.field-label { font-size: 11px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--c, var(--accent)); }
+.metric-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 8px; }
+.metric-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--c, var(--text)); }
+.metric-sub { font-size: 11px; color: var(--light); margin-top: 4px; }
 
 /* TABLE */
 table { width: 100%; border-collapse: collapse; }
-th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); background: #fafafa; }
-td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; border-bottom: 1px solid var(--border); background: #f8fafc; }
+td { padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: #fafafa; }
-.badge { padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-.avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+tbody tr:hover td { background: #f8fafc; cursor: pointer; }
+
+/* BADGE */
+.badge { padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+/* INPUT */
+.input { background: #f8fafc; border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 13px; font-family: inherit; width: 100%; outline: none; transition: border .12s; }
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
+select.input { cursor: pointer; }
+textarea.input { resize: vertical; min-height: 70px; }
+.field { margin-bottom: 13px; }
+.field-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
 /* KANBAN */
-.kanban-wrap { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; }
-.kanban-col { background: #f5f5f0; border: 1px solid var(--border); border-radius: 12px; min-width: 185px; flex: 1; transition: border-color .12s, background .12s; }
-.kanban-col.drag-over { border-color: var(--accent); background: var(--accent-bg); }
-.kanban-head { padding: 12px 12px 9px; border-bottom: 1px solid var(--border); }
-.kanban-stage-row { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
-.kanban-total { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.kanban-body { padding: 8px; min-height: 80px; display: flex; flex-direction: column; gap: 7px; }
-.deal-card { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 12px; cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
-.deal-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,110,247,.1); transform: translateY(-1px); }
-.deal-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.deal-client { font-size: 11px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
-.deal-footer { display: flex; justify-content: space-between; align-items: center; }
-.deal-value { font-size: 13px; font-weight: 700; }
-
-/* TASKS */
-.task-list { display: flex; flex-direction: column; gap: 8px; }
-.task-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow); }
-.task-check { width: 19px; height: 19px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all .12s; }
-
-/* FINANCES */
-.fin-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--border); }
-.fin-row:last-child { border-bottom: none; }
-.fin-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+.kanban-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; min-height: 400px; }
+.kanban-scroll::-webkit-scrollbar { height: 6px; }
+.kanban-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.k-col { background: #f1f5f9; border: 1px solid var(--border); border-radius: 12px; min-width: 200px; flex: 0 0 200px; display: flex; flex-direction: column; transition: border-color .12s, background .12s; }
+.k-col.drag-over { border-color: var(--accent); background: var(--accent-bg); }
+.k-head { padding: 12px 12px 10px; border-bottom: 1px solid var(--border); }
+.k-stage-row { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+.k-count { font-size: 11px; background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 1px 7px; color: var(--muted); margin-left: auto; }
+.k-total { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+.k-body { padding: 8px; flex: 1; display: flex; flex-direction: column; gap: 7px; overflow-y: auto; max-height: 70vh; }
+.k-card { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 11px 12px; cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
+.k-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,.1); transform: translateY(-1px); }
+.k-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.k-phone { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.k-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.k-amount { font-size: 13px; font-weight: 700; color: var(--accent); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
 /* MODAL */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
-.modal { background: var(--card); border: 1px solid var(--border2); border-radius: 14px; padding: 24px; width: 470px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.15); }
-.modal-wide { width: 720px; }
-.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(3px); }
+.modal { background: var(--card); border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.2); width: 860px; max-width: 100%; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+.modal-sm { width: 460px; }
+.modal-hd { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .modal-title { font-size: 17px; font-weight: 700; }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
-
-/* SEARCH */
-.search-wrap { position: relative; margin-bottom: 16px; }
-.search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 17px; pointer-events: none; }
-.search-wrap input { padding-left: 35px; }
-
-/* CHECKLIST */
-.checklist-tpl { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow); }
-.checklist-tpl-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-.checklist-tpl-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-.checklist-item { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: opacity .1s; }
-.checklist-item:last-child { border-bottom: none; }
-.checklist-item:hover { opacity: .8; }
-.check-box { width: 17px; height: 17px; border-radius: 4px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .12s; }
-
-/* PROGRESS */
-.progress-bar-wrap { height: 5px; background: #ededea; border-radius: 3px; overflow: hidden; }
-.progress-bar { height: 100%; background: var(--accent); border-radius: 3px; transition: width .3s; }
+.modal-body { flex: 1; overflow-y: auto; }
+.modal-ft { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; flex-shrink: 0; }
 
 /* TABS */
-.tabs { display: flex; gap: 4px; margin-bottom: 20px; background: #f5f5f0; border-radius: 10px; padding: 4px; }
-.tab { flex: 1; text-align: center; padding: 8px; border-radius: 7px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--muted); transition: all .12s; }
-.tab.active { background: var(--card); color: var(--text); box-shadow: var(--shadow); }
+.tabs { display: flex; gap: 2px; padding: 14px 22px 0; border-bottom: 1px solid var(--border); background: #f8fafc; overflow-x: auto; flex-shrink: 0; }
+.tabs::-webkit-scrollbar { height: 3px; }
+.tab { padding: 8px 14px; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--muted); transition: all .12s; white-space: nowrap; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; }
+.tab.active { background: var(--card); color: var(--accent); border-color: var(--border); }
+.tab:hover:not(.active) { color: var(--text); }
+.tab-body { padding: 20px 22px; }
 
-.section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 10px; }
+/* PROGRESS */
+.prog-wrap { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-bar { height: 100%; border-radius: 3px; transition: width .3s; }
+
+/* CHECKLIST */
+.cl-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+.cl-item:last-child { border-bottom: none; }
+.cl-item:hover { opacity: .8; }
+.cl-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .12s; }
+.cl-box.done { background: var(--success); border-color: var(--success); }
+
+/* TASK */
+.task-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.task-row:last-child { border-bottom: none; }
+.task-chk { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all .12s; }
+
+/* STAGE PROGRESS BAR */
+.accomp-stages { display: flex; gap: 0; margin: 12px 0; }
+.accomp-step { flex: 1; text-align: center; position: relative; }
+.accomp-step::before { content: ''; position: absolute; top: 10px; left: 0; right: 0; height: 2px; background: var(--border); z-index: 0; }
+.accomp-step:first-child::before { left: 50%; }
+.accomp-step:last-child::before { right: 50%; }
+.accomp-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border2); background: var(--card); display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 10px; font-weight: 700; position: relative; z-index: 1; transition: all .12s; }
+.accomp-dot.done { background: var(--success); border-color: var(--success); color: #fff; }
+.accomp-dot.active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 0 0 4px rgba(59,130,246,.2); }
+.accomp-label { font-size: 9px; color: var(--muted); font-weight: 500; line-height: 1.2; }
+
+/* SEARCH BAR */
+.search-wrap { position: relative; }
+.search-wrap i { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; pointer-events: none; }
+.search-wrap input { padding-left: 34px; }
+
+/* FILTER BAR */
+.filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+/* KPI TABLE */
+.kpi-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.kpi-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+
+/* COMMENT */
 .comment-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
 .comment-item:last-child { border-bottom: none; }
-.comment-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
-.comment-text { font-size: 13px; line-height: 1.55; }
-.stage-block { margin-bottom: 14px; }
-.stage-block-head { display: flex; align-items: center; gap: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border); margin-bottom: 8px; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.empty-state { text-align: center; padding: 50px 20px; color: var(--muted); }
-.empty-state i { font-size: 40px; margin-bottom: 12px; display: block; opacity: .4; }
+.comment-meta { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: flex; gap: 8px; }
+.comment-text { font-size: 13px; line-height: 1.5; }
+
+/* TAGS */
+.source-badge { padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
 
 /* LOADING */
-.loading-screen { position: fixed; inset: 0; background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; gap: 16px; }
-.spinner { width: 36px; height: 36px; border: 3px solid var(--accent-bg); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 9998; animation: slideUp .2s ease; }
-@keyframes slideUp { from { transform: translateY(10px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+.loading { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--muted); font-size: 14px; gap: 10px; }
 
-/* SCROLLBAR */
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; z-index: 9999; box-shadow: var(--shadow-md); }
+
+/* CONTRACT HIGHLIGHT */
+.contract-box { background: linear-gradient(135deg, #eff6ff, #f5f3ff); border: 1px solid #c7d2fe; border-radius: 10px; padding: 16px; }
+.contract-amount { font-size: 28px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+
+/* CREDIT STATUS */
+.credit-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.credit-option { border: 2px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; text-align: center; transition: all .12s; }
+.credit-option.selected { border-color: var(--accent); background: var(--accent-bg); }
+.credit-option:hover:not(.selected) { border-color: var(--border2); }
+
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 </style>
 </head>
 <body>
-
 <div id="root"></div>
 
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<!-- React -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-const { useState, useEffect, useCallback, useRef } = React;
+const { useState, useEffect, useRef } = React;
+const SK = 'mortgage_crm_v1';
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  ⚙️  КОНФИГУРАЦИЯ — ВСТАВЬТЕ СВОИ ДАННЫЕ ИЗ SUPABASE        ║
-// ║  Supabase → Settings → API → Project URL & anon key         ║
-// ╚══════════════════════════════════════════════════════════════╝
-const SUPABASE_URL  = "https://qmjdzxliotupthuvjozd.supabase.co";
-const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFtamR6eGxpb3R1cHRodXZqb3pkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NzM1NTcsImV4cCI6MjA5NDM0OTU1N30.-j3UXBVPFUCOXdB2LqrW-S6nvGBry9hfr34Wja0sBxE";
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════ CONSTANTS ════════════════════════════
+const PIPELINE = [
+  { id:'new_lead',      label:'Новый лид',        color:'#6366f1' },
+  { id:'in_work',       label:'Взят в работу',    color:'#0ea5e9' },
+  { id:'analysis',      label:'Анализ клиента',   color:'#f59e0b' },
+  { id:'consultation',  label:'Платная консульт.',color:'#a855f7' },
+  { id:'contract',      label:'Договор',          color:'#ec4899' },
+  { id:'accompaniment', label:'Сопровождение',    color:'#14b8a6' },
+  { id:'approval',      label:'Одобрение',        color:'#10b981' },
+  { id:'deal',          label:'Сделка',           color:'#f97316' },
+  { id:'issuance',      label:'Выдача ипотеки',   color:'#22c55e' },
+  { id:'closed',        label:'Закрыто',          color:'#64748b' },
+];
+const PL_MAP = Object.fromEntries(PIPELINE.map(p=>[p.id,p]));
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SOURCES = [
+  {id:'instagram',label:'Instagram'},{id:'tiktok',label:'TikTok'},
+  {id:'whatsapp',label:'WhatsApp'},{id:'recommendation',label:'Рекомендация'},
+  {id:'site',label:'Сайт'},{id:'kaspi',label:'Kaspi'},
+  {id:'telegram',label:'Telegram'},{id:'other',label:'Другое'},
+];
+const SOURCE_COLORS = {instagram:'#e1306c',tiktok:'#010101',whatsapp:'#25d366',recommendation:'#f59e0b',site:'#3b82f6',kaspi:'#ef4444',telegram:'#0088cc',other:'#64748b'};
 
-const STAGES = ["Новый","Квалификация","Предложение","Переговоры","Выигран","Проигран"];
-const STAGE_COLOR = {"Новый":"#6b7280","Квалификация":"#4f6ef7","Предложение":"#8b5cf6","Переговоры":"#d97706","Выигран":"#16a34a","Проигран":"#dc2626"};
-const PRIO_COLOR = { high:"#dc2626", medium:"#d97706", low:"#6b7280" };
-const PRIO_LABEL = { high:"Высокий", medium:"Средний", low:"Низкий" };
-const STATUS_COLOR = { active:"#16a34a", lead:"#4f6ef7", inactive:"#6b7280" };
-const STATUS_LABEL = { active:"Активный", lead:"Лид", inactive:"Неактивный" };
+const CONTACT_STATUSES = ['Дозвонился','Не отвечает','Перезвонить','Отказ','Думает','Назначена встреча'];
+const MARITAL_STATUSES = ['Женат/Замужем','Холост/Не замужем','Разведён(а)','Вдовец/Вдова'];
+const WORK_TYPES = [{id:'official',label:'Официальная'},{id:'ip',label:'ИП'},{id:'self',label:'Самозанятый'},{id:'none',label:'Без офиц. работы'}];
+const DOWN_TYPES = [{id:'cash',label:'Наличка'},{id:'deposit',label:'Депозит'},{id:'mixed',label:'Смешанный'}];
 
-function uid() { return Math.random().toString(36).slice(2, 9); }
-function fmt(n) { return new Intl.NumberFormat("ru").format(Math.round(n)); }
-function today() { return new Date().toISOString().split("T")[0]; }
-function nowStr() { return new Date().toLocaleString("ru",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+const CREDIT_STATUSES = [
+  {id:'good',label:'Хорошая',color:'#10b981'},{id:'medium',label:'Средняя',color:'#f59e0b'},
+  {id:'bad',label:'Плохая',color:'#ef4444'},{id:'overdue',label:'Просрочки',color:'#dc2626'},
+  {id:'current',label:'Текущие кредиты',color:'#f97316'},{id:'microloans',label:'Микрозаймы',color:'#f97316'},
+  {id:'arrests',label:'Аресты',color:'#991b1b'},{id:'none',label:'Нет КИ',color:'#64748b'},
+];
+const CR_MAP = Object.fromEntries(CREDIT_STATUSES.map(c=>[c.id,c]));
 
-// ─── DB HELPERS ───────────────────────────────────────────────────────────────
-const db = {
-  // clients
-  getClients: () => sb.from("clients").select("*").order("created_at", {ascending:true}),
-  addClient: (c) => sb.from("clients").insert(c).select().single(),
-  updateClient: (id, c) => sb.from("clients").update(c).eq("id", id).select().single(),
-  deleteClient: (id) => sb.from("clients").delete().eq("id", id),
+const CONTRACT_TYPES = [
+  {id:'full',label:'Сопровождение',amount:600000},
+  {id:'extra_income',label:'Доп. доход',amount:300000},
+  {id:'house_search',label:'Поиск дома',amount:200000},
+  {id:'full_extra',label:'Сопровождение + Доп. доход',amount:900000},
+  {id:'full_search',label:'Сопровождение + Поиск дома',amount:800000},
+  {id:'full_all',label:'Полный пакет',amount:1100000},
+  {id:'online',label:'Онлайн сопровождение',amount:400000},
+  {id:'nauryz',label:'Наурыз',amount:0},
+  {id:'50_50',label:'50/50',amount:0},
+  {id:'30_70',label:'30/70',amount:0},
+  {id:'rental',label:'Арендное жилье',amount:0},
+  {id:'otbasy',label:'Отбасы банк',amount:0},
+  {id:'commercial',label:'Коммерческая ипотека',amount:0},
+  {id:'no_income',label:'Без подтверждения дохода',amount:0},
+];
+const CT_MAP = Object.fromEntries(CONTRACT_TYPES.map(c=>[c.id,c]));
 
-  // checklists
-  getChecklists: () => sb.from("checklists").select("*").order("created_at", {ascending:true}),
-  addChecklist: (t) => sb.from("checklists").insert(t).select().single(),
-  updateChecklist: (id, t) => sb.from("checklists").update(t).eq("id", id).select().single(),
-  deleteChecklist: (id) => sb.from("checklists").delete().eq("id", id),
+const ACCOMP_STAGES = ['Сбор документов','Проверка БКИ','Подготовка доходов','Выбор программы','Подача заявки','Одобрение','Поиск квартиры','Оценка','Сделка','Выдача ипотеки','Закрытие'];
 
-  // deals
-  getDeals: () => sb.from("deals").select("*").order("created_at", {ascending:true}),
-  addDeal: (d) => sb.from("deals").insert({...d, client_id: d.clientId}).select().single(),
-  updateDeal: (id, d) => sb.from("deals").update(d).eq("id", id).select().single(),
-  deleteDeal: (id) => sb.from("deals").delete().eq("id", id),
+const TASK_TYPES = ['Позвонить','Запросить документы','Отправить договор','Назначить встречу','Проверить депозит','Проверить БКИ','Другое'];
+const MANAGERS = ['Айгерим Б.','Данияр С.','Мадина К.','Руслан Т.'];
+const CITIES = ['Алматы','Астана','Шымкент','Актобе','Другой'];
 
-  // tasks
-  getTasks: () => sb.from("tasks").select("*").order("created_at", {ascending:true}),
-  addTask: (t) => sb.from("tasks").insert({...t, due_date: t.dueDate}).select().single(),
-  updateTask: (id, t) => sb.from("tasks").update(t).eq("id", id).select().single(),
-  deleteTask: (id) => sb.from("tasks").delete().eq("id", id),
-
-  // finances
-  getFinances: () => sb.from("finances").select("*").order("created_at", {ascending:true}),
-  addFinance: (f) => sb.from("finances").insert(f).select().single(),
-  deleteFinance: (id) => sb.from("finances").delete().eq("id", id),
+const CHECKLISTS = {
+  full:      {name:'Стандартное',items:['ИИН проверен','Доход подтверждён','КИ проверена','ПВ подтверждён','Договор подписан','Банк выбран','Заявка подана','Одобрение получено','Квартира найдена','Оценка проведена','Сделка оформлена']},
+  nauryz:    {name:'Наурыз',items:['Депозит проверен','Срок депозита','Подтверждение дохода','Пенсионные','КИ проверена','Справки получены','Оценка недвижимости']},
+  otbasy:    {name:'Отбасы',items:['Депозит 36+ мес','Мин. ставка','БКИ справка','Справка о доходах','Воен. учёт (муж)','2 НДФЛ','Оценка имущества']},
+  commercial:{name:'Коммерческая',items:['БИН компании','Баланс предприятия','Налог. задолженность','Оборот по счёту','Залоговое имущество','Страховка']},
+  online:    {name:'Онлайн',items:['Документы получены','Zoom-консультация','КП отправлено','Договор онлайн','Заявка подана']},
 };
 
-// Map DB row → app format
-function mapDeal(r) { return r ? {...r, clientId: r.client_id, comments: r.comments||[], checklists: r.checklists||{}} : null; }
-function mapTask(r) { return r ? {...r, dueDate: r.due_date} : null; }
+function uid(){return Math.random().toString(36).slice(2,9)}
+function fmt(n){return n?new Intl.NumberFormat('ru').format(Math.round(n)):'-'}
+function today(){return new Date().toISOString().split('T')[0]}
+function nowStr(){return new Date().toLocaleString('ru',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
 
-// ─── HELPER COMPONENTS ────────────────────────────────────────────────────────
-function MH({ title, onClose }) {
-  return <div className="modal-head"><div className="modal-title">{title}</div><button className="btn btn-ghost btn-sm" onClick={onClose}><i className="ti ti-x" /></button></div>;
+function emptyClient(){
+  return {
+    id:uid(), fio:'',iin:'',phone:'',city:'Алматы',manager:MANAGERS[0],
+    dateIn:today(),source:'instagram',stage:'new_lead',contactStatus:'',
+    maritalStatus:'',children:'',
+    officialIncome:'',extraIncome:'',extraIncomeConfirmed:false,
+    pensionContributions:'',workExperience:'',workType:'official',
+    downPayment:'',downPaymentType:'cash',depositBank:'',depositAmount:'',depositTerm:'',
+    creditStatus:'good',hasOverdue:false,creditsCount:'',monthlyLoad:'',
+    hadBankRefusal:false,hasRefinancing:false,problematicCredits:false,courtRestrictions:false,
+    isReassignment:false,reassignmentComplex:'',reassignmentDeveloper:'',
+    reassignmentAmount:'',mortgageBalance:'',reassignmentBank:'',hasDebt:false,urgentSale:false,
+    contractType:'',contractAmount:0,
+    responsibleManager:'',mortgageSpecialist:'',accompStageIndex:0,
+    miroLink:'',roadmapLink:'',driveLink:'',
+    checklists:{},comments:[],tasks:[],
+    createdAt:new Date().toISOString(),
+  };
 }
-function Field({ label, children }) {
-  return <div className="field"><div className="field-label">{label}</div>{children}</div>;
-}
-function MA({ onClose, onSave, saving }) {
-  return <div className="modal-actions">
-    <button className="btn" onClick={onClose}>Отмена</button>
-    <button className="btn btn-primary" onClick={onSave} disabled={saving}>{saving ? <><i className="ti ti-loader" style={{animation:"spin .7s linear infinite"}} /> Сохраняю...</> : "Сохранить"}</button>
+
+const DEMO = [
+  {...emptyClient(),id:'c1',fio:'Айша Бекова',iin:'950101300456',phone:'+7 701 234-56-78',city:'Алматы',manager:'Айгерим Б.',dateIn:'2025-05-12',source:'instagram',stage:'new_lead',contactStatus:'Не отвечает',officialIncome:'450000',workType:'official',creditStatus:'good'},
+  {...emptyClient(),id:'c2',fio:'Марат Сейтов',iin:'880515401123',phone:'+7 702 345-67-89',city:'Астана',manager:'Данияр С.',dateIn:'2025-05-11',source:'whatsapp',stage:'in_work',contactStatus:'Назначена встреча',officialIncome:'350000',extraIncome:'150000',workType:'ip',creditStatus:'medium',creditsCount:'2',monthlyLoad:'80000'},
+  {...emptyClient(),id:'c3',fio:'Гульнара Иванова',iin:'920320300789',phone:'+7 705 456-78-90',city:'Алматы',manager:'Мадина К.',dateIn:'2025-05-10',source:'recommendation',stage:'analysis',contactStatus:'Дозвонился',officialIncome:'600000',workType:'official',creditStatus:'good',downPaymentType:'deposit',depositBank:'Отбасы',depositAmount:'5000000',depositTerm:'36 мес'},
+  {...emptyClient(),id:'c4',fio:'Тимур Ахметов',iin:'850720400321',phone:'+7 747 567-89-01',city:'Шымкент',manager:'Руслан Т.',dateIn:'2025-05-09',source:'instagram',stage:'consultation',contactStatus:'Думает',officialIncome:'800000',workType:'official',creditStatus:'good'},
+  {...emptyClient(),id:'c5',fio:'Зарина Смакова',iin:'910630300654',phone:'+7 777 678-90-12',city:'Астана',manager:'Айгерим Б.',dateIn:'2025-04-28',source:'tiktok',stage:'contract',contactStatus:'Дозвонился',contractType:'full_all',contractAmount:1100000,officialIncome:'700000',extraIncome:'300000',workType:'official',creditStatus:'good',comments:[{id:'cc1',text:'Договор подписан! Клиент очень доволен условиями.',date:'2025-04-30',author:'Айгерим Б.'}]},
+  {...emptyClient(),id:'c6',fio:'Нурлан Джаксыбеков',iin:'870915401456',phone:'+7 701 789-01-23',city:'Алматы',manager:'Данияр С.',dateIn:'2025-04-20',source:'site',stage:'accompaniment',contactStatus:'Дозвонился',contractType:'full_search',contractAmount:800000,accompStageIndex:3,responsibleManager:'Данияр С.',mortgageSpecialist:'Самал И.',officialIncome:'900000',workType:'official',creditStatus:'medium',checklists:{full:['ИИН проверен','Доход подтверждён','КИ проверена','ПВ подтверждён','Договор подписан','Банк выбран']}},
+  {...emptyClient(),id:'c7',fio:'Динара Касымова',iin:'930210300987',phone:'+7 775 890-12-34',city:'Актобе',manager:'Мадина К.',dateIn:'2025-04-15',source:'kaspi',stage:'approval',contactStatus:'Дозвонился',contractType:'full_extra',contractAmount:900000,accompStageIndex:5,officialIncome:'550000',workType:'official',creditStatus:'good'},
+  {...emptyClient(),id:'c8',fio:'Болат Рахимов',iin:'781205400789',phone:'+7 702 901-23-45',city:'Алматы',manager:'Руслан Т.',dateIn:'2025-04-12',source:'whatsapp',stage:'deal',contactStatus:'Дозвонился',contractType:'full',contractAmount:600000,accompStageIndex:8,officialIncome:'1200000',workType:'ip',creditStatus:'good'},
+  {...emptyClient(),id:'c9',fio:'Алима Сарова',iin:'960410300654',phone:'+7 777 012-34-56',city:'Алматы',manager:'Айгерим Б.',dateIn:'2025-04-08',source:'recommendation',stage:'closed',contactStatus:'Дозвонился',contractType:'full_all',contractAmount:1100000,accompStageIndex:10,officialIncome:'950000',workType:'official',creditStatus:'good',comments:[{id:'cc2',text:'Ипотека выдана! 27,000,000 ₸. Клиент очень доволен.',date:'2025-05-05',author:'Айгерим Б.'}]},
+];
+
+// ═══════════════════════════ HELPERS ══════════════════════════════
+function MH({title,subtitle,onClose}){
+  return <div className="modal-hd">
+    <div><div className="modal-title">{title}</div>{subtitle&&<div style={{fontSize:12,color:'var(--muted)',marginTop:2}}>{subtitle}</div>}</div>
+    <button className="btn btn-ghost btn-sm" onClick={onClose}><i className="ti ti-x"/></button>
   </div>;
 }
+function Fl({label,children}){return <div className="field"><div className="field-label">{label}</div>{children}</div>}
+function MA({onClose,onSave,label='Сохранить',danger}){
+  return <div className="modal-ft">
+    <button className="btn" onClick={onClose}>Отмена</button>
+    <button className={`btn ${danger?'btn-danger':'btn-primary'}`} onClick={onSave}>{label}</button>
+  </div>;
+}
+function StageTag({stageId}){
+  const s=PL_MAP[stageId];
+  if(!s)return null;
+  return <span className="badge" style={{background:s.color+'22',color:s.color}}>{s.label}</span>;
+}
+function CreditTag({statusId}){
+  const c=CR_MAP[statusId];
+  if(!c)return null;
+  return <span className="badge" style={{background:c.color+'22',color:c.color}}>{c.label}</span>;
+}
+function SourceTag({src}){
+  const s=SOURCES.find(x=>x.id===src);
+  return <span className="source-badge" style={{background:SOURCE_COLORS[src]+'22',color:SOURCE_COLORS[src]}}>{s?.label||src}</span>;
+}
 
-// ─── APP ──────────────────────────────────────────────────────────────────────
-function App() {
-  const [sec, setSec] = useState("dashboard");
-  const [loading, setLoading] = useState(true);
-  const [syncing, setSyncing] = useState(false);
-  const [toast, setToast] = useState(null);
-  const [data, setData] = useState({ clients:[], deals:[], tasks:[], finances:[], checklists:[] });
-  const [modal, setModal] = useState(null);
-  const [search, setSearch] = useState("");
-  const [dragId, setDragId] = useState(null);
-  const [dragOver, setDragOver] = useState(null);
-  const toastTimer = useRef(null);
+// ═══════════════════════════ APP ══════════════════════════════════
+function App(){
+  const [page,setPage]=useState('dashboard');
+  const [clients,setClients]=useState(()=>{
+    try{const s=localStorage.getItem(SK);return s?JSON.parse(s):DEMO;}catch{return DEMO;}
+  });
+  const [modal,setModal]=useState(null);
+  const [search,setSearch]=useState('');
+  const [filterManager,setFilterManager]=useState('');
+  const [filterStage,setFilterStage]=useState('');
+  const [dragId,setDragId]=useState(null);
+  const [dragOver,setDragOver]=useState(null);
+  const [toast,setToast]=useState(null);
+  const toastRef=useRef(null);
 
-  function showToast(msg) {
-    setToast(msg);
-    clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(null), 2500);
-  }
+  useEffect(()=>{try{localStorage.setItem(SK,JSON.stringify(clients));}catch{}},[clients]);
 
-  // ─── LOAD ALL DATA ───────────────────────────────────────────────────────
-  async function loadAll() {
-    setLoading(true);
-    const [c, ch, d, t, f] = await Promise.all([
-      db.getClients(), db.getChecklists(), db.getDeals(), db.getTasks(), db.getFinances()
-    ]);
-    setData({
-      clients:   c.data  || [],
-      checklists: ch.data || [],
-      deals:     (d.data || []).map(mapDeal),
-      tasks:     (t.data || []).map(mapTask),
-      finances:  f.data  || [],
-    });
-    setLoading(false);
+  function showToast(msg){setToast(msg);clearTimeout(toastRef.current);toastRef.current=setTimeout(()=>setToast(null),2500);}
+  function upd(fn){setClients(cs=>{const n=[...cs];fn(n);return n;});}
+  function saveClient(c){
+    upd(cs=>{const idx=cs.findIndex(x=>x.id===c.id);idx>=0?cs.splice(idx,1,c):cs.push(c);});
+    showToast(c.fio?`${c.fio} сохранён`:'Клиент добавлен');
+    setModal(null);
   }
-  useEffect(() => { loadAll(); }, []);
+  function delClient(id){upd(cs=>cs.splice(cs.findIndex(x=>x.id===id),1));showToast('Удалено');setModal(null);}
+  function moveClient(id,stage){upd(cs=>{const c=cs.find(x=>x.id===id);if(c)c.stage=stage;});showToast(`Переведён: ${PL_MAP[stage]?.label}`);}
 
-  // ─── REALTIME ────────────────────────────────────────────────────────────
-  useEffect(() => {
-    const channel = sb.channel("crm-realtime")
-      .on("postgres_changes", { event:"*", schema:"public" }, () => { loadAll(); })
-      .subscribe();
-    return () => sb.removeChannel(channel);
-  }, []);
+  const filtered=clients.filter(c=>{
+    if(search&&!c.fio.toLowerCase().includes(search.toLowerCase())&&!c.phone.includes(search)&&!c.iin.includes(search))return false;
+    if(filterManager&&c.manager!==filterManager)return false;
+    if(filterStage&&c.stage!==filterStage)return false;
+    return true;
+  });
 
-  // ─── CLIENT ACTIONS ──────────────────────────────────────────────────────
-  async function saveClient(c) {
-    setSyncing(true);
-    if (c.id) {
-      const { error } = await db.updateClient(c.id, { name:c.name, company:c.company, phone:c.phone, email:c.email, status:c.status });
-      if (!error) { setData(d=>({...d, clients: d.clients.map(x=>x.id===c.id?c:x)})); showToast("Клиент обновлён"); }
-    } else {
-      const { data: row, error } = await db.addClient({ name:c.name, company:c.company, phone:c.phone, email:c.email, status:c.status, created:today() });
-      if (!error && row) { setData(d=>({...d, clients:[...d.clients, row]})); showToast("Клиент добавлен"); }
-    }
-    setSyncing(false); setModal(null);
-  }
-  async function delClient(id) {
-    await db.deleteClient(id);
-    setData(d=>({...d, clients: d.clients.filter(x=>x.id!==id)}));
-    showToast("Клиент удалён");
-  }
-
-  // ─── DEAL ACTIONS ────────────────────────────────────────────────────────
-  async function saveDeal(c) {
-    setSyncing(true);
-    const payload = { title:c.title, client_id:c.clientId, value:+c.value, stage:c.stage };
-    if (c.id) {
-      const { error } = await db.updateDeal(c.id, payload);
-      if (!error) { setData(d=>({...d, deals: d.deals.map(x=>x.id===c.id?{...x,...c}:x)})); showToast("Сделка обновлена"); }
-    } else {
-      const { data: row, error } = await db.addDeal({...payload, created:today(), comments:[], checklists:{}});
-      if (!error && row) { setData(d=>({...d, deals:[...d.deals, mapDeal(row)]})); showToast("Сделка добавлена"); }
-    }
-    setSyncing(false); setModal(null);
-  }
-  async function delDeal(id) {
-    await db.deleteDeal(id);
-    setData(d=>({...d, deals: d.deals.filter(x=>x.id!==id)}));
-    showToast("Сделка удалена");
-  }
-  async function moveDeal(dealId, stage) {
-    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,stage}:x)}));
-    await db.updateDeal(dealId, { stage });
-  }
-  async function addComment(dealId, stage, text) {
-    const deal = data.deals.find(x=>x.id===dealId);
-    if (!deal) return;
-    const comments = [...(deal.comments||[]), { id:uid(), stage, text, date:nowStr() }];
-    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,comments}:x)}));
-    await db.updateDeal(dealId, { comments });
-  }
-  async function delComment(dealId, cmId) {
-    const deal = data.deals.find(x=>x.id===dealId);
-    if (!deal) return;
-    const comments = (deal.comments||[]).filter(c=>c.id!==cmId);
-    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,comments}:x)}));
-    await db.updateDeal(dealId, { comments });
-  }
-  async function toggleCheck(dealId, tplId, itemId) {
-    const deal = data.deals.find(x=>x.id===dealId);
-    if (!deal) return;
-    const prev = (deal.checklists||{})[tplId]||[];
-    const next = prev.includes(itemId) ? prev.filter(x=>x!==itemId) : [...prev, itemId];
-    const checklists = {...(deal.checklists||{}), [tplId]: next};
-    setData(d=>({...d, deals: d.deals.map(x=>x.id===dealId?{...x,checklists}:x)}));
-    await db.updateDeal(dealId, { checklists });
-  }
-
-  // ─── TASK ACTIONS ────────────────────────────────────────────────────────
-  async function saveTask(c) {
-    setSyncing(true);
-    const payload = { title:c.title, due_date:c.dueDate||"", priority:c.priority };
-    if (c.id) {
-      await db.updateTask(c.id, payload);
-      setData(d=>({...d, tasks: d.tasks.map(x=>x.id===c.id?{...x,...c}:x)}));
-      showToast("Задача обновлена");
-    } else {
-      const { data: row } = await db.addTask({...payload, done:false});
-      if (row) setData(d=>({...d, tasks:[...d.tasks, mapTask(row)]}));
-      showToast("Задача добавлена");
-    }
-    setSyncing(false); setModal(null);
-  }
-  async function toggleTask(id) {
-    const task = data.tasks.find(x=>x.id===id);
-    if (!task) return;
-    const done = !task.done;
-    setData(d=>({...d, tasks: d.tasks.map(x=>x.id===id?{...x,done}:x)}));
-    await db.updateTask(id, { done });
-  }
-  async function delTask(id) {
-    await db.deleteTask(id);
-    setData(d=>({...d, tasks: d.tasks.filter(x=>x.id!==id)}));
-    showToast("Задача удалена");
-  }
-
-  // ─── FINANCE ACTIONS ─────────────────────────────────────────────────────
-  async function saveFin(c) {
-    setSyncing(true);
-    const { data: row } = await db.addFinance({ type:c.type, amount:+c.amount, description:c.description, date:c.date, category:c.category });
-    if (row) setData(d=>({...d, finances:[...d.finances, row]}));
-    showToast("Транзакция добавлена");
-    setSyncing(false); setModal(null);
-  }
-  async function delFin(id) {
-    await db.deleteFinance(id);
-    setData(d=>({...d, finances: d.finances.filter(x=>x.id!==id)}));
-    showToast("Удалено");
-  }
-
-  // ─── CHECKLIST ACTIONS ───────────────────────────────────────────────────
-  async function saveChecklist(tpl) {
-    setSyncing(true);
-    if (tpl.id) {
-      await db.updateChecklist(tpl.id, { name:tpl.name, stage:tpl.stage, color:tpl.color, items:tpl.items });
-      setData(d=>({...d, checklists: d.checklists.map(x=>x.id===tpl.id?tpl:x)}));
-      showToast("Шаблон обновлён");
-    } else {
-      const { data: row } = await db.addChecklist({ name:tpl.name, stage:tpl.stage, color:tpl.color, items:tpl.items });
-      if (row) setData(d=>({...d, checklists:[...d.checklists, row]}));
-      showToast("Шаблон создан");
-    }
-    setSyncing(false); setModal(null);
-  }
-  async function delChecklist(id) {
-    await db.deleteChecklist(id);
-    setData(d=>({...d, checklists: d.checklists.filter(x=>x.id!==id)}));
-    showToast("Шаблон удалён");
-  }
-
-  const tIncome = data.finances.filter(f=>f.type==="income").reduce((s,f)=>s+f.amount,0);
-  const tExpense = data.finances.filter(f=>f.type==="expense").reduce((s,f)=>s+f.amount,0);
-  const pipeline = data.deals.filter(d=>d.stage!=="Проигран").reduce((s,d)=>s+d.value,0);
-  const openTasks = data.tasks.filter(t=>!t.done).length;
-
-  const NAV = [
-    {id:"dashboard",label:"Дашборд",icon:"ti-layout-dashboard"},
-    {id:"clients",label:"Клиенты",icon:"ti-users"},
-    {id:"deals",label:"Сделки",icon:"ti-arrows-transfer-down"},
-    {id:"tasks",label:"Задачи",icon:"ti-checkbox"},
-    {id:"finances",label:"Финансы",icon:"ti-cash"},
-    {id:"checklists",label:"Чеклисты",icon:"ti-list-check"},
+  const NAV=[
+    {id:'dashboard',label:'Дашборд',icon:'ti-layout-dashboard'},
+    {id:'clients',label:'Клиенты',icon:'ti-users'},
+    {id:'tasks',label:'Задачи',icon:'ti-checkbox'},
+    {id:'kpi',label:'KPI сотрудников',icon:'ti-chart-bar'},
   ];
 
-  if (loading) return <div className="loading-screen">
-    <div className="spinner" />
-    <div style={{fontSize:14,color:"var(--muted)"}}>Загружаем данные...</div>
-  </div>;
-
-  return <div className="shell">
+  return <div className="app">
     {/* SIDEBAR */}
-    <div className="sidebar">
-      <div className="logo"><div className="logo-title">CRM</div><div className="logo-sub">Мой бизнес</div></div>
-      {NAV.map(n=><div key={n.id} className={`nav-item${sec===n.id?" active":""}`} onClick={()=>{setSec(n.id);setSearch("")}}>
-        <i className={`ti ${n.icon}`} />{n.label}
-      </div>)}
-      <div className="sidebar-footer">
-        {new Date().toLocaleDateString("ru",{weekday:"short",day:"numeric",month:"long"})}
-        <div className="sync-badge"><div className="sync-dot" /><span>Синхронизировано</span></div>
+    <div className="sb">
+      <div className="sb-logo">
+        <div className="sb-logo-title"><i className="ti ti-home-filled" style={{color:'var(--accent)'}}/>Ипотека CRM</div>
+        <div className="sb-logo-sub">Система управления клиентами</div>
+      </div>
+      <div className="sb-nav">
+        <div className="sb-section">Навигация</div>
+        {NAV.map(n=><div key={n.id} className={`sb-item${page===n.id?' active':''}`} onClick={()=>setPage(n.id)}>
+          <i className={`ti ${n.icon}`}/>{n.label}
+        </div>)}
+        <div className="sb-section" style={{marginTop:16}}>Воронка</div>
+        {PIPELINE.map(p=>{
+          const cnt=clients.filter(c=>c.stage===p.id).length;
+          return <div key={p.id} className="sb-item" style={{justifyContent:'space-between'}} onClick={()=>{setPage('clients');setFilterStage(p.id);}}>
+            <span style={{display:'flex',alignItems:'center',gap:8}}><span className="dot" style={{background:p.color}}/>{p.label}</span>
+            {cnt>0&&<span style={{background:p.color+'33',color:p.color,borderRadius:20,padding:'1px 7px',fontSize:11,fontWeight:700}}>{cnt}</span>}
+          </div>;
+        })}
+      </div>
+      <div className="sb-footer">
+        <div className="sb-user">
+          <div className="sb-avatar">АБ</div>
+          <div><div style={{fontSize:12,fontWeight:600,color:'#94a3b8'}}>Руководитель</div><div style={{fontSize:11,color:'#475569'}}>Полный доступ</div></div>
+        </div>
       </div>
     </div>
 
     {/* MAIN */}
     <div className="main">
-
-      {/* ── DASHBOARD ── */}
-      {sec==="dashboard" && <>
-        <div className="page-header"><div><div className="page-title">Дашборд</div><div className="page-sub">Обзор бизнеса в реальном времени</div></div></div>
-        <div className="metric-grid">
-          {[
-            {label:"Клиентов",value:data.clients.length,sub:`${data.clients.filter(c=>c.status==="lead").length} лидов`,color:"#4f6ef7"},
-            {label:"Воронка",value:`${fmt(pipeline)} ₸`,sub:`${data.deals.filter(d=>!["Выигран","Проигран"].includes(d.stage)).length} активных`,color:"#8b5cf6"},
-            {label:"Открытых задач",value:openTasks,sub:`${data.tasks.filter(t=>t.done).length} завершено`,color:"#d97706"},
-            {label:"Прибыль",value:`${fmt(tIncome-tExpense)} ₸`,sub:`Доход: ${fmt(tIncome)} ₸`,color:tIncome>=tExpense?"#16a34a":"#dc2626"},
-          ].map(({label,value,sub,color})=><div key={label} className="metric-card">
-            <div className="metric-label">{label}</div>
-            <div className="metric-value" style={{color}}>{value}</div>
-            <div className="metric-sub">{sub}</div>
-          </div>)}
+      <div className="topbar">
+        <div className="topbar-title">{NAV.find(n=>n.id===page)?.label||'CRM'}</div>
+        <div className="topbar-right">
+          {page==='clients'&&<>
+            <div className="search-wrap"><i className="ti ti-search"/><input className="input" style={{width:220}} placeholder="Поиск клиента..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+            <select className="input" style={{width:150}} value={filterManager} onChange={e=>setFilterManager(e.target.value)}>
+              <option value="">Все менеджеры</option>{MANAGERS.map(m=><option key={m} value={m}>{m}</option>)}
+            </select>
+            <select className="input" style={{width:160}} value={filterStage} onChange={e=>setFilterStage(e.target.value)}>
+              <option value="">Все этапы</option>{PIPELINE.map(p=><option key={p.id} value={p.id}>{p.label}</option>)}
+            </select>
+          </>}
+          <button className="btn btn-primary" onClick={()=>setModal({type:'client',item:emptyClient()})}>
+            <i className="ti ti-plus"/>Новый клиент
+          </button>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-          <div className="card">
-            <div className="section-label" style={{marginBottom:14}}>Воронка по этапам</div>
-            {STAGES.slice(0,5).map(s=>{
-              const cnt = data.deals.filter(d=>d.stage===s).length;
-              const pct = Math.round(cnt/(data.deals.length||1)*100);
-              return <div key={s} style={{marginBottom:12}}>
-                <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:5}}>
-                  <span style={{display:"flex",alignItems:"center",gap:7}}><span className="dot" style={{background:STAGE_COLOR[s]}} />{s}</span>
-                  <span style={{color:"var(--muted)"}}>{cnt} сд.</span>
-                </div>
-                <div className="progress-bar-wrap"><div className="progress-bar" style={{width:`${pct}%`,background:STAGE_COLOR[s]}} /></div>
-              </div>;
-            })}
-          </div>
-          <div className="card">
-            <div className="section-label" style={{marginBottom:14}}>Ближайшие задачи</div>
-            {data.tasks.slice(0,5).map(t=><div key={t.id} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 0",borderBottom:"1px solid var(--border)"}}>
-              <div className="task-check" style={{background:t.done?"#16a34a":undefined,borderColor:t.done?"#16a34a":PRIO_COLOR[t.priority]}} onClick={()=>toggleTask(t.id)}>
-                {t.done && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
-              </div>
-              <div style={{flex:1,fontSize:13,textDecoration:t.done?"line-through":"none",color:t.done?"var(--muted)":"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</div>
-              <span style={{fontSize:11,color:"var(--muted)",flexShrink:0}}>{t.dueDate}</span>
-            </div>)}
-          </div>
-        </div>
-      </>}
-
-      {/* ── CLIENTS ── */}
-      {sec==="clients" && <>
-        <div className="page-header">
-          <div><div className="page-title">Клиенты</div><div className="page-sub">{data.clients.length} контактов</div></div>
-          <button className="btn btn-primary" onClick={()=>setModal({type:"client"})}><i className="ti ti-plus" /> Добавить</button>
-        </div>
-        <div className="search-wrap"><i className="ti ti-search" /><input className="input" placeholder="Поиск..." value={search} onChange={e=>setSearch(e.target.value)} /></div>
-        <div className="card" style={{padding:0,overflow:"hidden"}}>
-          <table>
-            <thead><tr>{["Клиент","Компания","Телефон","Email","Статус",""].map(h=><th key={h}>{h}</th>)}</tr></thead>
-            <tbody>
-              {data.clients.filter(c=>!search||c.name.toLowerCase().includes(search.toLowerCase())||c.company.toLowerCase().includes(search.toLowerCase())).map(c=><tr key={c.id}>
-                <td><div style={{display:"flex",alignItems:"center",gap:10}}>
-                  <div className="avatar" style={{background:STATUS_COLOR[c.status]+"22",color:STATUS_COLOR[c.status]}}>{c.name[0]}</div>
-                  <div><div style={{fontWeight:600,fontSize:13}}>{c.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>с {c.created}</div></div>
-                </div></td>
-                <td style={{color:"var(--muted)"}}>{c.company}</td>
-                <td>{c.phone}</td>
-                <td style={{color:"var(--muted)"}}>{c.email}</td>
-                <td><span className="badge" style={{background:STATUS_COLOR[c.status]+"22",color:STATUS_COLOR[c.status]}}>{STATUS_LABEL[c.status]}</span></td>
-                <td><div style={{display:"flex",gap:6}}>
-                  <button className="btn btn-ghost btn-sm" onClick={()=>setModal({type:"client",item:c})}><i className="ti ti-edit" style={{fontSize:14}} /></button>
-                  <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delClient(c.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
-                </div></td>
-              </tr>)}
-            </tbody>
-          </table>
-        </div>
-      </>}
-
-      {/* ── DEALS ── */}
-      {sec==="deals" && <>
-        <div className="page-header">
-          <div><div className="page-title">Сделки</div><div className="page-sub">Нажмите на карточку · Перетащите для смены этапа</div></div>
-          <button className="btn btn-primary" onClick={()=>setModal({type:"deal"})}><i className="ti ti-plus" /> Добавить</button>
-        </div>
-        <div className="kanban-wrap">
-          {STAGES.map(stage=>{
-            const sDeals = data.deals.filter(d=>d.stage===stage);
-            const sVal = sDeals.reduce((s,d)=>s+d.value,0);
-            return <div key={stage} className={`kanban-col${dragOver===stage?" drag-over":""}`}
-              onDragOver={e=>{e.preventDefault();setDragOver(stage)}}
-              onDragLeave={()=>setDragOver(null)}
-              onDrop={e=>{e.preventDefault();if(dragId)moveDeal(dragId,stage);setDragId(null);setDragOver(null);}}>
-              <div className="kanban-head">
-                <div className="kanban-stage-row">
-                  <span className="dot" style={{background:STAGE_COLOR[stage]}} />{stage}
-                  <span className="badge" style={{background:"#fff",color:"var(--muted)",fontSize:11,padding:"2px 7px",marginLeft:"auto",border:"1px solid var(--border)"}}>{sDeals.length}</span>
-                </div>
-                <div className="kanban-total">{fmt(sVal)} ₸</div>
-              </div>
-              <div className="kanban-body">
-                {sDeals.map(deal=>{
-                  const cl = data.clients.find(c=>c.id===deal.clientId||c.id===deal.client_id);
-                  const cmCount = (deal.comments||[]).length;
-                  const allDone = Object.values(deal.checklists||{}).flat();
-                  const allItems = data.checklists.reduce((s,t)=>s+t.items.length,0);
-                  const pct = allItems>0 ? Math.round(allDone.length/allItems*100) : 0;
-                  return <div key={deal.id} className="deal-card" draggable
-                    onDragStart={e=>{e.stopPropagation();setDragId(deal.id)}}
-                    onDragEnd={()=>{setDragId(null);setDragOver(null)}}
-                    onClick={()=>setModal({type:"deal-detail",dealId:deal.id})}>
-                    <div className="deal-title">{deal.title}</div>
-                    {cl && <div className="deal-client"><i className="ti ti-user" style={{fontSize:11}} />{cl.name}</div>}
-                    {allItems>0 && <div style={{marginBottom:8}}>
-                      <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginBottom:3}}><span>Прогресс</span><span>{allDone.length}/{allItems}</span></div>
-                      <div className="progress-bar-wrap"><div className="progress-bar" style={{width:`${pct}%`,background:pct===100?"#16a34a":"#4f6ef7"}} /></div>
-                    </div>}
-                    <div className="deal-footer">
-                      <div className="deal-value" style={{color:STAGE_COLOR[stage]}}>{fmt(deal.value)} ₸</div>
-                      <div style={{display:"flex",alignItems:"center",gap:5}}>
-                        <span style={{fontSize:11,background:"#f5f5f0",border:"1px solid var(--border)",borderRadius:20,padding:"2px 7px",color:"var(--muted)",display:"flex",alignItems:"center",gap:3}}>
-                          <i className="ti ti-message" style={{fontSize:11}} />{cmCount}
-                        </span>
-                        <button className="btn btn-ghost btn-sm" style={{padding:"3px 6px"}} onClick={e=>{e.stopPropagation();setModal({type:"deal",item:deal})}}><i className="ti ti-edit" style={{fontSize:13}} /></button>
-                        <button className="btn btn-ghost btn-sm" style={{padding:"3px 6px",color:"var(--danger)"}} onClick={e=>{e.stopPropagation();delDeal(deal.id)}}><i className="ti ti-trash" style={{fontSize:13}} /></button>
-                      </div>
-                    </div>
-                  </div>;
-                })}
-              </div>
-            </div>;
-          })}
-        </div>
-      </>}
-
-      {/* ── TASKS ── */}
-      {sec==="tasks" && <>
-        <div className="page-header">
-          <div><div className="page-title">Задачи</div><div className="page-sub">{openTasks} открытых</div></div>
-          <button className="btn btn-primary" onClick={()=>setModal({type:"task"})}><i className="ti ti-plus" /> Добавить</button>
-        </div>
-        <div style={{display:"flex",flexDirection:"column",gap:20}}>
-          {["high","medium","low"].map(prio=>{
-            const tasks = data.tasks.filter(t=>t.priority===prio);
-            if(!tasks.length) return null;
-            return <div key={prio}>
-              <div className="section-label" style={{color:PRIO_COLOR[prio],marginBottom:8}}><i className="ti ti-flag" style={{fontSize:13}} /> {PRIO_LABEL[prio]} приоритет</div>
-              <div className="task-list">{tasks.map(t=><div key={t.id} className="task-item">
-                <div className="task-check" style={{background:t.done?"#16a34a":undefined,borderColor:t.done?"#16a34a":PRIO_COLOR[t.priority]}} onClick={()=>toggleTask(t.id)}>
-                  {t.done && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
-                </div>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:13,fontWeight:t.done?400:600,textDecoration:t.done?"line-through":"none",color:t.done?"var(--muted)":"var(--text)"}}>{t.title}</div>
-                  {t.dueDate && <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}><i className="ti ti-calendar" style={{fontSize:12}} /> {t.dueDate}</div>}
-                </div>
-                <span className="badge" style={{background:PRIO_COLOR[prio]+"22",color:PRIO_COLOR[prio]}}>{PRIO_LABEL[prio]}</span>
-                <button className="btn btn-ghost btn-sm" onClick={()=>setModal({type:"task",item:t})}><i className="ti ti-edit" style={{fontSize:14}} /></button>
-                <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delTask(t.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
-              </div>)}</div>
-            </div>;
-          })}
-        </div>
-      </>}
-
-      {/* ── FINANCES ── */}
-      {sec==="finances" && <>
-        <div className="page-header">
-          <div><div className="page-title">Финансы</div><div className="page-sub">Доходы и расходы</div></div>
-          <button className="btn btn-primary" onClick={()=>setModal({type:"finance"})}><i className="ti ti-plus" /> Добавить</button>
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12,marginBottom:20}}>
-          {[{label:"Доходы",value:tIncome,color:"#16a34a"},{label:"Расходы",value:tExpense,color:"#dc2626"},{label:"Прибыль",value:tIncome-tExpense,color:(tIncome-tExpense)>=0?"#4f6ef7":"#dc2626"}].map(({label,value,color})=>
-            <div key={label} className="metric-card"><div className="metric-label">{label}</div><div className="metric-value" style={{color}}>{fmt(value)} ₸</div></div>
-          )}
-        </div>
-        <div className="card">
-          <div className="section-label" style={{marginBottom:4}}>Транзакции</div>
-          {[...data.finances].reverse().map(f=><div key={f.id} className="fin-row">
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div className="fin-icon" style={{background:f.type==="income"?"#16a34a22":"#dc262622"}}>
-                <i className={`ti ${f.type==="income"?"ti-arrow-up-right":"ti-arrow-down-left"}`} style={{color:f.type==="income"?"#16a34a":"#dc2626"}} />
-              </div>
-              <div><div style={{fontSize:13,fontWeight:600}}>{f.description}</div><div style={{fontSize:11,color:"var(--muted)"}}>{f.date} · {f.category}</div></div>
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <span style={{fontSize:15,fontWeight:700,color:f.type==="income"?"#16a34a":"#dc2626"}}>{f.type==="income"?"+":"-"}{fmt(f.amount)} ₸</span>
-              <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>delFin(f.id)}><i className="ti ti-trash" style={{fontSize:14}} /></button>
-            </div>
-          </div>)}
-        </div>
-      </>}
-
-      {/* ── CHECKLISTS ── */}
-      {sec==="checklists" && <>
-        <div className="page-header">
-          <div><div className="page-title">Чеклисты</div><div className="page-sub">Шаблоны применяются ко всем сделкам</div></div>
-          <button className="btn btn-primary" onClick={()=>setModal({type:"checklist"})}><i className="ti ti-plus" /> Новый шаблон</button>
-        </div>
-        {data.checklists.length===0 && <div className="empty-state"><i className="ti ti-list-check" /><p>Нет шаблонов. Создайте первый!</p></div>}
-        {data.checklists.map(tpl=><div key={tpl.id} className="checklist-tpl">
-          <div className="checklist-tpl-head">
-            <div className="checklist-tpl-title">
-              <span style={{width:12,height:12,borderRadius:3,background:tpl.color,display:"inline-block"}} />{tpl.name}
-              <span className="badge" style={{background:"#f5f5f0",color:"var(--muted)",fontSize:11}}>{tpl.stage}</span>
-            </div>
-            <div style={{display:"flex",gap:6}}>
-              <button className="btn btn-sm" onClick={()=>setModal({type:"checklist",item:tpl})}><i className="ti ti-edit" style={{fontSize:13}} /> Изменить</button>
-              <button className="btn btn-sm btn-danger-soft" onClick={()=>delChecklist(tpl.id)}><i className="ti ti-trash" style={{fontSize:13}} /></button>
-            </div>
-          </div>
-          <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>{tpl.items.length} пунктов</div>
-          {tpl.items.map(item=><div key={item.id} className="checklist-item" style={{cursor:"default"}}>
-            <div style={{width:16,height:16,borderRadius:3,border:"2px solid var(--border2)",flexShrink:0}} />
-            <span style={{fontSize:13}}>{item.text}</span>
-          </div>)}
-        </div>)}
-      </>}
-
+      </div>
+      <div className="content">
+        {page==='dashboard'&&<Dashboard clients={clients} onOpen={c=>setModal({type:'client',item:c})}/>}
+        {page==='clients'&&<ClientsPage clients={filtered} allClients={clients} onOpen={c=>setModal({type:'client',item:c})} dragId={dragId} setDragId={setDragId} dragOver={dragOver} setDragOver={setDragOver} onMove={moveClient}/>}
+        {page==='tasks'&&<TasksPage clients={clients} onOpen={c=>setModal({type:'client',item:c})} onSave={saveClient}/>}
+        {page==='kpi'&&<KPIPage clients={clients}/>}
+      </div>
     </div>
 
     {/* MODALS */}
-    {modal && <div className="overlay" onClick={e=>e.target===e.currentTarget&&setModal(null)}>
-      <div className={`modal${modal.type==="deal-detail"?" modal-wide":""}`}>
-        {modal.type==="client"      && <ClientModal     item={modal.item} onSave={saveClient} onClose={()=>setModal(null)} saving={syncing} />}
-        {modal.type==="deal"        && <DealModal       item={modal.item} clients={data.clients} onSave={saveDeal} onClose={()=>setModal(null)} saving={syncing} />}
-        {modal.type==="deal-detail" && <DealDetailModal deal={data.deals.find(d=>d.id===modal.dealId)} clients={data.clients} checklists={data.checklists} onAddComment={addComment} onDelComment={delComment} onToggleCheck={toggleCheck} onEdit={d=>setModal({type:"deal",item:d})} onClose={()=>setModal(null)} />}
-        {modal.type==="task"        && <TaskModal       item={modal.item} onSave={saveTask} onClose={()=>setModal(null)} saving={syncing} />}
-        {modal.type==="finance"     && <FinModal        item={modal.item} onSave={saveFin} onClose={()=>setModal(null)} saving={syncing} />}
-        {modal.type==="checklist"   && <ChecklistModal  item={modal.item} onSave={saveChecklist} onClose={()=>setModal(null)} saving={syncing} />}
-      </div>
-    </div>}
-
-    {/* TOAST */}
-    {toast && <div className="toast"><i className="ti ti-check" /> {toast}</div>}
+    {modal?.type==='client'&&<ClientModal key={modal.item.id} client={modal.item} onSave={saveClient} onDelete={delClient} onClose={()=>setModal(null)}/>}
+    {toast&&<div className="toast"><i className="ti ti-check"/> {toast}</div>}
   </div>;
 }
 
-// ─── MODAL COMPONENTS ─────────────────────────────────────────────────────────
-function DealDetailModal({ deal, clients, checklists, onAddComment, onDelComment, onToggleCheck, onEdit, onClose }) {
-  const [tab, setTab] = useState("checklist");
-  const [newComment, setNewComment] = useState("");
-  const [selStage, setSelStage] = useState(deal?.stage||"Новый");
-  if(!deal) return null;
-  const cl = clients.find(c=>c.id===deal.clientId||c.id===deal.client_id);
-  const comments = deal.comments||[];
-  return <>
-    <MH title={deal.title} onClose={onClose} />
-    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:16,padding:"12px",background:"#f5f5f0",borderRadius:10}}>
-      {[["Клиент",cl?cl.name:"—"],["Сумма",fmt(deal.value)+" ₸"],["Этап",deal.stage],["Создана",deal.created]].map(([l,v])=>
-        <div key={l}><div style={{fontSize:11,color:"var(--muted)",marginBottom:3,fontWeight:600,textTransform:"uppercase",letterSpacing:".04em"}}>{l}</div><div style={{fontSize:13,fontWeight:600}}>{v}</div></div>
-      )}
+// ═══════════════════════════ DASHBOARD ════════════════════════════
+function Dashboard({clients,onOpen}){
+  const now=new Date(),month=now.getMonth(),year=now.getFullYear();
+  const thisMonth=clients.filter(c=>{const d=new Date(c.createdAt);return d.getMonth()===month&&d.getFullYear()===year;});
+  const active=clients.filter(c=>!['closed'].includes(c.stage));
+  const withContract=clients.filter(c=>c.contractType);
+  const revenue=withContract.reduce((s,c)=>s+c.contractAmount,0);
+  const inAccomp=clients.filter(c=>c.stage==='accompaniment');
+  const approved=clients.filter(c=>['approval','deal','issuance','closed'].includes(c.stage));
+  const closed=clients.filter(c=>c.stage==='closed');
+
+  const managerStats=MANAGERS.map(m=>{
+    const mc=clients.filter(c=>c.manager===m);
+    const contracts=mc.filter(c=>c.contractType);
+    const rev=contracts.reduce((s,c)=>s+c.contractAmount,0);
+    const conv=mc.length?Math.round(contracts.length/mc.length*100):0;
+    return {name:m,leads:mc.length,contracts:contracts.length,revenue:rev,conversion:conv};
+  }).sort((a,b)=>b.revenue-a.revenue);
+
+  const maxRev=Math.max(...managerStats.map(m=>m.revenue),1);
+
+  // Funnel conversions
+  const funnelData=[
+    {label:'Лиды',count:clients.length},
+    {label:'В работе',count:clients.filter(c=>c.stage!=='new_lead').length},
+    {label:'Консультация',count:clients.filter(c=>['consultation','contract','accompaniment','approval','deal','issuance','closed'].includes(c.stage)).length},
+    {label:'Договор',count:withContract.length},
+    {label:'Одобрение',count:approved.length},
+    {label:'Закрыто',count:closed.length},
+  ];
+
+  return <div>
+    <div className="metric-grid">
+      {[
+        {label:'Новых лидов (месяц)',value:thisMonth.length,sub:`${clients.length} всего`,color:'#6366f1'},
+        {label:'Активных клиентов',value:active.length,sub:`${inAccomp.length} в сопровождении`,color:'#0ea5e9'},
+        {label:'Договоров',value:withContract.length,sub:`${Math.round(withContract.length/Math.max(clients.length,1)*100)}% конверсия`,color:'#ec4899'},
+        {label:'Выручка',value:fmt(revenue)+' ₸',sub:`среднее: ${fmt(revenue/Math.max(withContract.length,1))} ₸`,color:'#10b981'},
+      ].map(({label,value,sub,color})=><div key={label} className="metric-card" style={{'--c':color}}>
+        <div className="metric-label">{label}</div>
+        <div className="metric-value">{value}</div>
+        <div className="metric-sub">{sub}</div>
+      </div>)}
     </div>
-    <div style={{marginBottom:16}}><button className="btn btn-sm" onClick={()=>onEdit(deal)}><i className="ti ti-edit" style={{fontSize:13}} /> Редактировать</button></div>
-    <div className="tabs">
-      <div className={`tab${tab==="checklist"?" active":""}`} onClick={()=>setTab("checklist")}><i className="ti ti-list-check" style={{fontSize:13}} /> Чеклист</div>
-      <div className={`tab${tab==="comments"?" active":""}`} onClick={()=>setTab("comments")}><i className="ti ti-message" style={{fontSize:13}} /> Комментарии ({comments.length})</div>
-    </div>
-    {tab==="checklist" && <>
-      {checklists.length===0 && <div className="empty-state"><i className="ti ti-list-check" /><p>Нет шаблонов. Создайте в разделе «Чеклисты».</p></div>}
-      {checklists.map(tpl=>{
-        const done = (deal.checklists||{})[tpl.id]||[];
-        const pct = Math.round(done.length/(tpl.items.length||1)*100);
-        return <div key={tpl.id} className="checklist-tpl" style={{borderColor:pct===100?tpl.color:"var(--border)"}}>
-          <div className="checklist-tpl-head">
-            <div className="checklist-tpl-title"><span style={{width:10,height:10,borderRadius:2,background:tpl.color,display:"inline-block"}} />{tpl.name}</div>
-            <span style={{fontSize:12,color:"var(--muted)",fontWeight:600}}>{done.length}/{tpl.items.length}</span>
-          </div>
-          <div className="progress-bar-wrap" style={{marginBottom:12}}><div className="progress-bar" style={{width:`${pct}%`,background:pct===100?"#16a34a":tpl.color}} /></div>
-          {tpl.items.map(item=>{
-            const isDone = done.includes(item.id);
-            return <div key={item.id} className="checklist-item" onClick={()=>onToggleCheck(deal.id,tpl.id,item.id)}>
-              <div className="check-box" style={{background:isDone?tpl.color:undefined,borderColor:isDone?tpl.color:undefined}}>
-                {isDone && <i className="ti ti-check" style={{fontSize:11,color:"#fff"}} />}
-              </div>
-              <span style={{fontSize:13,textDecoration:isDone?"line-through":"none",color:isDone?"var(--muted)":"var(--text)"}}>{item.text}</span>
+
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:16}}>
+      {/* FUNNEL */}
+      <div className="card card-p">
+        <div style={{fontWeight:700,fontSize:14,marginBottom:14}}>Воронка продаж</div>
+        {funnelData.map((f,i)=>{
+          const pct=Math.round(f.count/Math.max(funnelData[0].count,1)*100);
+          return <div key={f.label} style={{marginBottom:12}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}>
+              <span style={{fontWeight:500}}>{f.label}</span>
+              <span style={{color:'var(--muted)'}}>{f.count} клиентов</span>
+            </div>
+            <div className="prog-wrap">
+              <div className="prog-bar" style={{width:`${pct}%`,background:PIPELINE[Math.min(i,PIPELINE.length-1)].color}}/>
+            </div>
+          </div>;
+        })}
+      </div>
+
+      {/* PIPELINE SUMMARY */}
+      <div className="card card-p">
+        <div style={{fontWeight:700,fontSize:14,marginBottom:14}}>Этапы воронки</div>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          {PIPELINE.map(p=>{
+            const cnt=clients.filter(c=>c.stage===p.id).length;
+            const rev=clients.filter(c=>c.stage===p.id&&c.contractAmount).reduce((s,c)=>s+c.contractAmount,0);
+            return <div key={p.id} style={{display:'flex',alignItems:'center',gap:10,padding:'7px 10px',borderRadius:8,background:'#f8fafc',border:'1px solid var(--border)'}}>
+              <span className="dot" style={{background:p.color}}/>
+              <span style={{flex:1,fontSize:13,fontWeight:500}}>{p.label}</span>
+              <span style={{background:p.color+'22',color:p.color,borderRadius:20,padding:'2px 8px',fontSize:11,fontWeight:700}}>{cnt}</span>
+              {rev>0&&<span style={{fontSize:11,color:'var(--muted)'}}>{fmt(rev)} ₸</span>}
             </div>;
           })}
-        </div>;
-      })}
-    </>}
-    {tab==="comments" && <>
-      {STAGES.map(stage=>{
-        const cms = comments.filter(c=>c.stage===stage);
-        if(!cms.length && stage!==deal.stage) return null;
-        return <div key={stage} className="stage-block">
-          <div className="stage-block-head"><span className="dot" style={{background:STAGE_COLOR[stage]}} />{stage}<span className="badge" style={{background:STAGE_COLOR[stage]+"22",color:STAGE_COLOR[stage],fontSize:11,marginLeft:"auto"}}>{cms.length} комм.</span></div>
-          {cms.length===0 ? <div style={{fontSize:12,color:"var(--muted)",fontStyle:"italic",padding:"6px 0"}}>Нет комментариев</div> :
-          cms.map(cm=><div key={cm.id} className="comment-item">
-            <div className="comment-meta"><i className="ti ti-message" style={{fontSize:12}} />{cm.date}<button className="btn btn-ghost" style={{padding:"1px 5px",fontSize:11,color:"var(--danger)",marginLeft:"auto"}} onClick={()=>onDelComment(deal.id,cm.id)}><i className="ti ti-trash" style={{fontSize:11}} /></button></div>
-            <div className="comment-text">{cm.text}</div>
-          </div>)}
-        </div>;
-      })}
-      <div style={{marginTop:14,padding:"14px",background:"#f5f5f0",borderRadius:10}}>
-        <div className="section-label" style={{marginBottom:8}}>Добавить комментарий</div>
-        <select className="input" value={selStage} onChange={e=>setSelStage(e.target.value)} style={{marginBottom:8}}>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}</select>
-        <textarea className="input" placeholder="Что произошло на этом этапе?" value={newComment} onChange={e=>setNewComment(e.target.value)} style={{marginBottom:8}} />
-        <div style={{display:"flex",justifyContent:"flex-end"}}>
-          <button className="btn btn-primary" onClick={()=>{const t=newComment.trim();if(!t)return;onAddComment(deal.id,selStage,t);setNewComment("")}}><i className="ti ti-message" style={{fontSize:13}} /> Добавить</button>
         </div>
       </div>
-    </>}
-  </>;
+    </div>
+
+    {/* MANAGERS TABLE */}
+    <div className="card" style={{overflow:'hidden'}}>
+      <div style={{padding:'14px 18px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14}}>Рейтинг менеджеров</div>
+      <table>
+        <thead><tr>
+          {['Менеджер','Лиды','Договоры','Выручка','Конверсия','Прогресс'].map(h=><th key={h}>{h}</th>)}
+        </tr></thead>
+        <tbody>
+          {managerStats.map((m,i)=><tr key={m.name}>
+            <td>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <div className="avatar" style={{background:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4]+'22',color:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4],fontSize:12}}>{m.name[0]}</div>
+                <div style={{fontWeight:600}}>{m.name}</div>
+              </div>
+            </td>
+            <td>{m.leads}</td>
+            <td><span style={{background:'#eff6ff',color:'var(--accent)',borderRadius:20,padding:'2px 8px',fontSize:12,fontWeight:700}}>{m.contracts}</span></td>
+            <td style={{fontWeight:700,color:'var(--success)'}}>{m.revenue>0?fmt(m.revenue)+' ₸':'—'}</td>
+            <td><span style={{color:m.conversion>=50?'var(--success)':m.conversion>=25?'var(--warn)':'var(--danger)',fontWeight:700}}>{m.conversion}%</span></td>
+            <td style={{width:140}}>
+              <div className="kpi-bar"><div className="kpi-fill" style={{width:`${Math.round(m.revenue/maxRev*100)}%`,background:['#6366f1','#10b981','#f59e0b','#ec4899'][i%4]}}/></div>
+            </td>
+          </tr>)}
+        </tbody>
+      </table>
+    </div>
+  </div>;
 }
 
-function ChecklistModal({ item, onSave, onClose, saving }) {
-  const [f, sf] = useState(item ? JSON.parse(JSON.stringify(item)) : {name:"",stage:"Все этапы",color:"#4f6ef7",items:[]});
-  const [newItem, setNewItem] = useState("");
-  const addItem = () => { const t=newItem.trim(); if(!t) return; sf(x=>({...x,items:[...x.items,{id:uid(),text:t}]})); setNewItem(""); };
-  return <>
-    <MH title={item?"Редактировать шаблон":"Новый шаблон"} onClose={onClose} />
-    <Field label="Название"><input className="input" value={f.name} onChange={e=>sf(x=>({...x,name:e.target.value}))} placeholder="Например: Онбординг клиента" /></Field>
-    <Field label="Применять на этапе"><select className="input" value={f.stage} onChange={e=>sf(x=>({...x,stage:e.target.value}))}>
-      <option value="Все этапы">Все этапы</option>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}
-    </select></Field>
-    <Field label="Цвет">
-      <div style={{display:"flex",gap:8}}>
-        {["#4f6ef7","#16a34a","#8b5cf6","#d97706","#dc2626","#0ea5e9"].map(c=>
-          <div key={c} onClick={()=>sf(x=>({...x,color:c}))} style={{width:26,height:26,borderRadius:6,background:c,cursor:"pointer",border:`3px solid ${f.color===c?"#1a1a1a":"transparent"}`,transition:"border .12s"}} />
-        )}
+// ═══════════════════════════ CLIENTS PAGE ═════════════════════════
+function ClientsPage({clients,allClients,onOpen,dragId,setDragId,dragOver,setDragOver,onMove}){
+  return <div className="kanban-scroll">
+    {PIPELINE.map(p=>{
+      const stageClients=clients.filter(c=>c.stage===p.id);
+      const stageRev=stageClients.reduce((s,c)=>s+c.contractAmount,0);
+      return <div key={p.id} className={`k-col${dragOver===p.id?' drag-over':''}`}
+        onDragOver={e=>{e.preventDefault();setDragOver(p.id)}}
+        onDragLeave={()=>setDragOver(null)}
+        onDrop={e=>{e.preventDefault();if(dragId)onMove(dragId,p.id);setDragId(null);setDragOver(null);}}>
+        <div className="k-head">
+          <div className="k-stage-row">
+            <span className="dot" style={{background:p.color}}/>
+            <span style={{color:p.color}}>{p.label}</span>
+            <span className="k-count">{stageClients.length}</span>
+          </div>
+          {stageRev>0&&<div className="k-total">{fmt(stageRev)} ₸</div>}
+        </div>
+        <div className="k-body">
+          {stageClients.map(c=><KCard key={c.id} client={c} stageColor={p.color} onOpen={()=>onOpen(c)} setDragId={setDragId}/>)}
+          {stageClients.length===0&&<div style={{textAlign:'center',color:'var(--light)',fontSize:12,padding:'20px 0'}}>Нет клиентов</div>}
+        </div>
+      </div>;
+    })}
+  </div>;
+}
+function KCard({client:c,stageColor,onOpen,setDragId}){
+  const ct=CT_MAP[c.contractType];
+  const cr=CR_MAP[c.creditStatus];
+  return <div className="k-card" draggable onDragStart={e=>{e.stopPropagation();setDragId(c.id)}} onDragEnd={()=>setDragId(null)} onClick={onOpen}>
+    <div className="k-name">{c.fio||'—'}</div>
+    <div className="k-phone">{c.phone||c.city}</div>
+    <div className="k-tags">
+      <SourceTag src={c.source}/>
+      {c.creditStatus&&<span className="badge" style={{background:cr?.color+'22',color:cr?.color}}>{cr?.label}</span>}
+    </div>
+    {c.contactStatus&&<div style={{fontSize:11,marginBottom:6}}><span className={`badge ${c.contactStatus==='Дозвонился'?'':''}` } style={{background:'#f1f5f9',color:'var(--muted)'}}><i className="ti ti-phone" style={{fontSize:10}}/>{c.contactStatus}</span></div>}
+    {ct&&<div style={{fontWeight:700,color:stageColor,fontSize:13}}>{fmt(ct.amount)} ₸</div>}
+    <div style={{fontSize:10,color:'var(--light)',marginTop:4}}>{c.manager} · {c.dateIn}</div>
+  </div>;
+}
+
+// ═══════════════════════════ CLIENT MODAL ═════════════════════════
+function ClientModal({client,onSave,onDelete,onClose}){
+  const [f,sf]=useState({...client});
+  const [tab,setTab]=useState('profile');
+  const [newComment,setNewComment]=useState('');
+  const [newTask,setNewTask]=useState({type:TASK_TYPES[0],text:'',due:''});
+
+  function set(k,v){sf(x=>({...x,[k]:v}));}
+  function save(){onSave({...f});}
+
+  const ct=CT_MAP[f.contractType];
+  const totalDone=Object.values(f.checklists).flat().length;
+  const allItems=Object.keys(CHECKLISTS).reduce((s,k)=>s+CHECKLISTS[k].items.length,0);
+
+  function addComment(){
+    if(!newComment.trim())return;
+    set('comments',[...f.comments,{id:uid(),text:newComment,date:nowStr(),author:'Вы'}]);
+    setNewComment('');
+  }
+  function addTask(){
+    if(!newTask.text.trim())return;
+    set('tasks',[...f.tasks,{id:uid(),...newTask,done:false,created:nowStr()}]);
+    setNewTask({type:TASK_TYPES[0],text:'',due:''});
+  }
+  function toggleTask(id){set('tasks',f.tasks.map(t=>t.id===id?{...t,done:!t.done}:t));}
+  function delTask(id){set('tasks',f.tasks.filter(t=>t.id!==id));}
+  function toggleCheck(prog,item){
+    const cur=(f.checklists[prog]||[]);
+    set('checklists',{...f.checklists,[prog]:cur.includes(item)?cur.filter(x=>x!==item):[...cur,item]});
+  }
+  function selectContract(id){
+    const ct=CT_MAP[id];
+    sf(x=>({...x,contractType:id,contractAmount:ct?.amount||0}));
+  }
+
+  const TABS=[
+    {id:'profile',label:'Профиль'},
+    {id:'analysis',label:'Анализ'},
+    {id:'credit',label:'Кредитная история'},
+    {id:'contract',label:'Договор'},
+    {id:'reassignment',label:'Переуступка'},
+    {id:'accompaniment',label:'Сопровождение'},
+    {id:'checklist',label:'Чек-лист'},
+    {id:'tasks',label:`Задачи (${f.tasks.filter(t=>!t.done).length})`},
+    {id:'history',label:`История (${f.comments.length})`},
+  ];
+
+  return <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+    <div className="modal">
+      <MH title={f.fio||'Новый клиент'} subtitle={<span style={{display:'flex',gap:6,alignItems:'center'}}><StageTag stageId={f.stage}/><span style={{color:'var(--muted)'}}>{f.manager}</span></span>} onClose={onClose}/>
+
+      {/* Stage selector */}
+      <div style={{padding:'10px 22px',borderBottom:'1px solid var(--border)',background:'#f8fafc',display:'flex',gap:6,overflowX:'auto'}}>
+        {PIPELINE.map(p=><button key={p.id} onClick={()=>set('stage',p.id)}
+          style={{padding:'4px 10px',borderRadius:20,border:`1.5px solid ${f.stage===p.id?p.color:'transparent'}`,background:f.stage===p.id?p.color+'22':'transparent',color:f.stage===p.id?p.color:'var(--muted)',fontSize:11,fontWeight:700,cursor:'pointer',whiteSpace:'nowrap',transition:'all .12s'}}>
+          {p.label}
+        </button>)}
       </div>
-    </Field>
-    <Field label={`Пункты (${f.items.length})`}>
-      <div style={{display:"flex",gap:8,marginBottom:8}}>
-        <input className="input" value={newItem} onChange={e=>setNewItem(e.target.value)} placeholder="Новый пункт..." onKeyDown={e=>e.key==="Enter"&&addItem()} />
-        <button className="btn btn-primary" onClick={addItem}><i className="ti ti-plus" /></button>
+
+      <div className="tabs">
+        {TABS.map(t=><div key={t.id} className={`tab${tab===t.id?' active':''}`} onClick={()=>setTab(t.id)}>{t.label}</div>)}
       </div>
-      <div style={{display:"flex",flexDirection:"column",gap:5}}>
-        {f.items.map(item=><div key={item.id} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"#f5f5f0",borderRadius:7,border:"1px solid var(--border)"}}>
-          <i className="ti ti-grip-vertical" style={{color:"var(--muted)",fontSize:14}} />
-          <span style={{flex:1,fontSize:13}}>{item.text}</span>
-          <button className="btn btn-ghost btn-sm" style={{color:"var(--danger)"}} onClick={()=>sf(x=>({...x,items:x.items.filter(i=>i.id!==item.id)}))}><i className="ti ti-x" style={{fontSize:13}} /></button>
-        </div>)}
+
+      <div className="modal-body">
+        <div className="tab-body">
+
+          {/* ── PROFILE ── */}
+          {tab==='profile'&&<>
+            <div className="field-row3">
+              <Fl label="ФИО *"><input className="input" value={f.fio} onChange={e=>set('fio',e.target.value)} placeholder="Фамилия Имя Отчество"/></Fl>
+              <Fl label="ИИН *"><input className="input" value={f.iin} onChange={e=>set('iin',e.target.value)} placeholder="123456789012" maxLength={12}/></Fl>
+              <Fl label="Телефон *"><input className="input" value={f.phone} onChange={e=>set('phone',e.target.value)} placeholder="+7 701 000-00-00"/></Fl>
+            </div>
+            <div className="field-row">
+              <Fl label="Город"><select className="input" value={f.city} onChange={e=>set('city',e.target.value)}>{CITIES.map(c=><option key={c}>{c}</option>)}</select></Fl>
+              <Fl label="Менеджер"><select className="input" value={f.manager} onChange={e=>set('manager',e.target.value)}>{MANAGERS.map(m=><option key={m}>{m}</option>)}</select></Fl>
+            </div>
+            <div className="field-row">
+              <Fl label="Дата поступления"><input className="input" type="date" value={f.dateIn} onChange={e=>set('dateIn',e.target.value)}/></Fl>
+              <Fl label="Источник лида"><select className="input" value={f.source} onChange={e=>set('source',e.target.value)}>{SOURCES.map(s=><option key={s.id} value={s.id}>{s.label}</option>)}</select></Fl>
+            </div>
+            <Fl label="Статус связи">
+              <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+                {CONTACT_STATUSES.map(s=><button key={s} onClick={()=>set('contactStatus',s)}
+                  style={{padding:'5px 12px',borderRadius:20,border:`1.5px solid ${f.contactStatus===s?'var(--accent)':'var(--border2)'}`,background:f.contactStatus===s?'var(--accent-bg)':'transparent',color:f.contactStatus===s?'var(--accent)':'var(--muted)',fontSize:12,cursor:'pointer',fontWeight:f.contactStatus===s?700:400}}>
+                  {s}
+                </button>)}
+              </div>
+            </Fl>
+          </>}
+
+          {/* ── ANALYSIS ── */}
+          {tab==='analysis'&&<>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Личные данные</div>
+            <div className="field-row">
+              <Fl label="Семейное положение"><select className="input" value={f.maritalStatus} onChange={e=>set('maritalStatus',e.target.value)}><option value="">Не указано</option>{MARITAL_STATUSES.map(s=><option key={s}>{s}</option>)}</select></Fl>
+              <Fl label="Количество детей"><input className="input" type="number" min="0" value={f.children} onChange={e=>set('children',e.target.value)} placeholder="0"/></Fl>
+            </div>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,marginTop:8,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Финансы</div>
+            <div className="field-row">
+              <Fl label="Официальный доход (₸)"><input className="input" type="number" value={f.officialIncome} onChange={e=>set('officialIncome',e.target.value)} placeholder="0"/></Fl>
+              <Fl label="Дополнительный доход (₸)"><input className="input" type="number" value={f.extraIncome} onChange={e=>set('extraIncome',e.target.value)} placeholder="0"/></Fl>
+            </div>
+            <div className="field-row">
+              <Fl label="Пенсионные отчисления (₸)"><input className="input" type="number" value={f.pensionContributions} onChange={e=>set('pensionContributions',e.target.value)} placeholder="0"/></Fl>
+              <Fl label="Рабочий стаж (лет)"><input className="input" type="number" value={f.workExperience} onChange={e=>set('workExperience',e.target.value)} placeholder="0"/></Fl>
+            </div>
+            <div className="field-row">
+              <Fl label="Тип занятости"><select className="input" value={f.workType} onChange={e=>set('workType',e.target.value)}>{WORK_TYPES.map(w=><option key={w.id} value={w.id}>{w.label}</option>)}</select></Fl>
+              <Fl label="Подтверждается доп. доход?">
+                <div style={{display:'flex',gap:8,marginTop:4}}>
+                  {['Да','Нет'].map(v=><button key={v} onClick={()=>set('extraIncomeConfirmed',v==='Да')} style={{flex:1,padding:'8px',borderRadius:8,border:`1.5px solid ${f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--border2)'}`,background:f.extraIncomeConfirmed===(v==='Да')?'var(--accent-bg)':'transparent',cursor:'pointer',fontWeight:600,fontSize:13,color:f.extraIncomeConfirmed===(v==='Да')?'var(--accent)':'var(--muted)'}}>{v}</button>)}
+                </div>
+              </Fl>
+            </div>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:12,marginTop:8,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Первоначальный взнос</div>
+            <div className="field-row">
+              <Fl label="Сумма ПВ (₸)"><input className="input" type="number" value={f.downPayment} onChange={e=>set('downPayment',e.target.value)} placeholder="0"/></Fl>
+              <Fl label="Тип ПВ"><select className="input" value={f.downPaymentType} onChange={e=>set('downPaymentType',e.target.value)}>{DOWN_TYPES.map(d=><option key={d.id} value={d.id}>{d.label}</option>)}</select></Fl>
+            </div>
+            {(f.downPaymentType==='deposit'||f.downPaymentType==='mixed')&&<div className="field-row3">
+              <Fl label="Банк депозита"><input className="input" value={f.depositBank} onChange={e=>set('depositBank',e.target.value)} placeholder="Название банка"/></Fl>
+              <Fl label="Сумма депозита (₸)"><input className="input" type="number" value={f.depositAmount} onChange={e=>set('depositAmount',e.target.value)}/></Fl>
+              <Fl label="Срок накопления"><input className="input" value={f.depositTerm} onChange={e=>set('depositTerm',e.target.value)} placeholder="36 мес"/></Fl>
+            </div>}
+          </>}
+
+          {/* ── CREDIT ── */}
+          {tab==='credit'&&<>
+            <Fl label="Статус кредитной истории">
+              <div className="credit-grid">
+                {CREDIT_STATUSES.map(s=><div key={s.id} className={`credit-option${f.creditStatus===s.id?' selected':''}`} onClick={()=>set('creditStatus',s.id)}>
+                  <span className="dot" style={{background:s.color,marginBottom:4,display:'block',margin:'0 auto 4px'}}/>
+                  <div style={{fontSize:11,fontWeight:600,color:f.creditStatus===s.id?s.color:'var(--text)'}}>{s.label}</div>
+                </div>)}
+              </div>
+            </Fl>
+            <div style={{marginTop:16}}>
+              <div className="field-row">
+                <Fl label="Количество кредитов"><input className="input" type="number" value={f.creditsCount} onChange={e=>set('creditsCount',e.target.value)} placeholder="0"/></Fl>
+                <Fl label="Ежемес. нагрузка (₸)"><input className="input" type="number" value={f.monthlyLoad} onChange={e=>set('monthlyLoad',e.target.value)} placeholder="0"/></Fl>
+              </div>
+              <div className="field-row">
+                {[['hasOverdue','Есть просрочки'],['hadBankRefusal','Был отказ банка'],['hasRefinancing','Рефинансирование'],['problematicCredits','Проблемные кредиты'],['courtRestrictions','Суд. ограничения']].map(([k,label])=><div key={k} style={{display:'flex',alignItems:'center',gap:8,padding:'10px',border:'1px solid var(--border)',borderRadius:8,cursor:'pointer',background:f[k]?'#fef2f2':'transparent'}} onClick={()=>set(k,!f[k])}>
+                  <div style={{width:18,height:18,borderRadius:4,border:`2px solid ${f[k]?'var(--danger)':'var(--border2)'}`,background:f[k]?'var(--danger)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                    {f[k]&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
+                  </div>
+                  <span style={{fontSize:12,fontWeight:500,color:f[k]?'var(--danger)':'var(--text)'}}>{label}</span>
+                </div>)}
+              </div>
+            </div>
+          </>}
+
+          {/* ── CONTRACT ── */}
+          {tab==='contract'&&<>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:16}}>
+              {CONTRACT_TYPES.map(ct=><div key={ct.id} onClick={()=>selectContract(ct.id)}
+                style={{padding:'12px 14px',borderRadius:10,border:`2px solid ${f.contractType===ct.id?'var(--accent)':'var(--border)'}`,background:f.contractType===ct.id?'var(--accent-bg)':'var(--bg)',cursor:'pointer',transition:'all .12s'}}>
+                <div style={{fontWeight:600,fontSize:13,color:f.contractType===ct.id?'var(--accent)':'var(--text)'}}>{ct.label}</div>
+                {ct.amount>0&&<div style={{fontWeight:800,fontSize:16,color:f.contractType===ct.id?'var(--accent)':'var(--muted)',marginTop:3}}>{fmt(ct.amount)} ₸</div>}
+              </div>)}
+            </div>
+            {f.contractType&&<div className="contract-box">
+              <div style={{fontWeight:700,fontSize:13,marginBottom:8}}>Итого по договору</div>
+              <div style={{display:'flex',alignItems:'center',gap:16}}>
+                <div className="contract-amount">{fmt(f.contractAmount)} ₸</div>
+                <div>
+                  <div style={{fontWeight:600}}>{CT_MAP[f.contractType]?.label}</div>
+                  <div style={{fontSize:12,color:'var(--muted)'}}>Менеджер: {f.manager}</div>
+                </div>
+              </div>
+              <div style={{marginTop:12}}>
+                <Fl label="Сумма по договору (если другая)">
+                  <input className="input" type="number" value={f.contractAmount} onChange={e=>set('contractAmount',+e.target.value)}/>
+                </Fl>
+              </div>
+            </div>}
+            <div style={{marginTop:16}}>
+              <div className="field-row">
+                <Fl label="Ссылка на Miro"><input className="input" value={f.miroLink} onChange={e=>set('miroLink',e.target.value)} placeholder="https://miro.com/..."/></Fl>
+                <Fl label="Ссылка на Roadmap"><input className="input" value={f.roadmapLink} onChange={e=>set('roadmapLink',e.target.value)} placeholder="https://..."/></Fl>
+              </div>
+              <Fl label="Google Drive (документы)"><input className="input" value={f.driveLink} onChange={e=>set('driveLink',e.target.value)} placeholder="https://drive.google.com/..."/></Fl>
+              {(f.miroLink||f.roadmapLink||f.driveLink)&&<div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:4}}>
+                {f.miroLink&&<a href={f.miroLink} target="_blank" className="btn btn-sm"><i className="ti ti-external-link"/>Miro</a>}
+                {f.roadmapLink&&<a href={f.roadmapLink} target="_blank" className="btn btn-sm"><i className="ti ti-map"/>Roadmap</a>}
+                {f.driveLink&&<a href={f.driveLink} target="_blank" className="btn btn-sm"><i className="ti ti-brand-google-drive"/>Drive</a>}
+              </div>}
+            </div>
+          </>}
+
+          {/* ── REASSIGNMENT ── */}
+          {tab==='reassignment'&&<>
+            <div style={{marginBottom:14}}>
+              <Fl label="Переуступка?">
+                <div style={{display:'flex',gap:8}}>
+                  {['Да','Нет'].map(v=><button key={v} onClick={()=>set('isReassignment',v==='Да')} style={{flex:1,padding:'8px',borderRadius:8,border:`1.5px solid ${f.isReassignment===(v==='Да')?'var(--accent)':'var(--border2)'}`,background:f.isReassignment===(v==='Да')?'var(--accent-bg)':'transparent',cursor:'pointer',fontWeight:600,fontSize:13,color:f.isReassignment===(v==='Да')?'var(--accent)':'var(--muted)'}}>{v}</button>)}
+                </div>
+              </Fl>
+            </div>
+            {f.isReassignment&&<>
+              <div className="field-row">
+                <Fl label="Жилой комплекс"><input className="input" value={f.reassignmentComplex} onChange={e=>set('reassignmentComplex',e.target.value)} placeholder="Название ЖК"/></Fl>
+                <Fl label="Застройщик"><input className="input" value={f.reassignmentDeveloper} onChange={e=>set('reassignmentDeveloper',e.target.value)} placeholder="Название застройщика"/></Fl>
+              </div>
+              <div className="field-row3">
+                <Fl label="Сумма переуступки (₸)"><input className="input" type="number" value={f.reassignmentAmount} onChange={e=>set('reassignmentAmount',e.target.value)}/></Fl>
+                <Fl label="Остаток ипотеки (₸)"><input className="input" type="number" value={f.mortgageBalance} onChange={e=>set('mortgageBalance',e.target.value)}/></Fl>
+                <Fl label="Банк"><input className="input" value={f.reassignmentBank} onChange={e=>set('reassignmentBank',e.target.value)} placeholder="Название банка"/></Fl>
+              </div>
+              <div style={{display:'flex',gap:16,marginTop:8}}>
+                {[['hasDebt','Есть задолженность'],['urgentSale','Срочная продажа']].map(([k,label])=><div key={k} style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',border:'1px solid var(--border)',borderRadius:8,cursor:'pointer',flex:1,background:f[k]?'#fffbeb':'transparent'}} onClick={()=>set(k,!f[k])}>
+                  <div style={{width:18,height:18,borderRadius:4,border:`2px solid ${f[k]?'var(--warn)':'var(--border2)'}`,background:f[k]?'var(--warn)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                    {f[k]&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
+                  </div>
+                  <span style={{fontSize:13,fontWeight:600}}>{label}</span>
+                </div>)}
+              </div>
+            </>}
+          </>}
+
+          {/* ── ACCOMPANIMENT ── */}
+          {tab==='accompaniment'&&<>
+            <div className="field-row">
+              <Fl label="Ответственный менеджер"><select className="input" value={f.responsibleManager} onChange={e=>set('responsibleManager',e.target.value)}><option value="">Не назначен</option>{MANAGERS.map(m=><option key={m}>{m}</option>)}</select></Fl>
+              <Fl label="Ипотечный специалист"><input className="input" value={f.mortgageSpecialist} onChange={e=>set('mortgageSpecialist',e.target.value)} placeholder="ФИО специалиста"/></Fl>
+            </div>
+            <div style={{fontWeight:700,fontSize:13,margin:'8px 0 12px',color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.05em'}}>Этап сопровождения</div>
+            <div className="accomp-stages">
+              {ACCOMP_STAGES.map((s,i)=><div key={s} className="accomp-step" onClick={()=>set('accompStageIndex',i)}>
+                <div className={`accomp-dot${i<f.accompStageIndex?' done':i===f.accompStageIndex?' active':''}`}>
+                  {i<f.accompStageIndex?<i className="ti ti-check" style={{fontSize:10}}/>:i+1}
+                </div>
+                <div className="accomp-label">{s}</div>
+              </div>)}
+            </div>
+            <div style={{marginTop:16,padding:'12px',background:'var(--accent-bg)',borderRadius:10,border:'1px solid #bfdbfe'}}>
+              <div style={{fontWeight:700,fontSize:13,color:'var(--accent)'}}>Текущий этап: {ACCOMP_STAGES[f.accompStageIndex]}</div>
+              <div style={{fontSize:12,color:'var(--muted)',marginTop:3}}>Завершено {f.accompStageIndex} из {ACCOMP_STAGES.length} этапов</div>
+            </div>
+          </>}
+
+          {/* ── CHECKLIST ── */}
+          {tab==='checklist'&&<>
+            {Object.keys(CHECKLISTS).map(prog=>{
+              const cl=CHECKLISTS[prog];
+              const done=(f.checklists[prog]||[]);
+              const pct=Math.round(done.length/cl.items.length*100);
+              return <div key={prog} style={{marginBottom:20,background:'#f8fafc',borderRadius:10,padding:'14px',border:'1px solid var(--border)'}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+                  <div style={{fontWeight:700,fontSize:14}}>{cl.name}</div>
+                  <div style={{display:'flex',alignItems:'center',gap:10}}>
+                    <span style={{fontSize:12,color:'var(--muted)',fontWeight:600}}>{done.length}/{cl.items.length}</span>
+                    <span style={{fontSize:12,fontWeight:700,color:pct===100?'var(--success)':'var(--accent)'}}>{pct}%</span>
+                  </div>
+                </div>
+                <div className="prog-wrap" style={{marginBottom:10}}>
+                  <div className="prog-bar" style={{width:`${pct}%`,background:pct===100?'var(--success)':'var(--accent)'}}/>
+                </div>
+                {cl.items.map(item=>{
+                  const isDone=done.includes(item);
+                  return <div key={item} className="cl-item" onClick={()=>toggleCheck(prog,item)}>
+                    <div className={`cl-box${isDone?' done':''}`}>{isDone&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}</div>
+                    <span style={{fontSize:13,textDecoration:isDone?'line-through':'none',color:isDone?'var(--muted)':'var(--text)'}}>{item}</span>
+                  </div>;
+                })}
+              </div>;
+            })}
+          </>}
+
+          {/* ── TASKS ── */}
+          {tab==='tasks'&&<>
+            <div style={{background:'#f8fafc',borderRadius:10,padding:'14px',border:'1px solid var(--border)',marginBottom:16}}>
+              <div style={{fontWeight:700,fontSize:13,marginBottom:10}}>Добавить задачу</div>
+              <div className="field-row">
+                <Fl label="Тип задачи"><select className="input" value={newTask.type} onChange={e=>setNewTask(x=>({...x,type:e.target.value}))}>{TASK_TYPES.map(t=><option key={t}>{t}</option>)}</select></Fl>
+                <Fl label="Срок"><input className="input" type="date" value={newTask.due} onChange={e=>setNewTask(x=>({...x,due:e.target.value}))}/></Fl>
+              </div>
+              <Fl label="Описание"><input className="input" value={newTask.text} onChange={e=>setNewTask(x=>({...x,text:e.target.value}))} placeholder="Детали задачи..." onKeyDown={e=>e.key==='Enter'&&addTask()}/></Fl>
+              <button className="btn btn-primary btn-sm" onClick={addTask}><i className="ti ti-plus"/>Добавить задачу</button>
+            </div>
+            {f.tasks.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет задач</div>}
+            {f.tasks.map(t=><div key={t.id} className="task-row">
+              <div className={`task-chk`} style={{background:t.done?'var(--success)':'transparent',borderColor:t.done?'var(--success)':'var(--border2)'}} onClick={()=>toggleTask(t.id)}>
+                {t.done&&<i className="ti ti-check" style={{fontSize:11,color:'#fff'}}/>}
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:600,fontSize:13,textDecoration:t.done?'line-through':'none',color:t.done?'var(--muted)':'var(--text)'}}>{t.type}</div>
+                {t.text&&<div style={{fontSize:12,color:'var(--muted)'}}>{t.text}</div>}
+                {t.due&&<div style={{fontSize:11,color:'var(--light)'}}>До: {t.due}</div>}
+              </div>
+              <button className="btn btn-ghost btn-sm" style={{color:'var(--danger)'}} onClick={()=>delTask(t.id)}><i className="ti ti-trash"/></button>
+            </div>)}
+          </>}
+
+          {/* ── HISTORY ── */}
+          {tab==='history'&&<>
+            <div style={{marginBottom:14}}>
+              <Fl label="Новый комментарий">
+                <div style={{display:'flex',gap:8}}>
+                  <textarea className="input" value={newComment} onChange={e=>setNewComment(e.target.value)} placeholder="Добавьте заметку, результат звонка, статус..." style={{minHeight:60}}/>
+                  <button className="btn btn-primary" style={{alignSelf:'flex-end',flexShrink:0}} onClick={addComment}><i className="ti ti-send"/>Добавить</button>
+                </div>
+              </Fl>
+            </div>
+            {f.comments.length===0&&<div style={{textAlign:'center',color:'var(--light)',padding:30}}>Нет записей</div>}
+            {[...f.comments].reverse().map(c=><div key={c.id} className="comment-item">
+              <div className="comment-meta"><i className="ti ti-message" style={{fontSize:12}}/><span>{c.author}</span><span>{c.date}</span></div>
+              <div className="comment-text">{c.text}</div>
+            </div>)}
+          </>}
+
+        </div>
       </div>
-    </Field>
-    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
-  </>;
+
+      <div className="modal-ft">
+        <button className="btn btn-danger btn-sm" onClick={()=>onDelete(f.id)}><i className="ti ti-trash"/>Удалить</button>
+        <div style={{flex:1}}/>
+        <button className="btn" onClick={onClose}>Отмена</button>
+        <button className="btn btn-primary" onClick={save}><i className="ti ti-device-floppy"/>Сохранить</button>
+      </div>
+    </div>
+  </div>;
 }
 
-function ClientModal({ item, onSave, onClose, saving }) {
-  const [f, sf] = useState(item||{name:"",company:"",phone:"",email:"",status:"lead"});
-  return <>
-    <MH title={item?"Редактировать клиента":"Новый клиент"} onClose={onClose} />
-    <Field label="Имя"><input className="input" value={f.name} onChange={e=>sf(x=>({...x,name:e.target.value}))} placeholder="Полное имя" /></Field>
-    <Field label="Компания"><input className="input" value={f.company} onChange={e=>sf(x=>({...x,company:e.target.value}))} placeholder="Компания" /></Field>
-    <Field label="Телефон"><input className="input" value={f.phone} onChange={e=>sf(x=>({...x,phone:e.target.value}))} placeholder="+7 ..." /></Field>
-    <Field label="Email"><input className="input" value={f.email} onChange={e=>sf(x=>({...x,email:e.target.value}))} placeholder="email@example.com" /></Field>
-    <Field label="Статус"><select className="input" value={f.status} onChange={e=>sf(x=>({...x,status:e.target.value}))}>
-      <option value="lead">Лид</option><option value="active">Активный</option><option value="inactive">Неактивный</option>
-    </select></Field>
-    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
-  </>;
+// ═══════════════════════════ TASKS PAGE ═══════════════════════════
+function TasksPage({clients,onOpen,onSave}){
+  const allTasks=clients.flatMap(c=>c.tasks.map(t=>({...t,clientId:c.id,clientName:c.fio,client:c})));
+  const open=allTasks.filter(t=>!t.done);
+  const done=allTasks.filter(t=>t.done);
+
+  return <div>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20}}>
+      {[
+        {label:'Открытых задач',value:open.length,color:'var(--warn)'},
+        {label:'Завершено',value:done.length,color:'var(--success)'},
+        {label:'Всего',value:allTasks.length,color:'var(--accent)'},
+      ].map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}>
+        <div className="metric-label">{label}</div>
+        <div className="metric-value">{value}</div>
+      </div>)}
+    </div>
+    {open.length===0&&<div style={{textAlign:'center',color:'var(--muted)',padding:60,background:'var(--card)',borderRadius:12,border:'1px solid var(--border)'}}>
+      <i className="ti ti-circle-check" style={{fontSize:40,color:'var(--success)',display:'block',marginBottom:12}}/>Все задачи выполнены!
+    </div>}
+    {open.length>0&&<div className="card" style={{overflow:'hidden',marginBottom:16}}>
+      <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14}}>Открытые задачи ({open.length})</div>
+      <table>
+        <thead><tr>{['Задача','Клиент','Тип','Срок',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
+        <tbody>
+          {open.map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
+            <td style={{fontWeight:600}}>{t.text||t.type}</td>
+            <td>{t.clientName}</td>
+            <td><span className="badge" style={{background:'var(--accent-bg)',color:'var(--accent)'}}>{t.type}</span></td>
+            <td style={{color:t.due&&t.due<today()?'var(--danger)':'var(--muted)',fontWeight:t.due&&t.due<today()?700:400}}>{t.due||'—'}</td>
+            <td><button className="btn btn-sm btn-ghost"><i className="ti ti-arrow-right"/></button></td>
+          </tr>)}
+        </tbody>
+      </table>
+    </div>}
+    {done.length>0&&<div className="card" style={{overflow:'hidden'}}>
+      <div style={{padding:'12px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:14,color:'var(--muted)'}}>Завершённые задачи ({done.length})</div>
+      <table>
+        <thead><tr>{['Задача','Клиент','Тип',''].map(h=><th key={h}>{h}</th>)}</tr></thead>
+        <tbody>
+          {done.map(t=><tr key={t.id} onClick={()=>onOpen(t.client)}>
+            <td style={{textDecoration:'line-through',color:'var(--muted)'}}>{t.text||t.type}</td>
+            <td>{t.clientName}</td>
+            <td><span className="badge" style={{background:'#f0fdf4',color:'var(--success)'}}>{t.type}</span></td>
+            <td><i className="ti ti-circle-check" style={{color:'var(--success)'}}/></td>
+          </tr>)}
+        </tbody>
+      </table>
+    </div>}
+  </div>;
 }
 
-function DealModal({ item, clients, onSave, onClose, saving }) {
-  const [f, sf] = useState(item||{title:"",clientId:"",value:"",stage:"Новый"});
-  return <>
-    <MH title={item?"Редактировать сделку":"Новая сделка"} onClose={onClose} />
-    <Field label="Название"><input className="input" value={f.title} onChange={e=>sf(x=>({...x,title:e.target.value}))} placeholder="Название сделки" /></Field>
-    <Field label="Клиент"><select className="input" value={f.clientId||f.client_id||""} onChange={e=>sf(x=>({...x,clientId:e.target.value}))}>
-      <option value="">Выберите клиента</option>{clients.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}
-    </select></Field>
-    <Field label="Сумма (₸)"><input className="input" type="number" value={f.value} onChange={e=>sf(x=>({...x,value:+e.target.value}))} placeholder="0" /></Field>
-    <Field label="Этап"><select className="input" value={f.stage} onChange={e=>sf(x=>({...x,stage:e.target.value}))}>{STAGES.map(s=><option key={s} value={s}>{s}</option>)}</select></Field>
-    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
-  </>;
+// ═══════════════════════════ KPI PAGE ════════════════════════════
+function KPIPage({clients}){
+  const stats=MANAGERS.map(m=>{
+    const mc=clients.filter(c=>c.manager===m);
+    const contracts=mc.filter(c=>c.contractType);
+    const revenue=contracts.reduce((s,c)=>s+c.contractAmount,0);
+    const inWork=mc.filter(c=>c.stage!=='new_lead'&&c.stage!=='closed');
+    const approved=mc.filter(c=>['approval','deal','issuance','closed'].includes(c.stage));
+    const closed=mc.filter(c=>c.stage==='closed');
+    const convLD=mc.length?Math.round(contracts.length/mc.length*100):0;
+    const convCA=contracts.length?Math.round(approved.length/contracts.length*100):0;
+    const tasks=mc.flatMap(c=>c.tasks);
+    return {name:m,leads:mc.length,inWork:inWork.length,contracts:contracts.length,revenue,approved:approved.length,closed:closed.length,convLD,convCA,tasks:tasks.length,tasksDone:tasks.filter(t=>t.done).length};
+  }).sort((a,b)=>b.revenue-a.revenue);
+  const maxRev=Math.max(...stats.map(s=>s.revenue),1);
+
+  return <div>
+    <div className="metric-grid" style={{marginBottom:20}}>
+      {[
+        {label:'Всего клиентов',value:clients.length,color:'#6366f1'},
+        {label:'Договоров подписано',value:clients.filter(c=>c.contractType).length,color:'#ec4899'},
+        {label:'Общая выручка',value:fmt(clients.reduce((s,c)=>s+c.contractAmount,0))+' ₸',color:'#10b981'},
+        {label:'Успешно закрыто',value:clients.filter(c=>c.stage==='closed').length,color:'#22c55e'},
+      ].map(({label,value,color})=><div key={label} className="metric-card" style={{'--c':color}}>
+        <div className="metric-label">{label}</div>
+        <div className="metric-value">{value}</div>
+      </div>)}
+    </div>
+    {stats.map((s,i)=>{
+      const colors=['#6366f1','#10b981','#f59e0b','#ec4899'];
+      const col=colors[i%4];
+      return <div key={s.name} className="card card-p" style={{marginBottom:12}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <div className="avatar" style={{background:col+'22',color:col,width:40,height:40,fontSize:15}}>{s.name[0]}</div>
+            <div>
+              <div style={{fontWeight:700,fontSize:15}}>{s.name}</div>
+              <div style={{fontSize:12,color:'var(--muted)'}}>{s.leads} лидов · {s.contracts} договоров</div>
+            </div>
+          </div>
+          <div style={{textAlign:'right'}}>
+            <div style={{fontWeight:800,fontSize:22,color:col,letterSpacing:'-1px'}}>{fmt(s.revenue)} ₸</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>выручка</div>
+          </div>
+        </div>
+        <div className="kpi-bar" style={{marginBottom:16}}><div className="kpi-fill" style={{width:`${Math.round(s.revenue/maxRev*100)}%`,background:col}}/></div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:8}}>
+          {[
+            {label:'В работе',value:s.inWork,color:'#0ea5e9'},
+            {label:'Договоры',value:s.contracts,color:'#ec4899'},
+            {label:'Одобрений',value:s.approved,color:'#10b981'},
+            {label:'Закрыто',value:s.closed,color:'#22c55e'},
+            {label:'Лид→Дог',value:s.convLD+'%',color:s.convLD>=50?'#10b981':s.convLD>=25?'#f59e0b':'#ef4444'},
+            {label:'Дог→Одоб',value:s.convCA+'%',color:s.convCA>=50?'#10b981':s.convCA>=25?'#f59e0b':'#ef4444'},
+          ].map(({label,value,color})=><div key={label} style={{background:'#f8fafc',borderRadius:8,padding:'10px',border:'1px solid var(--border)',textAlign:'center'}}>
+            <div style={{fontSize:18,fontWeight:800,color}}>{value}</div>
+            <div style={{fontSize:10,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:'.04em',marginTop:2}}>{label}</div>
+          </div>)}
+        </div>
+      </div>;
+    })}
+  </div>;
 }
 
-function TaskModal({ item, onSave, onClose, saving }) {
-  const [f, sf] = useState(item||{title:"",dueDate:"",priority:"medium"});
-  return <>
-    <MH title={item?"Редактировать задачу":"Новая задача"} onClose={onClose} />
-    <Field label="Задача"><input className="input" value={f.title} onChange={e=>sf(x=>({...x,title:e.target.value}))} placeholder="Что нужно сделать?" /></Field>
-    <Field label="Срок"><input className="input" type="date" value={f.dueDate||f.due_date||""} onChange={e=>sf(x=>({...x,dueDate:e.target.value}))} /></Field>
-    <Field label="Приоритет"><select className="input" value={f.priority} onChange={e=>sf(x=>({...x,priority:e.target.value}))}>
-      <option value="high">Высокий</option><option value="medium">Средний</option><option value="low">Низкий</option>
-    </select></Field>
-    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
-  </>;
-}
-
-function FinModal({ item, onSave, onClose, saving }) {
-  const [f, sf] = useState(item||{type:"income",amount:"",description:"",date:today(),category:"Услуги"});
-  return <>
-    <MH title="Добавить транзакцию" onClose={onClose} />
-    <Field label="Тип"><select className="input" value={f.type} onChange={e=>sf(x=>({...x,type:e.target.value}))}>
-      <option value="income">Доход</option><option value="expense">Расход</option>
-    </select></Field>
-    <Field label="Сумма (₸)"><input className="input" type="number" value={f.amount} onChange={e=>sf(x=>({...x,amount:+e.target.value}))} placeholder="0" /></Field>
-    <Field label="Описание"><input className="input" value={f.description} onChange={e=>sf(x=>({...x,description:e.target.value}))} placeholder="За что?" /></Field>
-    <Field label="Категория"><input className="input" value={f.category} onChange={e=>sf(x=>({...x,category:e.target.value}))} placeholder="Услуги, Аренда..." /></Field>
-    <Field label="Дата"><input className="input" type="date" value={f.date} onChange={e=>sf(x=>({...x,date:e.target.value}))} /></Field>
-    <MA onClose={onClose} onSave={()=>onSave(f)} saving={saving} />
-  </>;
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>

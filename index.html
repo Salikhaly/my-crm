@@ -1012,7 +1012,7 @@ function ClientDetail({client,clients,managers,pipeline,checklists,user,allUsers
                 </div>)}
               </div>}/>
               <div className="r2">
-                <Fl l="Кредитный рейтинг" ch={<input className="inp" type="number" value={c.creditsCount} onChange={e=>set('creditstaings',e.target.value)}/>}/>
+                <Fl l="Кредитный рейтинг" ch={<input className="inp" type="number" value={c.creditsrating} onChange={e=>set('creditsratings',e.target.value)}/>}/>
                 <Fl l="Кол-во кредитов" ch={<input className="inp" type="number" value={c.creditsCount} onChange={e=>set('creditsCount',e.target.value)}/>}/>
                 <Fl l="Ежемес. нагрузка (₸)" ch={<input className="inp" type="number" value={c.monthlyLoad} onChange={e=>set('monthlyLoad',e.target.value)}/>}/>
               </div>

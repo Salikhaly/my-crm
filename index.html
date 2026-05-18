@@ -291,7 +291,7 @@ tbody tr:hover td{background:#f8fafc}
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
-const {useState,useEffect,useRef,useCallback}=React;
+const {useState,useEffect,useRef,useCallback,useMemo}=React;
 const SK='crm_v5';
 
 // ═══ DATA ═══
@@ -540,15 +540,16 @@ function App(){
   const NAV=[
     {id:'dashboard',l:'Дашборд',i:'ti-layout-dashboard'},
     {id:'clients',l:'Клиенты',i:'ti-users'},
-    {id:'search',l:'Поиск ИИН',i:'ti-search'},
+    {id:'search',l:'🔍 Поиск/Все клиенты',i:'ti-search'},
+    {id:'wa',l:'WhatsApp лиды',i:'ti-brand-whatsapp',cnt:myCl.filter(c=>c.isWhatsApp&&c.stage==='new_lead').length},
     {id:'tasks',l:'Задачи',i:'ti-checkbox',cnt:openTasks,warn:overdueTasks>0},
     {id:'kpi',l:'KPI',i:'ti-chart-bar'},
     ...(isAdmin?[{id:'admin',l:'Техник',i:'ti-settings-2'}]:[]),
   ];
   const BOT_NAV=[
     {id:'dashboard',l:'Главная',i:'ti-home'},
-    {id:'clients',l:'Клиенты',i:'ti-users'},
     {id:'search',l:'Поиск',i:'ti-search'},
+    {id:'wa',l:'WhatsApp',i:'ti-brand-whatsapp',cnt:myCl.filter(c=>c.isWhatsApp&&c.stage==='new_lead').length,wa:true},
     {id:'tasks',l:'Задачи',i:'ti-checkbox',cnt:openTasks,warn:overdueTasks>0},
     {id:'kpi',l:'KPI',i:'ti-chart-bar'},
   ];
@@ -613,8 +614,9 @@ function App(){
       <div className="page">
         {page==='dashboard'&&<Dashboard clients={myCl} managers={mgrs} pipeline={pl} user={user} onOpen={c=>setSelClient(c)} onNew={()=>{const c=emptyClient(user.mid||'');setModal({type:'new_client',c});}} onStageClick={(sid,e)=>setStagePopup(stagePopup?.id===sid?null:{id:sid,clients:myCl.filter(c=>c.stage===sid)})}/>}
         {page==='clients'&&<Clients clients={filtered} managers={mgrs} pipeline={pl} onOpen={c=>setSelClient(c)} drag={drag} setDrag={setDrag} dragOv={dragOv} setDragOv={setDragOv} onMove={moveClient}/>}
-        {page==='search'&&<IINSearch clients={myCl} managers={mgrs} pipeline={pl} onOpen={c=>setSelClient(c)}/>}
+        {page==='search'&&<IINSearch clients={myCl} managers={mgrs} pipeline={pl} checklists={cls} onOpen={c=>setSelClient(c)}/>}
         {page==='tasks'&&<Tasks clients={myCl} managers={mgrs} onOpen={c=>setSelClient(c)}/>}
+        {page==='wa'&&<WALeadsPage clients={myCl} managers={mgrs} pipeline={pl} checklists={cls} onOpen={c=>setSelClient(c)} onImport={c=>{upd(s=>s.clients.push(c));toast$('✅ WhatsApp лид добавлен!');}} onSave={saveClient}/>}
         {page==='kpi'&&<KPI clients={myCl} managers={mgrs} user={user}/>}
         {page==='admin'&&isAdmin&&<AdminPanel store={store} managers={mgrs} pipeline={pl} checklists={cls} onSaveMgr={saveMgr} onDelMgr={delMgr} onSaveUser={saveUser} onSaveCL={saveCL} onSavePL={savePL} onModal={setModal} toast$={toast$} upd={upd}/>}
       </div>
@@ -623,10 +625,10 @@ function App(){
     {/* BOTTOM NAV */}
     <nav className="bot-nav">
       <div className="bot-items">
-        {BOT_NAV.map(n=><button key={n.id} className={`bot-item${page===n.id?' act':''}`} onClick={()=>navTo(n.id)}>
+        {BOT_NAV.map(n=><button key={n.id} className={`bot-item${page===n.id?' act':''}`} onClick={()=>navTo(n.id)} style={n.wa&&page===n.id?{color:'#25d366'}:n.wa?{color:'#25d366',opacity:.7}:{}}>
           <div className="nav-icon-wrap" style={{position:'relative'}}>
             <i className={`ti ${n.i}`}/>
-            {n.cnt>0&&<span className="bot-badge" style={n.warn?{background:'#ef4444'}:{}}>{n.cnt}</span>}
+            {n.cnt>0&&<span className="bot-badge" style={n.warn?{background:'#ef4444'}:n.wa?{background:'#25d366'}:{}}>{n.cnt}</span>}
           </div>
           <span>{n.l}</span>
         </button>)}
@@ -1012,7 +1014,6 @@ function ClientDetail({client,clients,managers,pipeline,checklists,user,allUsers
                 </div>)}
               </div>}/>
               <div className="r2">
-                <Fl l="Кредитный рейтинг" ch={<input className="inp" type="number" value={c.creditsrating} onChange={e=>set('creditsratings',e.target.value)}/>}/>
                 <Fl l="Кол-во кредитов" ch={<input className="inp" type="number" value={c.creditsCount} onChange={e=>set('creditsCount',e.target.value)}/>}/>
                 <Fl l="Ежемес. нагрузка (₸)" ch={<input className="inp" type="number" value={c.monthlyLoad} onChange={e=>set('monthlyLoad',e.target.value)}/>}/>
               </div>
@@ -1464,44 +1465,258 @@ function HistoryTab({c,setC,user}){
 }
 
 // ═══ IIN SEARCH ═══
-function IINSearch({clients,managers,pipeline,onOpen}){
-  const [q,setQ]=useState('');
-  const res=q.length>=3?clients.filter(c=>c.iin.includes(q)||c.fio.toLowerCase().includes(q.toLowerCase())||c.phone.includes(q)):[];
-  return <div style={{maxWidth:640,margin:'0 auto'}}>
-    <div style={{textAlign:'center',marginBottom:22}}><div style={{fontSize:38,marginBottom:8}}>🔍</div><div style={{fontSize:20,fontWeight:800,marginBottom:4}}>Поиск по ИИН</div><div style={{fontSize:14,color:'var(--mu)'}}>ИИН, имя или телефон</div></div>
-    <div style={{display:'flex',alignItems:'center',gap:10,background:'#f1f5f9',borderRadius:13,padding:'12px 15px',marginBottom:14}}>
-      <i className="ti ti-search" style={{color:'var(--mu)',fontSize:19,flexShrink:0}}/>
-      <input style={{border:'none',background:'transparent',fontSize:15,color:'var(--tx)',flex:1,outline:'none'}} value={q} onChange={e=>setQ(e.target.value)} placeholder="Начните вводить..." autoFocus/>
-      {q&&<button style={{border:'none',background:'transparent',color:'var(--mu)',fontSize:19,cursor:'pointer'}} onClick={()=>setQ('')}><i className="ti ti-x"/></button>}
-    </div>
-    {q.length>0&&q.length<3&&<div style={{textAlign:'center',color:'var(--mu)',padding:20}}>Введите минимум 3 символа...</div>}
-    {res.map(c=>{
-      const m=managers.find(x=>x.id===c.manager);const p=(pipeline||PIPELINE).find(x=>x.id===c.stage);
-      const totalItems=ACCOMP.reduce((s,st)=>{const items=DEF_CL[st]||[];return s+items.length;},0);
-      const totalDone=ACCOMP.reduce((s,st,i)=>s+((c.accompStages||{})[i]?.done||[]).length,0);
-      const pct=totalItems>0?Math.round(totalDone/totalItems*100):0;
-      const paid=(c.payments||[]).filter(p=>p.status==='paid').reduce((s,p)=>s+p.paidAmount,0);
-      return <div key={c.id} style={{background:'var(--card)',border:'2px solid var(--A)',borderRadius:15,padding:'15px',marginBottom:11,cursor:'pointer',transition:'all .14s'}} onClick={()=>onOpen(c)} onMouseEnter={e=>e.currentTarget.style.background='var(--Ab)'} onMouseLeave={e=>e.currentTarget.style.background='var(--card)'}>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:11}}>
-          <div><div style={{fontWeight:800,fontSize:18,marginBottom:3}}>{c.fio||'—'}</div>
-            <div style={{display:'flex',gap:7,flexWrap:'wrap',alignItems:'center'}}>
-              <span style={{fontFamily:'monospace',fontSize:12,background:'#f1f5f9',padding:'2px 8px',borderRadius:5,color:'var(--mu)'}}>{c.iin||'—'}</span>
-              <span style={{fontSize:12,color:'var(--mu)'}}>{c.phone}</span>
+// ═══ BIG CLIENT CARD ═══
+function BigClientCard({c,managers,pipeline,checklists,onOpen}){
+  const m=managers.find(x=>x.id===c.manager);
+  const pl=pipeline||PIPELINE;
+  const p=pl.find(x=>x.id===c.stage);
+  const cr=CR[c.creditStatus];
+  const ctObj=CT[c.contractType];
+  const src=SRC[c.source];
+
+  // Progress
+  const cls=checklists||DEF_CL;
+  const totalItems=ACCOMP.reduce((s,st)=>s+(cls[st]||[]).length,0);
+  const totalDone=ACCOMP.reduce((s,st,i)=>s+((c.accompStages||{})[i]?.done||[]).length,0);
+  const pct=totalItems>0?Math.round(totalDone/totalItems*100):0;
+
+  // Payments
+  const paid=(c.payments||[]).filter(p=>p.status==='paid').reduce((s,p)=>s+p.paidAmount,0);
+  const partial=(c.payments||[]).filter(p=>p.status==='partial').reduce((s,p)=>s+p.paidAmount,0);
+  const payPct=c.contractAmount>0?Math.round((paid+partial)/c.contractAmount*100):0;
+  const pendingPays=(c.payments||[]).filter(p=>p.status==='pending');
+
+  // Tasks
+  const openTasks=c.tasks.filter(t=>!t.done);
+  const overdueTasks=openTasks.filter(t=>t.due&&t.due<today());
+
+  // Last comment
+  const lastCmt=[...c.comments].sort((a,b)=>b.date?.localeCompare(a.date||'')||0)[0];
+
+  // Stage docs count
+  const docsCount=ACCOMP.reduce((s,st,i)=>s+((c.accompStages||{})[i]?.docs||[]).length,0);
+
+  const stageColor=p?.c||'#3b82f6';
+
+  return <div onClick={()=>onOpen(c)} style={{background:'var(--card)',borderRadius:18,overflow:'hidden',marginBottom:14,cursor:'pointer',border:'1.5px solid var(--br)',boxShadow:'0 4px 20px rgba(0,0,0,.08)',transition:'all .18s'}}
+    onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 8px 32px rgba(0,0,0,.14)';}}
+    onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 20px rgba(0,0,0,.08)';}}>
+
+    {/* TOP COLOR BAR */}
+    <div style={{height:5,background:`linear-gradient(90deg,${stageColor},${stageColor}88)`}}/>
+
+    {/* HEADER */}
+    <div style={{padding:'16px 18px 13px',background:`linear-gradient(135deg,${stageColor}11,transparent)`,borderBottom:'1px solid var(--br)'}}>
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12}}>
+        <div style={{display:'flex',gap:12,alignItems:'center',flex:1,minWidth:0}}>
+          {/* Avatar */}
+          <div style={{width:48,height:48,borderRadius:14,background:stageColor+'22',color:stageColor,display:'flex',alignItems:'center',justifyContent:'center',fontWeight:900,fontSize:20,flexShrink:0,border:`2px solid ${stageColor}44`}}>
+            {c.fio?c.fio[0]:'?'}
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap',marginBottom:4}}>
+              <span style={{fontWeight:900,fontSize:18,letterSpacing:'-.3px'}}>{c.fio||'—'}</span>
+              {c.isWhatsApp&&<span style={{background:'#25d36622',color:'#25d366',border:'1px solid #25d36644',borderRadius:20,padding:'2px 8px',fontSize:10,fontWeight:700,display:'inline-flex',alignItems:'center',gap:3}}><i className="ti ti-brand-whatsapp" style={{fontSize:10}}/>WA</span>}
+            </div>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
+              <span style={{fontFamily:'monospace',fontSize:11,background:'#f1f5f9',padding:'2px 8px',borderRadius:5,color:'var(--mu)',border:'1px solid var(--br)'}}>{c.iin||'нет ИИН'}</span>
+              <span style={{fontSize:12,color:'var(--mu)',display:'flex',alignItems:'center',gap:3}}><i className="ti ti-phone" style={{fontSize:11}}/>{c.phone||'—'}</span>
+              <span style={{fontSize:12,color:'var(--mu)'}}>{c.city}</span>
             </div>
           </div>
-          {p&&<span className="badge" style={{background:p.c+'22',color:p.c}}>{p.l}</span>}
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:7,marginBottom:c.stage==='accompaniment'?11:0}}>
-          {[{l:'Менеджер',v:m?.name||'—'},{l:'Источник',v:SRC[c.source]?.l||'—'},{l:'Договор',v:c.contractAmount>0?fmt(c.contractAmount)+' ₸':'—'},{l:'Оплачено',v:paid>0?fmt(paid)+' ₸':'—'}].map(({l,v})=><div key={l} style={{background:'#f8fafc',borderRadius:8,padding:'7px 9px'}}>
-            <div style={{fontSize:9,color:'var(--mu)',fontWeight:700,textTransform:'uppercase',marginBottom:2}}>{l}</div>
-            <div style={{fontWeight:700,fontSize:12}}>{v}</div>
+        {/* Stage badge */}
+        {p&&<div style={{flexShrink:0,textAlign:'right'}}>
+          <span className="badge" style={{background:p.c+'22',color:p.c,fontSize:12,padding:'5px 11px'}}>{p.l}</span>
+          <div style={{fontSize:10,color:'var(--mu)',marginTop:4}}>{c.dateIn}</div>
+        </div>}
+      </div>
+    </div>
+
+    {/* BODY — KEY INFO GRID */}
+    <div style={{padding:'13px 18px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8,marginBottom:13}}>
+        {/* Manager */}
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px 11px',border:'1px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:4,display:'flex',alignItems:'center',gap:4}}><i className="ti ti-user" style={{fontSize:11}}/>Менеджер</div>
+          {m?<div style={{display:'flex',alignItems:'center',gap:5}}>
+            <span style={{width:8,height:8,borderRadius:'50%',background:m.color,display:'inline-block',flexShrink:0}}/>
+            <span style={{fontWeight:700,fontSize:12,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{m.name}</span>
+          </div>:<span style={{fontWeight:700,fontSize:12,color:'var(--mu)'}}>Не назначен</span>}
+        </div>
+        {/* Source */}
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px 11px',border:'1px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:4}}><i className="ti ti-antenna" style={{fontSize:11}}/> Источник</div>
+          {src?<span style={{background:src.c+'22',color:src.c,borderRadius:5,padding:'2px 7px',fontSize:11,fontWeight:700}}>{src.l}</span>:<span style={{fontWeight:700,fontSize:12,color:'var(--mu)'}}>—</span>}
+        </div>
+        {/* Credit */}
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px 11px',border:'1px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:4}}><i className="ti ti-credit-card" style={{fontSize:11}}/> КИ</div>
+          {cr?<span style={{background:cr.c+'22',color:cr.c,borderRadius:5,padding:'2px 7px',fontSize:11,fontWeight:700}}>{cr.l}</span>:<span style={{fontSize:12,color:'var(--mu)'}}>—</span>}
+        </div>
+        {/* Income */}
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px 11px',border:'1px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:4}}><i className="ti ti-cash" style={{fontSize:11}}/> Доход</div>
+          <div style={{fontWeight:700,fontSize:12}}>{c.officialIncome?fmt(+c.officialIncome)+' ₸':'—'}</div>
+          {c.extraIncome&&<div style={{fontSize:10,color:'var(--mu)'}}>+{fmt(+c.extraIncome)} ₸ доп.</div>}
+        </div>
+      </div>
+
+      {/* CONTRACT + PAYMENT */}
+      {c.contractType&&<div style={{background:'linear-gradient(135deg,#eff6ff,#f5f3ff)',borderRadius:12,padding:'12px 14px',marginBottom:12,border:'1.5px solid #c7d2fe'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
+          <div>
+            <div style={{fontSize:10,fontWeight:700,color:'#6366f1',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:2}}>💼 {ctObj?.l||'Договор'}</div>
+            <div style={{fontWeight:900,fontSize:20,color:'#1d4ed8',letterSpacing:'-1px'}}>{fmt(c.contractAmount)} ₸</div>
+          </div>
+          <div style={{textAlign:'right'}}>
+            <div style={{fontSize:11,color:'var(--mu)',marginBottom:4}}>Получено: <b style={{color:'#10b981'}}>{fmt(paid+partial)} ₸</b></div>
+            <div style={{fontWeight:800,fontSize:16,color:payPct===100?'#10b981':payPct>0?'#3b82f6':'#f59e0b'}}>{payPct}%</div>
+          </div>
+        </div>
+        <Prog pct={payPct} c={payPct===100?'#10b981':payPct>0?'#3b82f6':'#f59e0b'} sz='sm'/>
+        {pendingPays.length>0&&<div style={{marginTop:8,display:'flex',gap:6,flexWrap:'wrap'}}>
+          {pendingPays.map(pp=><span key={pp.id} style={{background:'#fffbeb',border:'1px solid #fde68a',borderRadius:6,padding:'3px 8px',fontSize:10,fontWeight:600,color:'#92400e'}}>
+            ⏳ {pp.name}: {fmt(pp.amount)} ₸
+          </span>)}
+        </div>}
+      </div>}
+
+      {/* ACCOMP PROGRESS */}
+      {c.stage==='accompaniment'&&<div style={{background:'#f0fdf4',borderRadius:12,padding:'12px 14px',marginBottom:12,border:'1.5px solid #bbf7d0'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:7}}>
+          <div style={{fontWeight:700,fontSize:13,color:'#065f46'}}>🗺 Сопровождение</div>
+          <div style={{fontWeight:900,fontSize:18,color:pct===100?'#10b981':'#3b82f6'}}>{pct}%</div>
+        </div>
+        <Prog pct={pct} c={pct===100?'#10b981':pct>50?'#3b82f6':'#f59e0b'} sz='sm'/>
+        <div style={{display:'flex',justifyContent:'space-between',marginTop:7,fontSize:11}}>
+          <span style={{color:'#047857',fontWeight:600}}>📍 Текущий: <b>{ACCOMP[c.accompStageIndex]}</b></span>
+          <span style={{color:'var(--mu)'}}>{totalDone}/{totalItems} пунктов</span>
+        </div>
+        {/* Mini stage dots */}
+        <div style={{display:'flex',gap:3,marginTop:9,overflowX:'auto'}}>
+          {ACCOMP.map((s,i)=>{
+            const sd=(c.accompStages||{})[i]||{};const items=cls[s]||[];const done=(sd.done||[]).length;const allDone=items.length>0&&done===items.length;const isCur=c.accompStageIndex===i;
+            return <div key={s} title={s} style={{width:isCur?28:20,height:20,borderRadius:6,background:allDone?'#10b981':isCur?'#3b82f6':'#e2e8f0',color:allDone||isCur?'#fff':'#94a3b8',display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:700,flexShrink:0,transition:'all .2s',border:isCur?'2px solid #1d4ed8':'none'}}>
+              {allDone?'✓':i+1}
+            </div>;
+          })}
+        </div>
+      </div>}
+
+      {/* TASKS + DOCS + LAST COMMENT */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:openTasks.length>0||lastCmt?12:0}}>
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px',border:`1.5px solid ${openTasks.length>0?overdueTasks.length>0?'#fecaca':'#bfdbfe':'var(--br)'}`}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:4}}>✅ Задачи</div>
+          <div style={{fontWeight:800,fontSize:18,color:overdueTasks.length>0?'#ef4444':openTasks.length>0?'#3b82f6':'#10b981',letterSpacing:'-1px'}}>{openTasks.length}</div>
+          {overdueTasks.length>0&&<div style={{fontSize:10,color:'#ef4444',fontWeight:700}}>⚠️ {overdueTasks.length} просрочено</div>}
+          {openTasks.length===0&&<div style={{fontSize:10,color:'#10b981',fontWeight:600}}>Всё выполнено</div>}
+        </div>
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px',border:'1.5px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:4}}>📎 Документы</div>
+          <div style={{fontWeight:800,fontSize:18,color:'#8b5cf6',letterSpacing:'-1px'}}>{docsCount}</div>
+          <div style={{fontSize:10,color:'var(--mu)'}}>{docsCount>0?'файлов загружено':'нет файлов'}</div>
+        </div>
+        <div style={{background:'#f8fafc',borderRadius:10,padding:'10px',border:'1.5px solid var(--br)'}}>
+          <div style={{fontSize:9,fontWeight:700,color:'var(--mu)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:4}}>💬 Комментарии</div>
+          <div style={{fontWeight:800,fontSize:18,color:'#14b8a6',letterSpacing:'-1px'}}>{c.comments.length}</div>
+          <div style={{fontSize:10,color:'var(--mu)'}}>{c.comments.length>0?'записей':'нет записей'}</div>
+        </div>
+      </div>
+
+      {/* LAST COMMENT */}
+      {lastCmt&&<div style={{background:'#fffbeb',borderRadius:10,padding:'10px 12px',marginBottom:12,border:'1px solid #fde68a'}}>
+        <div style={{fontSize:10,fontWeight:700,color:'#92400e',marginBottom:3,display:'flex',gap:6}}><i className="ti ti-message" style={{fontSize:11}}/><span>{lastCmt.author}</span><span style={{opacity:.7}}>{lastCmt.date}</span></div>
+        <div style={{fontSize:12,color:'#78350f',lineHeight:1.4,overflow:'hidden',textOverflow:'ellipsis',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical'}}>{lastCmt.text}</div>
+      </div>}
+
+      {/* LINKS + OPEN BUTTON */}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div style={{display:'flex',gap:6}}>
+          {c.miroLink&&<a href={c.miroLink} target="_blank" onClick={e=>e.stopPropagation()} style={{background:'#fef9c3',color:'#854d0e',borderRadius:7,padding:'4px 9px',fontSize:11,fontWeight:700,display:'inline-flex',alignItems:'center',gap:4,border:'1px solid #fde68a',textDecoration:'none'}}><i className="ti ti-brand-miro" style={{fontSize:12}}/>Miro</a>}
+          {c.driveLink&&<a href={c.driveLink} target="_blank" onClick={e=>e.stopPropagation()} style={{background:'#eff6ff',color:'#1d4ed8',borderRadius:7,padding:'4px 9px',fontSize:11,fontWeight:700,display:'inline-flex',alignItems:'center',gap:4,border:'1px solid #bfdbfe',textDecoration:'none'}}><i className="ti ti-brand-google-drive" style={{fontSize:12}}/>Drive</a>}
+          {c.contactStatus&&<span style={{background:'#f1f5f9',color:'var(--mu)',borderRadius:7,padding:'4px 9px',fontSize:11,fontWeight:600,display:'inline-flex',alignItems:'center',gap:4,border:'1px solid var(--br)'}}><i className="ti ti-phone" style={{fontSize:11}}/>{c.contactStatus}</span>}
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:5,color:'var(--A)',fontWeight:700,fontSize:12}}>
+          Открыть карточку<i className="ti ti-arrow-right" style={{fontSize:14}}/>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+// ═══ IIN SEARCH ═══
+function IINSearch({clients,managers,pipeline,checklists,onOpen}){
+  const [q,setQ]=useState('');
+  const [filterStage,setFilterStage]=useState('');
+  const [filterMgr,setFilterMgr]=useState('');
+  const pl=pipeline||PIPELINE;
+
+  const res=useMemo(()=>{
+    let list=clients;
+    if(q.length>=2) list=list.filter(c=>c.iin.includes(q)||c.fio.toLowerCase().includes(q.toLowerCase())||c.phone.includes(q)||c.city.toLowerCase().includes(q.toLowerCase()));
+    if(filterStage) list=list.filter(c=>c.stage===filterStage);
+    if(filterMgr) list=list.filter(c=>c.manager===filterMgr);
+    return list;
+  },[q,filterStage,filterMgr,clients]);
+
+  const waLeads=clients.filter(c=>c.isWhatsApp&&c.stage==='new_lead');
+  const showAll=q.length===0&&!filterStage&&!filterMgr;
+
+  return <div>
+    {/* HEADER */}
+    <div style={{background:'linear-gradient(135deg,var(--N),#1e3a5f)',borderRadius:16,padding:'20px',marginBottom:18,color:'#fff'}}>
+      <div style={{fontSize:18,fontWeight:900,marginBottom:4}}>🔍 Быстрый поиск клиента</div>
+      <div style={{fontSize:13,color:'#94a3b8',marginBottom:16}}>ИИН, имя, телефон или город — результат мгновенно</div>
+      <div style={{display:'flex',alignItems:'center',gap:10,background:'rgba(255,255,255,.1)',borderRadius:12,padding:'11px 14px',border:'1px solid rgba(255,255,255,.15)'}}>
+        <i className="ti ti-search" style={{color:'rgba(255,255,255,.6)',fontSize:20,flexShrink:0}}/>
+        <input style={{border:'none',background:'transparent',fontSize:16,color:'#fff',flex:1,outline:'none'}} value={q} onChange={e=>setQ(e.target.value)} placeholder="Начните вводить..." autoFocus/>
+        {q&&<button style={{border:'none',background:'rgba(255,255,255,.2)',color:'#fff',borderRadius:7,width:28,height:28,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}} onClick={()=>setQ('')}><i className="ti ti-x" style={{fontSize:14}}/></button>}
+      </div>
+      <div style={{display:'flex',gap:8,marginTop:10}}>
+        <select style={{flex:1,background:'rgba(255,255,255,.1)',border:'1px solid rgba(255,255,255,.2)',borderRadius:9,padding:'8px 11px',color:'#fff',fontSize:12,outline:'none',cursor:'pointer'}} value={filterStage} onChange={e=>setFilterStage(e.target.value)}>
+          <option value="" style={{color:'#000'}}>Все этапы</option>
+          {pl.map(p=><option key={p.id} value={p.id} style={{color:'#000'}}>{p.l}</option>)}
+        </select>
+        <select style={{flex:1,background:'rgba(255,255,255,.1)',border:'1px solid rgba(255,255,255,.2)',borderRadius:9,padding:'8px 11px',color:'#fff',fontSize:12,outline:'none',cursor:'pointer'}} value={filterMgr} onChange={e=>setFilterMgr(e.target.value)}>
+          <option value="" style={{color:'#000'}}>Все менеджеры</option>
+          {managers.map(m=><option key={m.id} value={m.id} style={{color:'#000'}}>{m.name}</option>)}
+        </select>
+      </div>
+    </div>
+
+    {/* WA LEADS ALERT */}
+    {waLeads.length>0&&showAll&&<div style={{background:'#f0fdf4',border:'2px solid #86efac',borderRadius:14,padding:'14px',marginBottom:16,display:'flex',gap:12,alignItems:'center'}}>
+      <div style={{width:42,height:42,borderRadius:12,background:'#25d366',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><i className="ti ti-brand-whatsapp" style={{color:'#fff',fontSize:21}}/></div>
+      <div style={{flex:1}}>
+        <div style={{fontWeight:800,fontSize:14,color:'#065f46',marginBottom:3}}>🔔 {waLeads.length} WhatsApp лидов ждут обработки</div>
+        <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
+          {waLeads.map(c=><div key={c.id} onClick={()=>onOpen(c)} style={{background:'#fff',border:'1px solid #bbf7d0',borderRadius:7,padding:'4px 10px',fontSize:12,fontWeight:700,cursor:'pointer',color:'#065f46',display:'flex',alignItems:'center',gap:4}}>
+            <i className="ti ti-brand-whatsapp" style={{fontSize:11,color:'#25d366'}}/>{c.fio||c.phone||'Новый лид'}
           </div>)}
         </div>
-        {c.stage==='accompaniment'&&<><div style={{fontSize:11,fontWeight:600,color:'var(--mu)',marginBottom:4}}>Прогресс: {pct}% · Этап: <b>{ACCOMP[c.accompStageIndex]}</b></div><Prog pct={pct} c={pct===100?'#10b981':pct>50?'#3b82f6':'#f59e0b'} sz='xs'/></>}
-        <div style={{fontSize:12,color:'var(--A)',fontWeight:700,marginTop:9,display:'flex',alignItems:'center',gap:4}}><i className="ti ti-arrow-right"/>Открыть карточку</div>
-      </div>;
-    })}
-    {q.length>=3&&res.length===0&&<div className="empty"><i className="ti ti-search"/><p>Не найден: "{q}"</p></div>}
+      </div>
+    </div>}
+
+    {/* STATS */}
+    {showAll&&<div className="mg mg4" style={{marginBottom:16}}>
+      {[
+        {l:'Всего клиентов',v:clients.length,c:'#6366f1'},
+        {l:'В сопровождении',v:clients.filter(c=>c.stage==='accompaniment').length,c:'#14b8a6'},
+        {l:'WhatsApp лидов',v:waLeads.length,c:'#25d366'},
+        {l:'Закрыто',v:clients.filter(c=>c.stage==='closed').length,c:'#10b981'},
+      ].map(({l,v,c})=><div key={l} className="mc" style={{'--c':c}}><div className="mc-l">{l}</div><div className="mc-v">{v}</div></div>)}
+    </div>}
+
+    {/* RESULTS COUNT */}
+    {!showAll&&<div style={{fontSize:13,color:'var(--mu)',fontWeight:600,marginBottom:12,display:'flex',alignItems:'center',gap:6}}>
+      <i className="ti ti-list" style={{fontSize:15}}/>Найдено: <b style={{color:'var(--tx)'}}>{res.length}</b> клиентов
+      {(filterStage||filterMgr)&&<button onClick={()=>{setFilterStage('');setFilterMgr('');}} style={{background:'var(--Rb)',color:'var(--R)',border:'none',borderRadius:6,padding:'2px 8px',fontSize:11,fontWeight:700,cursor:'pointer',marginLeft:4}}>Сбросить фильтры</button>}
+    </div>}
+
+    {/* RESULTS */}
+    {(showAll?clients:res).map(c=><BigClientCard key={c.id} c={c} managers={managers} pipeline={pl} checklists={checklists} onOpen={onOpen}/>)}
+    {!showAll&&res.length===0&&<div className="empty"><i className="ti ti-search"/><p>Ничего не найдено</p></div>}
   </div>;
 }
 
@@ -1528,7 +1743,7 @@ function Tasks({clients,managers,onOpen}){
     {todayT.length>0&&<div style={{marginBottom:13}}>
       <div style={{fontWeight:800,fontSize:13,color:'var(--A)',marginBottom:9}}>📅 Сегодня ({todayT.length})</div>
       {todayT.map(t=><div key={t.id} className="task-r" style={{cursor:'pointer',marginBottom:6,borderRadius:11}} onClick={()=>onOpen(t.cl)}>
-        <div className="tchk"/><div style={{flex:1,fontWeight:600,fontSize:13}}>{t.type}{t.text&&<span style={{color:'var(--mu)',fontWeight:400}}> — {t.text}</span>}</div><span style={{fontSize:12,color:'var(--mu)',fontWeight:600}}>{t.cFio}</span>
+        <div className="tchk"/><div style={{flex:1,fontWeight:600,fontSize:13}}>{t.type}{t.text&&<span style={{color:'var(--mu)',fontWeight:400'}}> — {t.text}</span>}</div><span style={{fontSize:12,color:'var(--mu)',fontWeight:600}}>{t.cFio}</span>
       </div>)}
     </div>}
     {rest.length>0&&<div>
@@ -1811,6 +2026,136 @@ function PLModal({pipeline,onSave,onClose}){
       </div>
       <MA onClose={onClose} onSave={()=>onSave(stages)} label="Сохранить воронку"/>
     </div>
+  </div>;
+}
+
+// ═══ WHATSAPP LEADS PAGE ═══
+function WALeadsPage({clients,managers,pipeline,checklists,onOpen,onImport,onSave}){
+  const [form,setForm]=useState({fio:'',phone:'',msg:'',assignTo:'',city:'Алматы',source:'whatsapp'});
+  const [showForm,setShowForm]=useState(false);
+  const sf=(k,v)=>setForm(x=>({...x,[k]:v}));
+
+  const waAll=clients.filter(c=>c.isWhatsApp);
+  const waNew=waAll.filter(c=>c.stage==='new_lead');
+  const waWork=waAll.filter(c=>c.stage!=='new_lead'&&c.stage!=='closed');
+  const waClosed=waAll.filter(c=>c.stage==='closed');
+
+  function addLead(){
+    if(!form.phone)return;
+    const c={...emptyClient(form.assignTo),fio:form.fio||'',phone:form.phone,city:form.city,source:'whatsapp',isWhatsApp:true,waMsgPreview:form.msg,stage:'new_lead',manager:form.assignTo};
+    onImport(c);
+    setForm({fio:'',phone:'',msg:'',assignTo:'',city:'Алматы',source:'whatsapp'});
+    setShowForm(false);
+  }
+
+  const pl=pipeline||PIPELINE;
+
+  return <div>
+    {/* HEADER */}
+    <div style={{background:'linear-gradient(135deg,#064e3b,#065f46)',borderRadius:16,padding:'20px',marginBottom:18,color:'#fff'}}>
+      <div style={{display:'flex',alignItems:'center',gap:14,marginBottom:14}}>
+        <div style={{width:52,height:52,borderRadius:16,background:'#25d366',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}><i className="ti ti-brand-whatsapp" style={{fontSize:28,color:'#fff'}}/></div>
+        <div>
+          <div style={{fontSize:20,fontWeight:900,marginBottom:3}}>WhatsApp лиды</div>
+          <div style={{fontSize:13,color:'#a7f3d0'}}>Управляйте входящими лидами из WhatsApp</div>
+        </div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:8}}>
+        {[{l:'Всего WA',v:waAll.length,c:'#fff'},{l:'Новые',v:waNew.length,c:'#fde68a'},{l:'В работе',v:waWork.length,c:'#93c5fd'},{l:'Закрыто',v:waClosed.length,c:'#86efac'}].map(({l,v,c})=>
+          <div key={l} style={{background:'rgba(255,255,255,.1)',borderRadius:11,padding:'10px 12px',border:'1px solid rgba(255,255,255,.15)'}}>
+            <div style={{fontSize:10,fontWeight:700,color:'rgba(255,255,255,.6)',textTransform:'uppercase',letterSpacing:'.05em',marginBottom:4}}>{l}</div>
+            <div style={{fontWeight:900,fontSize:22,color:c,letterSpacing:'-1px'}}>{v}</div>
+          </div>)}
+      </div>
+    </div>
+
+    {/* HOW WA WORKS */}
+    <div style={{background:'var(--card)',borderRadius:14,padding:'16px',marginBottom:16,border:'1.5px solid var(--br)'}}>
+      <div style={{fontWeight:800,fontSize:15,marginBottom:14,display:'flex',alignItems:'center',gap:8}}><i className="ti ti-info-circle" style={{color:'#3b82f6'}}/>Как работает интеграция WhatsApp</div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10,marginBottom:14}}>
+        {[
+          {n:'1',i:'ti-world',c:'#6366f1',t:'Кнопка на сайте',d:'Клиент нажимает кнопку "Написать в WhatsApp" на вашем сайте'},
+          {n:'2',i:'ti-brand-whatsapp',c:'#25d366',t:'Клиент пишет',d:'Открывается WhatsApp с предзаполненным текстом о заявке'},
+          {n:'3',i:'ti-api',c:'#f59e0b',t:'Green API',d:'Сообщение перехватывается через Green API (~$15/мес)'},
+          {n:'4',i:'ti-user-plus',c:'#10b981',t:'Лид в CRM',d:'Автоматически создаётся карточка клиента с перепиской'},
+        ].map(step=><div key={step.n} style={{background:'#f8fafc',borderRadius:11,padding:'12px',border:'1.5px solid var(--br)'}}>
+          <div style={{width:32,height:32,borderRadius:10,background:step.c+'22',color:step.c,display:'flex',alignItems:'center',justifyContent:'center',marginBottom:8}}>
+            <i className={`ti ${step.i}`} style={{fontSize:16}}/>
+          </div>
+          <div style={{fontWeight:700,fontSize:13,marginBottom:4,color:step.c}}>{step.n}. {step.t}</div>
+          <div style={{fontSize:11,color:'var(--mu)',lineHeight:1.4}}>{step.d}</div>
+        </div>)}
+      </div>
+
+      {/* Instruction steps */}
+      <div style={{background:'#fffbeb',borderRadius:11,padding:'13px',border:'1px solid #fde68a'}}>
+        <div style={{fontWeight:700,fontSize:13,color:'#92400e',marginBottom:10}}>📋 Инструкция по подключению:</div>
+        <div style={{display:'flex',flexDirection:'column',gap:7}}>
+          {[
+            {n:'1',t:'Зарегистрируйтесь на green-api.com',d:'Бесплатный тест 3 месяца. Привязывайте свой обычный номер WhatsApp.',url:'https://green-api.com'},
+            {n:'2',t:'Получите ID инстанции и API токен',d:'В личном кабинете Green API → Мои инстанции → скопируйте idInstance и apiTokenInstance'},
+            {n:'3',t:'Задеплойте CRM на Supabase',d:'По инструкции из файла ИНСТРУКЦИЯ.md. Нужен Supabase для получения webhook-ов.'},
+            {n:'4',t:'Создайте Edge Function в Supabase',d:'Напишите мне "дай код для webhook WhatsApp" — я дам готовый код функции.'},
+            {n:'5',t:'Поставьте webhook URL в Green API',d:'Settings → Notifications → Webhook URL: https://ваш-проект.supabase.co/functions/v1/wa-webhook'},
+            {n:'6',t:'Добавьте кнопку на сайт',d:'<a href="https://wa.me/77XXXXXXXXX?text=Хочу узнать про ипотеку">WhatsApp</a>'},
+          ].map(step=><div key={step.n} style={{display:'flex',gap:10,padding:'9px',background:'#fff',borderRadius:8,border:'1px solid #fde68a'}}>
+            <div style={{width:22,height:22,borderRadius:'50%',background:'#25d366',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:800,fontSize:11,flexShrink:0}}>{step.n}</div>
+            <div>
+              <div style={{fontWeight:700,fontSize:12,color:'#92400e'}}>{step.t}</div>
+              <div style={{fontSize:11,color:'#78350f',marginTop:1}}>{step.d}</div>
+              {step.url&&<a href={step.url} target="_blank" style={{fontSize:11,color:'#25d366',fontWeight:700,textDecoration:'none'}}>{step.url} →</a>}
+            </div>
+          </div>)}
+        </div>
+      </div>
+
+      {/* WA Button code */}
+      <div style={{background:'#f0fdf4',borderRadius:11,padding:'12px',border:'1px solid #bbf7d0',marginTop:10}}>
+        <div style={{fontWeight:700,fontSize:12,color:'#065f46',marginBottom:6}}>Код кнопки для сайта (скопируйте и вставьте):</div>
+        <div style={{background:'#022c22',borderRadius:8,padding:'11px',fontFamily:'monospace',fontSize:11,color:'#86efac',lineHeight:1.6,wordBreak:'break-all'}}>
+          {'<a href="https://wa.me/77XXXXXXXXX?text=Здравствуйте!%20Хочу%20узнать%20про%20ипотечное%20сопровождение" target="_blank" style="background:#25d366;color:#fff;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:8px;">📱 Написать в WhatsApp</a>'}
+        </div>
+        <div style={{fontSize:11,color:'#047857',marginTop:6}}>⚠️ Замените 77XXXXXXXXX на ваш номер в формате без + (например: 77771234567)</div>
+      </div>
+    </div>
+
+    {/* MANUAL ADD */}
+    <div style={{marginBottom:16}}>
+      {!showForm&&<button className="btn btn-g" onClick={()=>setShowForm(true)} style={{width:'100%',justifyContent:'center',padding:'12px'}}><i className="ti ti-brand-whatsapp"/>Добавить WhatsApp лид вручную</button>}
+      {showForm&&<div style={{background:'var(--card)',borderRadius:14,padding:'16px',border:'2px solid #86efac'}}>
+        <div style={{fontWeight:800,fontSize:14,marginBottom:13,color:'#065f46'}}>➕ Новый WhatsApp лид</div>
+        <div className="r3">
+          <Fl l="Имя клиента" ch={<input className="inp" value={form.fio} onChange={e=>sf('fio',e.target.value)} placeholder="Как написал в чате"/>}/>
+          <Fl l="Телефон *" req ch={<input className="inp" value={form.phone} onChange={e=>sf('phone',e.target.value)} placeholder="+7 701 000-00-00"/>}/>
+          <Fl l="Город" ch={<select className="inp" value={form.city} onChange={e=>sf('city',e.target.value)}>{CITIES.map(c=><option key={c}>{c}</option>)}</select>}/>
+        </div>
+        <Fl l="Назначить менеджеру" ch={<select className="inp" value={form.assignTo} onChange={e=>sf('assignTo',e.target.value)}><option value="">Не назначен</option>{managers.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select>}/>
+        <Fl l="Сообщение из чата" ch={<textarea className="inp" value={form.msg} onChange={e=>sf('msg',e.target.value)} placeholder="Вставьте текст переписки..." style={{minHeight:60}}/>}/>
+        <div style={{display:'flex',gap:8}}>
+          <button className="btn btn-g" onClick={addLead} style={{flex:1,justifyContent:'center'}}><i className="ti ti-brand-whatsapp"/>Создать лид</button>
+          <button className="btn btn-gh btn-o" onClick={()=>setShowForm(false)}>Отмена</button>
+        </div>
+      </div>}
+    </div>
+
+    {/* NEW WA LEADS */}
+    {waNew.length>0&&<>
+      <div style={{fontWeight:800,fontSize:15,marginBottom:11,display:'flex',alignItems:'center',gap:8}}>
+        <span style={{background:'#fef9c3',color:'#854d0e',borderRadius:20,padding:'3px 10px',fontSize:12,fontWeight:700,border:'1px solid #fde68a'}}>🔔 Новые ({waNew.length})</span>
+        <span style={{fontSize:12,color:'var(--mu)',fontWeight:400}}>Ждут назначения менеджера</span>
+      </div>
+      {waNew.map(c=><BigClientCard key={c.id} c={c} managers={managers} pipeline={pl} checklists={checklists} onOpen={onOpen}/>)}
+    </>}
+
+    {/* IN WORK */}
+    {waWork.length>0&&<>
+      <div style={{fontWeight:800,fontSize:15,marginBottom:11,marginTop:waNew.length?20:0,display:'flex',alignItems:'center',gap:8}}>
+        <span style={{background:'#eff6ff',color:'#1d4ed8',borderRadius:20,padding:'3px 10px',fontSize:12,fontWeight:700,border:'1px solid #bfdbfe'}}>⚡ В работе ({waWork.length})</span>
+      </div>
+      {waWork.map(c=><BigClientCard key={c.id} c={c} managers={managers} pipeline={pl} checklists={checklists} onOpen={onOpen}/>)}
+    </>}
+
+    {waAll.length===0&&<div className="empty"><i className="ti ti-brand-whatsapp" style={{color:'#25d366',opacity:.4}}/><p>Нет WhatsApp лидов</p><div style={{fontSize:13,color:'var(--mu)',marginTop:4}}>Добавьте первый лид вручную или настройте интеграцию</div></div>}
   </div>;
 }
 
